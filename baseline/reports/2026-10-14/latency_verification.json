@@ -1,0 +1,29 @@
+[
+  {
+    "threshold": 10.0,
+    "samples": 100,
+    "max_abs_logit_error": 0.0,
+    "stage_2_calls": 0,
+    "logits_close": true,
+    "top1_and_routing_equal": true,
+    "execution_counts_verified": true
+  },
+  {
+    "threshold": 0.0,
+    "samples": 100,
+    "max_abs_logit_error": 0.0,
+    "stage_2_calls": 100,
+    "logits_close": true,
+    "top1_and_routing_equal": true,
+    "execution_counts_verified": true
+  },
+  {
+    "threshold": 1.0,
+    "samples": 100,
+    "max_abs_logit_error": 0.0,
+    "stage_2_calls": 31,
+    "logits_close": true,
+    "top1_and_routing_equal": true,
+    "execution_counts_verified": true
+  }
+]

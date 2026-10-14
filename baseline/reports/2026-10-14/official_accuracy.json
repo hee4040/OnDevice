@@ -1,0 +1,44 @@
+[
+  {
+    "threshold": 10.0,
+    "model": "thinkingvit",
+    "top1": 73.536,
+    "top1_err": 26.464,
+    "top5": 92.046,
+    "top5_err": 7.954,
+    "param_count": 22.12,
+    "img_size": 224,
+    "crop_pct": 0.9,
+    "interpolation": "bicubic",
+    "stage_2_fraction": 0.0,
+    "gmacs_official_routing_estimate": 1.25
+  },
+  {
+    "threshold": 0.0,
+    "model": "thinkingvit",
+    "top1": 81.44,
+    "top1_err": 18.56,
+    "top5": 95.716,
+    "top5_err": 4.284,
+    "param_count": 22.12,
+    "img_size": 224,
+    "crop_pct": 0.9,
+    "interpolation": "bicubic",
+    "stage_2_fraction": 1.0,
+    "gmacs_official_routing_estimate": 5.85
+  },
+  {
+    "threshold": 1.0,
+    "model": "thinkingvit",
+    "top1": 80.31,
+    "top1_err": 19.69,
+    "top5": 95.274,
+    "top5_err": 4.726,
+    "param_count": 22.12,
+    "img_size": 224,
+    "crop_pct": 0.9,
+    "interpolation": "bicubic",
+    "stage_2_fraction": 0.36012,
+    "gmacs_official_routing_estimate": 2.9065519999999996
+  }
+]

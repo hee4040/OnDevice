@@ -1,0 +1,128 @@
+{
+  "date": "2026-10-14",
+  "runs": {
+    "official_accuracy": {
+      "local_run_directory": "results/20261014T110640.667692Z-accuracy",
+      "arguments": {
+        "mode": "accuracy",
+        "data_dir": "data/imagenet1k",
+        "checkpoint": "checkpoints/thinkingvit_3h6h_ema.pth",
+        "repo": "third_party/ThinkingViT",
+        "batch_size": 512,
+        "thresholds": [
+          10.0,
+          0.0,
+          1.0
+        ],
+        "samples": 1000,
+        "warmup": 50,
+        "seed": 42
+      },
+      "python": "3.10.12",
+      "torch": "2.5.1+cu124",
+      "cuda": "12.4",
+      "gpu": "NVIDIA GeForce RTX 3090",
+      "precision": "float32, AMP off, TF32 allowed (official default)",
+      "repo_commit": "9254c4950d3159937ad682592d58a2be69708c42",
+      "repo_status": "",
+      "checkpoint_sha256": "9ead984e9e39887eb037a42c189c58c0af14cd9c2771ad27b4b01876997242b5"
+    },
+    "latency": {
+      "local_run_directory": "results/20261014T112547.612733Z-early-exit-latency",
+      "arguments": {
+        "mode": "latency",
+        "data_dir": "data/imagenet1k",
+        "checkpoint": "checkpoints/thinkingvit_3h6h_ema.pth",
+        "repo": "third_party/ThinkingViT",
+        "thresholds": [
+          10.0,
+          0.0,
+          1.0
+        ],
+        "samples": 1000,
+        "verify_samples": 100,
+        "warmup": 50,
+        "seed": 42
+      },
+      "python": "3.10.12",
+      "torch": "2.5.1+cu124",
+      "cuda": "12.4",
+      "gpu": "NVIDIA GeForce RTX 3090",
+      "precision": "float32, AMP off, TF32 allowed (official default)",
+      "repo_commit": "9254c4950d3159937ad682592d58a2be69708c42",
+      "repo_status": "",
+      "checkpoint_sha256": "9ead984e9e39887eb037a42c189c58c0af14cd9c2771ad27b4b01876997242b5",
+      "baseline_source_sha256": {
+        "early_exit.py": "2c2e5ce347ea13d41d68c6a20bf17916b37bc48093732f1fbcc79bb06f47f038",
+        "evaluate.py": "d092d9dd8e60429feaef216a4bbc57e38be2bfeb9fd66e0c95b5d0a927dadadf"
+      },
+      "sample_indices_sha256": "d480de573d8d0d1e5184ee55e0e883160cdcb9bd55bc1033c2b000fdc7e77ba8"
+    },
+    "accuracy": {
+      "local_run_directory": "results/20261014T113410.584497Z-early-exit-accuracy",
+      "arguments": {
+        "mode": "accuracy",
+        "data_dir": "data/imagenet1k",
+        "checkpoint": "checkpoints/thinkingvit_3h6h_ema.pth",
+        "repo": "third_party/ThinkingViT",
+        "thresholds": [
+          10.0,
+          0.0,
+          1.0
+        ],
+        "samples": 1000,
+        "verify_samples": 128,
+        "warmup": 50,
+        "batch_size": 128,
+        "workers": 4,
+        "compare_official": true,
+        "seed": 42
+      },
+      "python": "3.10.12",
+      "torch": "2.5.1+cu124",
+      "cuda": "12.4",
+      "gpu": "NVIDIA GeForce RTX 3090",
+      "precision": "float32, AMP off, TF32 allowed (official default)",
+      "repo_commit": "9254c4950d3159937ad682592d58a2be69708c42",
+      "repo_status": "",
+      "checkpoint_sha256": "9ead984e9e39887eb037a42c189c58c0af14cd9c2771ad27b4b01876997242b5",
+      "baseline_source_sha256": {
+        "early_exit.py": "1f2739653a223ecb95137f31689bcd6c640ad8f57f72d6d3507651dbbdf47857",
+        "evaluate.py": "2bacd5fd1b28dccadb9f1619002961e62b6c88910cf5bf60a5bded5063cf10e0"
+      },
+      "sample_indices_sha256": "80dbb2255effd7f49a59117230bd2bcf8497b04a4bd7114d8910bc14f80a3a5d"
+    }
+  },
+  "dataset": {
+    "repository": "ILSVRC/imagenet-1k",
+    "revision": "49e2ee26f3810fb5a7536bbf732a7b07389a47b5",
+    "label_mapping": "HF integer labels preserved as zero-padded folder names"
+  },
+  "checkpoint": {
+    "repository": "NCPS/thinkingvit_deit-3h-6h-imagenet1k",
+    "revision": "72a98ff2c23ed845c681d9ae70dcc76118e5e825",
+    "source_file": "model.safetensors",
+    "sha256": "9ead984e9e39887eb037a42c189c58c0af14cd9c2771ad27b4b01876997242b5"
+  },
+  "preprocessing": {
+    "input_size": [
+      3,
+      224,
+      224
+    ],
+    "interpolation": "bicubic",
+    "mean": [
+      0.485,
+      0.456,
+      0.406
+    ],
+    "std": [
+      0.229,
+      0.224,
+      0.225
+    ],
+    "crop_pct": 0.9,
+    "crop_mode": "center"
+  },
+  "note": "Latency was measured before adding batched accuracy and full-dataset official comparison to the evaluator; the batch-1 forward and timing path are unchanged."
+}
