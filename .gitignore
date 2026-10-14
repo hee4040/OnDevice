@@ -1,0 +1,23 @@
+.venv/
+.cache/
+data/
+checkpoints/
+third_party/
+results/
+__pycache__/
+*.pyc
+
+# Local credentials, agent settings, and machine-specific installation records.
+.env
+.env.*
+.aws/
+.codex/
+.agents/
+.ssh/
+requirements-installed.txt
+*.log
+*.pth
+*.pth.tar
+*.pt
+*.safetensors
+artifacts/
