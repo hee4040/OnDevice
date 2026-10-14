@@ -12,10 +12,47 @@ import os
 from pathlib import Path
 import re
 import shutil
+import time
 
 ROOT = Path(__file__).resolve().parents[1]
 REPO = "ILSVRC/imagenet-1k"
 COUNTS = {"train": 1281167, "validation": 50000}
+
+
+def is_transient_download_error(error):
+    """Hub can wrap a metadata timeout in LocalEntryNotFoundError."""
+    from requests.exceptions import ConnectionError, HTTPError, SSLError, Timeout, ChunkedEncodingError
+
+    seen = set()
+    while error is not None and id(error) not in seen:
+        seen.add(id(error))
+        if isinstance(error, HTTPError) and error.response is not None:
+            status = error.response.status_code
+            return status in {408, 429} or 500 <= status < 600
+        if isinstance(error, SSLError):
+            return False  # Certificate/configuration errors need intervention.
+        if isinstance(error, (Timeout, ConnectionError, ChunkedEncodingError)):
+            return True
+        error = error.__cause__ or error.__context__
+    return False
+
+
+def retry_download(operation, description, retries=8):
+    for attempt in range(retries + 1):
+        try:
+            return operation()
+        except Exception as error:
+            if not is_transient_download_error(error):
+                raise
+            if attempt == retries:
+                print(f"{description}: retries exhausted; completed shards and partial downloads "
+                      "are preserved. Run the same command again to resume.", flush=True)
+                raise
+            delay = min(5 * 2 ** attempt, 60)
+            # Do not print exception messages containing signed download URLs.
+            print(f"{description}: temporary network failure ({type(error).__name__}); "
+                  f"retry {attempt + 1}/{retries} in {delay}s", flush=True)
+            time.sleep(delay)
 
 
 def write_json(path, value):
@@ -56,8 +93,17 @@ def main():
     parser.add_argument("--output", type=Path, default=ROOT / "data/imagenet1k")
     parser.add_argument("--splits", nargs="+", choices=list(COUNTS), default=["validation", "train"])
     parser.add_argument("--revision", default=None, help="HF commit; defaults to the saved commit after the first run")
+    parser.add_argument("--retries", type=int, default=8, help="Additional attempts per network operation (default: 8)")
     args = parser.parse_args()
+    if args.retries < 0:
+        parser.error("--retries must be nonnegative")
     os.environ.setdefault("HF_HOME", str(ROOT / ".cache/huggingface"))
+    # huggingface_hub reads these values at import time.
+    os.environ.setdefault("HF_HUB_ETAG_TIMEOUT", "60")
+    os.environ.setdefault("HF_HUB_DOWNLOAD_TIMEOUT", "120")
+    metadata_timeout = int(os.environ["HF_HUB_ETAG_TIMEOUT"])
+    if metadata_timeout <= 0 or int(os.environ["HF_HUB_DOWNLOAD_TIMEOUT"]) <= 0:
+        parser.error("HF_HUB_ETAG_TIMEOUT and HF_HUB_DOWNLOAD_TIMEOUT must be positive integers")
     from huggingface_hub import HfApi, hf_hub_download, get_token
     import pyarrow.parquet as pq
     from PIL import Image
@@ -71,7 +117,10 @@ def main():
     lock = json.loads(lock_path.read_text()) if lock_path.exists() else None
     revision = args.revision or (lock["revision"] if lock else "main")
     api = HfApi()
-    info = api.dataset_info(REPO, revision=revision, files_metadata=True, token=True)
+    info = retry_download(
+        lambda: api.dataset_info(REPO, revision=revision, files_metadata=True, token=True,
+                                 timeout=metadata_timeout),
+        "Dataset metadata", args.retries)
     if lock and lock["revision"] != info.sha:
         raise SystemExit("A different dataset revision is already present. Use a new output directory.")
     selected = {s: split_files([f.rfilename for f in info.siblings], s) for s in dict.fromkeys(args.splits)}
@@ -79,7 +128,10 @@ def main():
     # HEAD a gated shard before creating a source lock or claiming access.
     from huggingface_hub import get_hf_file_metadata, hf_hub_url
     first = next(iter(selected.values()))[0]
-    get_hf_file_metadata(hf_hub_url(REPO, first, repo_type="dataset", revision=info.sha), token=True)
+    retry_download(
+        lambda: get_hf_file_metadata(hf_hub_url(REPO, first, repo_type="dataset", revision=info.sha),
+                                     token=True, timeout=metadata_timeout),
+        "Dataset access check", args.retries)
     write_json(lock_path, {"repository": REPO, "revision": info.sha,
                            "label_mapping": "HF integer labels preserved as zero-padded folder names"})
     for split, shards in selected.items():
@@ -100,7 +152,10 @@ def main():
             if shutil.disk_usage(args.output).free < reserve:
                 raise SystemExit("Insufficient free disk space for the next shard; completed shards are preserved.")
             print(f"[{split} {index + 1}/{len(shards)}] {filename}", flush=True)
-            shard = hf_hub_download(REPO, filename, repo_type="dataset", revision=info.sha, token=True)
+            shard = retry_download(
+                lambda: hf_hub_download(REPO, filename, repo_type="dataset", revision=info.sha,
+                                        token=True, etag_timeout=metadata_timeout),
+                filename, args.retries)
             images = []
             table = pq.ParquetFile(shard)
             for batch in table.iter_batches(batch_size=32, columns=["image", "label"]):
