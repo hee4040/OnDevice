@@ -1,0 +1,542 @@
+{
+  "source": "results/20261015T041255.578722Z-stage-analysis",
+  "failures": "results/20261015T043408.554317Z-failure-analysis",
+  "real_provenance": {
+    "repository": "https://github.com/google-research/reassessed-imagenet",
+    "commit": "bcd006fe12e929f055e0ec7fe39dbf4d64a6881a",
+    "url": "https://raw.githubusercontent.com/google-research/reassessed-imagenet/bcd006fe12e929f055e0ec7fe39dbf4d64a6881a/real.json",
+    "sha256": "d83e9bff374c631aae8439eb064c7019acc56e1b3bc3f56b8380c2a710b0220b"
+  },
+  "real_sha256": "d83e9bff374c631aae8439eb064c7019acc56e1b3bc3f56b8380c2a710b0220b",
+  "script_sha256": "39a5a8d77177c22c3b00a842207c25565ce13b9e7f85bbe83d60cd55be0b4762",
+  "mapping_checks": "50000 unique original validation IDs, complete coverage, all target synsets match filenames",
+  "all": {
+    "samples": 50000,
+    "real_evaluated": 46837,
+    "real_excluded": 3163,
+    "original_groups": {
+      "both_wrong": 8035,
+      "both_correct": 35522,
+      "corrected": 5198,
+      "regressed": 1245
+    },
+    "real_groups": {
+      "corrected": 3870,
+      "both_correct": 36812,
+      "excluded": 3163,
+      "both_wrong": 4923,
+      "regressed": 1232
+    },
+    "narrow": {
+      "original_correct_all": 36767,
+      "original_top1_all": 73.534,
+      "original_correct_matched": 35572,
+      "original_top1_matched": 75.94850225249269,
+      "real_correct": 38044,
+      "real_top1": 81.22638085274463
+    },
+    "wide": {
+      "original_correct_all": 40720,
+      "original_top1_all": 81.44,
+      "original_correct_matched": 39036,
+      "original_top1_matched": 83.34436449815317,
+      "real_correct": 40682,
+      "real_top1": 86.85868010333711
+    },
+    "routed": {
+      "original_correct_all": 40152,
+      "original_top1_all": 80.304,
+      "original_correct_matched": 38527,
+      "original_top1_matched": 82.25761684138608,
+      "real_correct": 40436,
+      "real_top1": 86.33345432030232
+    }
+  },
+  "routed_to_6h": {
+    "samples": 18004,
+    "real_evaluated": 15560,
+    "real_excluded": 2444,
+    "original_groups": {
+      "both_wrong": 5764,
+      "corrected": 4330,
+      "both_correct": 6965,
+      "regressed": 945
+    },
+    "real_groups": {
+      "corrected": 3330,
+      "both_correct": 7450,
+      "excluded": 2444,
+      "both_wrong": 3842,
+      "regressed": 938
+    },
+    "narrow": {
+      "original_correct_all": 7910,
+      "original_top1_all": 43.93468118195956,
+      "original_correct_matched": 7118,
+      "original_top1_matched": 45.745501285347046,
+      "real_correct": 8388,
+      "real_top1": 53.90745501285347
+    },
+    "wide": {
+      "original_correct_all": 11295,
+      "original_top1_all": 62.736058653632526,
+      "original_correct_matched": 10073,
+      "original_top1_matched": 64.73650385604113,
+      "real_correct": 10780,
+      "real_top1": 69.280205655527
+    },
+    "routed": {
+      "original_correct_all": 11295,
+      "original_top1_all": 62.736058653632526,
+      "original_correct_matched": 10073,
+      "original_top1_matched": 64.73650385604113,
+      "real_correct": 10780,
+      "real_top1": 69.280205655527
+    }
+  },
+  "original_routed_regressions": {
+    "samples": 945,
+    "real_evaluated": 800,
+    "real_excluded": 145,
+    "original_groups": {
+      "regressed": 945
+    },
+    "real_groups": {
+      "corrected": 104,
+      "regressed": 466,
+      "both_correct": 156,
+      "excluded": 145,
+      "both_wrong": 74
+    },
+    "narrow": {
+      "original_correct_all": 945,
+      "original_top1_all": 100.0,
+      "original_correct_matched": 800,
+      "original_top1_matched": 100.0,
+      "real_correct": 622,
+      "real_top1": 77.75
+    },
+    "wide": {
+      "original_correct_all": 0,
+      "original_top1_all": 0.0,
+      "original_correct_matched": 0,
+      "original_top1_matched": 0.0,
+      "real_correct": 260,
+      "real_top1": 32.5
+    },
+    "routed": {
+      "original_correct_all": 0,
+      "original_top1_all": 0.0,
+      "original_correct_matched": 0,
+      "original_top1_matched": 0.0,
+      "real_correct": 260,
+      "real_top1": 32.5
+    }
+  },
+  "routed_transition_cross_table": [
+    {
+      "original_group": "both_correct",
+      "real_group": "both_correct",
+      "count": 5703
+    },
+    {
+      "original_group": "both_correct",
+      "real_group": "both_wrong",
+      "count": 615
+    },
+    {
+      "original_group": "both_correct",
+      "real_group": "excluded",
+      "count": 647
+    },
+    {
+      "original_group": "both_wrong",
+      "real_group": "both_correct",
+      "count": 1227
+    },
+    {
+      "original_group": "both_wrong",
+      "real_group": "both_wrong",
+      "count": 2784
+    },
+    {
+      "original_group": "both_wrong",
+      "real_group": "corrected",
+      "count": 465
+    },
+    {
+      "original_group": "both_wrong",
+      "real_group": "excluded",
+      "count": 1077
+    },
+    {
+      "original_group": "both_wrong",
+      "real_group": "regressed",
+      "count": 211
+    },
+    {
+      "original_group": "corrected",
+      "real_group": "both_correct",
+      "count": 364
+    },
+    {
+      "original_group": "corrected",
+      "real_group": "both_wrong",
+      "count": 369
+    },
+    {
+      "original_group": "corrected",
+      "real_group": "corrected",
+      "count": 2761
+    },
+    {
+      "original_group": "corrected",
+      "real_group": "excluded",
+      "count": 575
+    },
+    {
+      "original_group": "corrected",
+      "real_group": "regressed",
+      "count": 261
+    },
+    {
+      "original_group": "regressed",
+      "real_group": "both_correct",
+      "count": 156
+    },
+    {
+      "original_group": "regressed",
+      "real_group": "both_wrong",
+      "count": 74
+    },
+    {
+      "original_group": "regressed",
+      "real_group": "corrected",
+      "count": 104
+    },
+    {
+      "original_group": "regressed",
+      "real_group": "excluded",
+      "count": 145
+    },
+    {
+      "original_group": "regressed",
+      "real_group": "regressed",
+      "count": 466
+    }
+  ],
+  "real_multiple_labels": 7443,
+  "original_label_not_in_nonempty_real": 4673,
+  "regression_probabilities": {
+    "samples": 945,
+    "true_probability_increased": 136,
+    "wide_winner_was_narrow_runner_up": 513,
+    "wide_winner_was_narrow_top5": 814,
+    "entropy_decreased": 786,
+    "true_rank_histogram": {
+      "2": 719,
+      "3": 126,
+      "6": 9,
+      "4": 45,
+      "43": 1,
+      "10": 3,
+      "5": 23,
+      "9": 3,
+      "12": 1,
+      "19": 1,
+      "7": 5,
+      "11": 1,
+      "24": 1,
+      "14": 1,
+      "13": 1,
+      "47": 1,
+      "20": 1,
+      "8": 3
+    },
+    "median_true_probability_change": -0.15407218784093857,
+    "median_wrong_probability_change": 0.2968515008687973
+  },
+  "still_regressed_probabilities": {
+    "samples": 466,
+    "true_probability_increased": 62,
+    "wide_winner_was_narrow_runner_up": 251,
+    "wide_winner_was_narrow_top5": 390,
+    "entropy_decreased": 378,
+    "true_rank_histogram": {
+      "2": 357,
+      "3": 56,
+      "4": 26,
+      "43": 1,
+      "6": 4,
+      "5": 11,
+      "12": 1,
+      "19": 1,
+      "11": 1,
+      "7": 2,
+      "14": 1,
+      "13": 1,
+      "9": 1,
+      "8": 3
+    },
+    "median_true_probability_change": -0.15186337381601334,
+    "median_wrong_probability_change": 0.28867029026150703
+  },
+  "entropy_bins": [
+    {
+      "lower_inclusive": 0,
+      "upper_exclusive": 0.5,
+      "samples": 20363,
+      "real_evaluated": 20169,
+      "real_excluded": 194,
+      "original_groups": {
+        "both_correct": 19706,
+        "both_wrong": 587,
+        "corrected": 54,
+        "regressed": 16
+      },
+      "real_groups": {
+        "both_correct": 19907,
+        "both_wrong": 208,
+        "excluded": 194,
+        "corrected": 37,
+        "regressed": 17
+      },
+      "narrow": {
+        "original_correct_all": 19722,
+        "original_top1_all": 96.85213377203752,
+        "original_correct_matched": 19594,
+        "original_top1_matched": 97.14909018791214,
+        "real_correct": 19924,
+        "real_top1": 98.78526451484952
+      },
+      "wide": {
+        "original_correct_all": 19760,
+        "original_top1_all": 97.03874674655012,
+        "original_correct_matched": 19630,
+        "original_top1_matched": 97.32758193266895,
+        "real_correct": 19944,
+        "real_top1": 98.88442659526997
+      },
+      "routed": {
+        "original_correct_all": 19722,
+        "original_top1_all": 96.85213377203752,
+        "original_correct_matched": 19594,
+        "original_top1_matched": 97.14909018791214,
+        "real_correct": 19924,
+        "real_top1": 98.78526451484952
+      }
+    },
+    {
+      "lower_inclusive": 0.5,
+      "upper_exclusive": 1,
+      "samples": 11633,
+      "real_evaluated": 11108,
+      "real_excluded": 525,
+      "original_groups": {
+        "both_correct": 8851,
+        "corrected": 814,
+        "both_wrong": 1684,
+        "regressed": 284
+      },
+      "real_groups": {
+        "both_correct": 9455,
+        "corrected": 503,
+        "excluded": 525,
+        "both_wrong": 873,
+        "regressed": 277
+      },
+      "narrow": {
+        "original_correct_all": 9135,
+        "original_top1_all": 78.52660534685808,
+        "original_correct_matched": 8860,
+        "original_top1_matched": 79.76233345336695,
+        "real_correct": 9732,
+        "real_top1": 87.61253150882247
+      },
+      "wide": {
+        "original_correct_all": 9665,
+        "original_top1_all": 83.0826098169002,
+        "original_correct_matched": 9333,
+        "original_top1_matched": 84.02052574720922,
+        "real_correct": 9958,
+        "real_top1": 89.64710118833273
+      },
+      "routed": {
+        "original_correct_all": 9135,
+        "original_top1_all": 78.52660534685808,
+        "original_correct_matched": 8860,
+        "original_top1_matched": 79.76233345336695,
+        "real_correct": 9732,
+        "real_top1": 87.61253150882247
+      }
+    },
+    {
+      "lower_inclusive": 1,
+      "upper_exclusive": 1.5,
+      "samples": 9018,
+      "real_evaluated": 8051,
+      "real_excluded": 967,
+      "original_groups": {
+        "corrected": 1660,
+        "both_correct": 4675,
+        "both_wrong": 2199,
+        "regressed": 484
+      },
+      "real_groups": {
+        "corrected": 1220,
+        "both_correct": 4945,
+        "excluded": 967,
+        "both_wrong": 1419,
+        "regressed": 467
+      },
+      "narrow": {
+        "original_correct_all": 5159,
+        "original_top1_all": 57.207806609004216,
+        "original_correct_matched": 4735,
+        "original_top1_matched": 58.81256986709725,
+        "real_correct": 5412,
+        "real_top1": 67.22146317227674
+      },
+      "wide": {
+        "original_correct_all": 6335,
+        "original_top1_all": 70.24839210467952,
+        "original_correct_matched": 5797,
+        "original_top1_matched": 72.00347782884114,
+        "real_correct": 6165,
+        "real_top1": 76.57433859147932
+      },
+      "routed": {
+        "original_correct_all": 6335,
+        "original_top1_all": 70.24839210467952,
+        "original_correct_matched": 5797,
+        "original_top1_matched": 72.00347782884114,
+        "real_correct": 6165,
+        "real_top1": 76.57433859147932
+      }
+    },
+    {
+      "lower_inclusive": 1.5,
+      "upper_exclusive": 2,
+      "samples": 6909,
+      "real_evaluated": 5815,
+      "real_excluded": 1094,
+      "original_groups": {
+        "both_correct": 2012,
+        "corrected": 2008,
+        "regressed": 387,
+        "both_wrong": 2502
+      },
+      "real_groups": {
+        "both_correct": 2194,
+        "corrected": 1512,
+        "excluded": 1094,
+        "regressed": 391,
+        "both_wrong": 1718
+      },
+      "narrow": {
+        "original_correct_all": 2399,
+        "original_top1_all": 34.7228253003329,
+        "original_correct_matched": 2084,
+        "original_top1_matched": 35.838349097162514,
+        "real_correct": 2585,
+        "real_top1": 44.45399828030954
+      },
+      "wide": {
+        "original_correct_all": 4020,
+        "original_top1_all": 58.18497611810682,
+        "original_correct_matched": 3469,
+        "original_top1_matched": 59.65606190885641,
+        "real_correct": 3706,
+        "real_top1": 63.731728288907995
+      },
+      "routed": {
+        "original_correct_all": 4020,
+        "original_top1_all": 58.18497611810682,
+        "original_correct_matched": 3469,
+        "original_top1_matched": 59.65606190885641,
+        "real_correct": 3706,
+        "real_top1": 63.731728288907995
+      }
+    },
+    {
+      "lower_inclusive": 2,
+      "upper_exclusive": 3,
+      "samples": 2077,
+      "real_evaluated": 1694,
+      "real_excluded": 383,
+      "original_groups": {
+        "both_wrong": 1063,
+        "corrected": 662,
+        "both_correct": 278,
+        "regressed": 74
+      },
+      "real_groups": {
+        "corrected": 598,
+        "both_wrong": 705,
+        "excluded": 383,
+        "both_correct": 311,
+        "regressed": 80
+      },
+      "narrow": {
+        "original_correct_all": 352,
+        "original_top1_all": 16.947520462205105,
+        "original_correct_matched": 299,
+        "original_top1_matched": 17.650531286894925,
+        "real_correct": 391,
+        "real_top1": 23.081463990554898
+      },
+      "wide": {
+        "original_correct_all": 940,
+        "original_top1_all": 45.25758305247954,
+        "original_correct_matched": 807,
+        "original_top1_matched": 47.63872491145219,
+        "real_correct": 909,
+        "real_top1": 53.65997638724912
+      },
+      "routed": {
+        "original_correct_all": 940,
+        "original_top1_all": 45.25758305247954,
+        "original_correct_matched": 807,
+        "original_top1_matched": 47.63872491145219,
+        "real_correct": 909,
+        "real_top1": 53.65997638724912
+      }
+    },
+    {
+      "lower_inclusive": 3,
+      "upper_exclusive": 7,
+      "samples": 0,
+      "real_evaluated": 0,
+      "real_excluded": 0,
+      "original_groups": {},
+      "real_groups": {},
+      "narrow": {
+        "original_correct_all": 0,
+        "original_top1_all": null,
+        "original_correct_matched": 0,
+        "original_top1_matched": null,
+        "real_correct": 0,
+        "real_top1": null
+      },
+      "wide": {
+        "original_correct_all": 0,
+        "original_top1_all": null,
+        "original_correct_matched": 0,
+        "original_top1_matched": null,
+        "real_correct": 0,
+        "real_top1": null
+      },
+      "routed": {
+        "original_correct_all": 0,
+        "original_top1_all": null,
+        "original_correct_matched": 0,
+        "original_top1_matched": null,
+        "real_correct": 0,
+        "real_top1": null
+      }
+    }
+  ],
+  "audit_seed": 20261015,
+  "audit_samples": 40,
+  "limitations": "ReaL is complementary reassessed annotation, not infallible truth. Empty lists are excluded, never counted wrong. Probabilities are from a regression-only rerun with all Top-1 predictions reproduced. Random visual inspection is non-expert and unblinded; it cannot establish causal token effects."
+}

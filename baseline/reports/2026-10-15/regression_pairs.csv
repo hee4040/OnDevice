@@ -1,0 +1,825 @@
+target,target_name,prediction,prediction_name,count
+639,"maillot, tank suit",638,maillot,6
+240,Appenzeller,241,EntleBucher,5
+250,Siberian husky,248,"Eskimo dog, husky",5
+837,"sunglasses, dark glasses, shades",836,sunglass,5
+435,"bathtub, bathing tub, bath, tub",876,"tub, vat",4
+725,"pitcher, ewer",899,water jug,4
+638,maillot,639,"maillot, tank suit",4
+359,"black-footed ferret, ferret, Mustela nigripes",358,"polecat, fitch, foulmart, foumart, Mustela putorius",3
+240,Appenzeller,238,Greater Swiss Mountain dog,3
+236,"Doberman, Doberman pinscher",234,Rottweiler,3
+979,"valley, vale",970,alp,3
+64,green mamba,55,"green snake, grass snake",3
+513,"cornet, horn, trumpet, trump",875,trombone,3
+681,"notebook, notebook computer",620,"laptop, laptop computer",3
+656,minivan,436,"beach wagon, station wagon, wagon, estate car, beach waggon, station waggon, waggon",3
+77,"wolf spider, hunting spider",73,"barn spider, Araneus cavaticus",3
+876,"tub, vat",435,"bathtub, bathing tub, bath, tub",2
+750,"quilt, comforter, comfort, puff",831,"studio couch, day bed",2
+161,"basset, basset hound",162,beagle,2
+515,"cowboy hat, ten-gallon hat",514,cowboy boot,2
+579,"grand piano, grand",881,"upright, upright piano",2
+692,packet,549,envelope,2
+847,"tank, army tank, armored combat vehicle, armoured combat vehicle",586,half track,2
+527,desktop computer,664,monitor,2
+624,library,453,bookcase,2
+767,"rubber eraser, rubber, pencil eraser",710,pencil sharpener,2
+413,"assault rifle, assault gun",764,rifle,2
+658,mitten,911,"wool, woolen, woollen",2
+249,"malamute, malemute, Alaskan malamute",248,"Eskimo dog, husky",2
+382,"squirrel monkey, Saimiri sciureus",380,"titi, titi monkey",2
+813,spatula,618,ladle,2
+265,toy poodle,266,miniature poodle,2
+733,pole,602,"horizontal bar, high bar",2
+187,Yorkshire terrier,193,Australian terrier,2
+631,lotion,838,"sunscreen, sunblock, sun blocker",2
+823,stethoscope,617,"lab coat, laboratory coat",2
+968,cup,504,coffee mug,2
+369,"siamang, Hylobates syndactylus, Symphalangus syndactylus",368,"gibbon, Hylobates lar",2
+817,"sports car, sport car",751,"racer, race car, racing car",2
+926,"hot pot, hotpot",909,wok,2
+639,"maillot, tank suit",433,"bathing cap, swimming cap",2
+700,paper towel,999,"toilet tissue, toilet paper, bathroom tissue",2
+509,"confectionery, confectionary, candy store",692,packet,2
+524,cuirass,461,"breastplate, aegis, egis",2
+5,"electric ray, crampfish, numbfish, torpedo",6,stingray,2
+221,Irish water spaniel,267,standard poodle,2
+281,"tabby, tabby cat",285,Egyptian cat,2
+892,wall clock,835,sundial,2
+374,langur,371,"patas, hussar monkey, Erythrocebus patas",2
+671,"mountain bike, all-terrain bike, off-roader",970,alp,2
+821,steel arch bridge,718,pier,2
+752,"racket, racquet",890,volleyball,2
+238,Greater Swiss Mountain dog,240,Appenzeller,2
+531,digital watch,826,"stopwatch, stop watch",2
+636,"mailbag, postbag",748,purse,2
+601,"hoopskirt, crinoline",689,overskirt,2
+689,overskirt,601,"hoopskirt, crinoline",2
+118,"Dungeness crab, Cancer magister",119,"rock crab, Cancer irroratus",2
+598,"home theater, home theatre",548,entertainment center,2
+939,"zucchini, courgette",943,"cucumber, cuke",2
+485,CD player,754,"radio, wireless",2
+976,"promontory, headland, head, foreland",977,"sandbar, sand bar",2
+195,"Boston bull, Boston terrier",179,"Staffordshire bullterrier, Staffordshire bull terrier",2
+875,trombone,513,"cornet, horn, trumpet, trump",2
+264,"Cardigan, Cardigan Welsh corgi",263,"Pembroke, Pembroke Welsh corgi",2
+662,modem,592,"hard disc, hard disk, fixed disk",2
+497,"church, church building",884,vault,2
+941,acorn squash,940,spaghetti squash,2
+526,desk,553,"file, file cabinet, filing cabinet",2
+282,tiger cat,281,"tabby, tabby cat",2
+928,"ice cream, icecream",960,"chocolate sauce, chocolate syrup",2
+204,"Lhasa, Lhasa apso",155,Shih-Tzu,2
+710,pencil sharpener,767,"rubber eraser, rubber, pencil eraser",2
+970,alp,979,"valley, vale",2
+905,window shade,799,sliding door,2
+612,"jinrikisha, ricksha, rickshaw",870,"tricycle, trike, velocipede",2
+508,"computer keyboard, keypad",487,"cellular telephone, cellular phone, cellphone, cell, mobile phone",2
+541,"drum, membranophone, tympan",542,drumstick,2
+907,wine bottle,440,beer bottle,2
+409,analog clock,892,wall clock,2
+241,EntleBucher,240,Appenzeller,2
+485,CD player,848,tape player,2
+997,bolete,947,mushroom,2
+838,"sunscreen, sunblock, sun blocker",631,lotion,2
+976,"promontory, headland, head, foreland",972,"cliff, drop, drop-off",2
+837,"sunglasses, dark glasses, shades",523,crutch,2
+527,desktop computer,508,"computer keyboard, keypad",2
+200,"Tibetan terrier, chrysanthemum dog",204,"Lhasa, Lhasa apso",2
+590,"hand-held computer, hand-held microcomputer",487,"cellular telephone, cellular phone, cellphone, cell, mobile phone",2
+848,tape player,482,cassette player,2
+836,sunglass,837,"sunglasses, dark glasses, shades",2
+504,coffee mug,850,"teddy, teddy bear",2
+266,miniature poodle,265,toy poodle,2
+158,toy terrier,850,"teddy, teddy bear",1
+443,bib,452,"bonnet, poke bonnet",1
+706,"patio, terrace",762,"restaurant, eating house, eating place, eatery",1
+958,hay,706,"patio, terrace",1
+223,schipperke,224,groenendael,1
+663,monastery,873,triumphal arch,1
+947,mushroom,991,coral fungus,1
+566,"French horn, horn",513,"cornet, horn, trumpet, trump",1
+813,spatula,647,measuring cup,1
+699,"panpipe, pandean pipe, syrinx",862,torch,1
+737,"pop bottle, soda bottle",582,"grocery store, grocery, food market, market",1
+827,stove,891,waffle iron,1
+964,potpie,931,"bagel, beigel",1
+640,manhole cover,904,window screen,1
+60,"night snake, Hypsiglena torquata",59,vine snake,1
+827,stove,848,tape player,1
+467,"butcher shop, meat market",582,"grocery store, grocery, food market, market",1
+55,"green snake, grass snake",64,green mamba,1
+223,schipperke,256,"Newfoundland, Newfoundland dog",1
+860,"tobacco shop, tobacconist shop, tobacconist",789,shoji,1
+490,"chain mail, ring mail, mail, chain armor, chain armour, ring armor, ring armour",488,chain,1
+234,Rottweiler,236,"Doberman, Doberman pinscher",1
+504,coffee mug,868,tray,1
+641,maraca,522,croquet ball,1
+648,"medicine chest, medicine cabinet",804,soap dispenser,1
+799,sliding door,495,"china cabinet, china closet",1
+74,"garden spider, Aranea diademata",73,"barn spider, Araneus cavaticus",1
+186,Norwich terrier,193,Australian terrier,1
+504,coffee mug,968,cup,1
+941,acorn squash,942,butternut squash,1
+914,yawl,780,schooner,1
+329,"sea cucumber, holothurian",65,sea snake,1
+527,desktop computer,613,joystick,1
+567,"frying pan, frypan, skillet",910,wooden spoon,1
+620,"laptop, laptop computer",478,carton,1
+718,pier,536,"dock, dockage, docking facility",1
+703,park bench,843,swing,1
+36,terrapin,37,"box turtle, box tortoise",1
+842,"swimming trunks, bathing trunks",433,"bathing cap, swimming cap",1
+917,comic book,868,tray,1
+266,miniature poodle,267,standard poodle,1
+464,buckle,626,"lighter, light, igniter, ignitor",1
+519,crate,553,"file, file cabinet, filing cabinet",1
+896,"washbasin, handbasin, washbowl, lavabo, wash-hand basin",648,"medicine chest, medicine cabinet",1
+46,"green lizard, Lacerta viridis",40,"American chameleon, anole, Anolis carolinensis",1
+653,milk can,989,"hip, rose hip, rosehip",1
+973,coral reef,329,"sea cucumber, holothurian",1
+923,plate,935,mashed potato,1
+595,"harvester, reaper",856,"thresher, thrasher, threshing machine",1
+423,barber chair,407,ambulance,1
+680,nipple,720,pill bottle,1
+905,window shade,845,syringe,1
+692,packet,560,football helmet,1
+461,"breastplate, aegis, egis",524,cuirass,1
+394,sturgeon,391,"coho, cohoe, coho salmon, blue jack, silver salmon, Oncorhynchus kisutch",1
+855,thimble,883,vase,1
+987,corn,925,consomme,1
+522,croquet ball,575,"golfcart, golf cart",1
+690,oxcart,984,rapeseed,1
+35,mud turtle,36,terrapin,1
+917,comic book,858,tile roof,1
+895,"warplane, military plane",403,"aircraft carrier, carrier, flattop, attack aircraft carrier",1
+470,"candle, taper, wax light",532,"dining table, board",1
+199,"Scotch terrier, Scottish terrier, Scottie",197,giant schnauzer,1
+578,gown,638,maillot,1
+159,Rhodesian ridgeback,247,"Saint Bernard, St Bernard",1
+717,"pickup, pickup truck",654,minibus,1
+578,gown,728,plastic bag,1
+864,"tow truck, tow car, wrecker",705,"passenger car, coach, carriage",1
+205,flat-coated retriever,208,Labrador retriever,1
+512,"corkscrew, bottle screw",473,"can opener, tin opener",1
+664,monitor,620,"laptop, laptop computer",1
+835,sundial,892,wall clock,1
+54,"hognose snake, puff adder, sand viper",60,"night snake, Hypsiglena torquata",1
+478,carton,561,forklift,1
+230,"Shetland sheepdog, Shetland sheep dog, Shetland",231,collie,1
+970,alp,672,mountain tent,1
+712,Petri dish,729,plate rack,1
+750,"quilt, comforter, comfort, puff",588,hamper,1
+184,Irish terrier,191,"Airedale, Airedale terrier",1
+641,maraca,749,"quill, quill pen",1
+599,honeycomb,8,hen,1
+748,purse,636,"mailbag, postbag",1
+558,"flute, transverse flute",593,"harmonica, mouth organ, harp, mouth harp",1
+185,Norfolk terrier,215,Brittany spaniel,1
+883,vase,738,"pot, flowerpot",1
+647,measuring cup,659,mixing bowl,1
+587,hammer,596,hatchet,1
+923,plate,962,"meat loaf, meatloaf",1
+189,Lakeland terrier,245,French bulldog,1
+386,"African elephant, Loxodonta africana",101,tusker,1
+620,"laptop, laptop computer",681,"notebook, notebook computer",1
+784,screwdriver,783,screw,1
+972,"cliff, drop, drop-off",970,alp,1
+747,"punching bag, punch bag, punching ball, punchball",417,balloon,1
+899,water jug,725,"pitcher, ewer",1
+427,"barrel, cask",822,steel drum,1
+253,basenji,173,"Ibizan hound, Ibizan Podenco",1
+942,butternut squash,940,spaghetti squash,1
+394,sturgeon,4,"hammerhead, hammerhead shark",1
+735,poncho,501,cloak,1
+415,"bakery, bakeshop, bakehouse",850,"teddy, teddy bear",1
+119,"rock crab, Cancer irroratus",125,hermit crab,1
+710,pencil sharpener,589,"hand blower, blow dryer, blow drier, hair dryer, hair drier",1
+159,Rhodesian ridgeback,168,redbone,1
+436,"beach wagon, station wagon, wagon, estate car, beach waggon, station waggon, waggon",627,"limousine, limo",1
+655,"miniskirt, mini",788,"shoe shop, shoe-shop, shoe store",1
+439,"bearskin, busby, shako",652,military uniform,1
+725,"pitcher, ewer",849,teapot,1
+482,cassette player,848,tape player,1
+581,"grille, radiator grille",475,car mirror,1
+922,menu,563,fountain pen,1
+187,Yorkshire terrier,201,"silky terrier, Sydney silky",1
+692,packet,574,golf ball,1
+32,"tailed frog, bell toad, ribbed toad, tailed toad, Ascaphus trui",31,"tree frog, tree-frog",1
+78,tick,70,"harvestman, daddy longlegs, Phalangium opilio",1
+115,"sea slug, nudibranch",110,"flatworm, platyhelminth",1
+909,wok,936,head cabbage,1
+964,potpie,567,"frying pan, frypan, skillet",1
+733,pole,920,"traffic light, traffic signal, stoplight",1
+153,"Maltese dog, Maltese terrier, Maltese",203,West Highland white terrier,1
+865,toyshop,917,comic book,1
+536,"dock, dockage, docking facility",554,fireboat,1
+889,"violin, fiddle",432,bassoon,1
+617,"lab coat, laboratory coat",601,"hoopskirt, crinoline",1
+650,"microphone, mike",872,tripod,1
+43,"frilled lizard, Chlamydosaurus kingi",39,"common iguana, iguana, Iguana iguana",1
+462,broom,840,"swab, swob, mop",1
+243,bull mastiff,245,French bulldog,1
+905,window shade,846,table lamp,1
+0,"tench, Tinca tinca",391,"coho, cohoe, coho salmon, blue jack, silver salmon, Oncorhynchus kisutch",1
+607,jack-o'-lantern,668,mosque,1
+999,"toilet tissue, toilet paper, bathroom tissue",700,paper towel,1
+861,toilet seat,999,"toilet tissue, toilet paper, bathroom tissue",1
+424,barbershop,415,"bakery, bakeshop, bakehouse",1
+866,tractor,595,"harvester, reaper",1
+191,"Airedale, Airedale terrier",189,Lakeland terrier,1
+831,"studio couch, day bed",905,window shade,1
+478,carton,519,crate,1
+187,Yorkshire terrier,157,papillon,1
+55,"green snake, grass snake",59,vine snake,1
+549,envelope,767,"rubber eraser, rubber, pencil eraser",1
+861,toilet seat,361,"skunk, polecat, wood pussy",1
+759,reflex camera,786,sewing machine,1
+436,"beach wagon, station wagon, wagon, estate car, beach waggon, station waggon, waggon",581,"grille, radiator grille",1
+599,honeycomb,410,"apiary, bee house",1
+442,"bell cote, bell cot",494,"chime, bell, gong",1
+553,"file, file cabinet, filing cabinet",412,"ashcan, trash can, garbage can, wastebin, ash bin, ash-bin, ashbin, dustbin, trash barrel, trash bin",1
+708,"pedestal, plinth, footstall",458,"brass, memorial tablet, plaque",1
+198,standard schnauzer,183,Kerry blue terrier,1
+613,joystick,844,"switch, electric switch, electrical switch",1
+154,"Pekinese, Pekingese, Peke",151,Chihuahua,1
+248,"Eskimo dog, husky",162,beagle,1
+659,mixing bowl,961,dough,1
+454,"bookshop, bookstore, bookstall",865,toyshop,1
+909,wok,567,"frying pan, frypan, skillet",1
+651,"microwave, microwave oven",827,stove,1
+481,cassette,454,"bookshop, bookstore, bookstall",1
+553,"file, file cabinet, filing cabinet",514,cowboy boot,1
+170,Irish wolfhound,177,"Scottish deerhound, deerhound",1
+433,"bathing cap, swimming cap",842,"swimming trunks, bathing trunks",1
+652,military uniform,869,trench coat,1
+60,"night snake, Hypsiglena torquata",62,"rock python, rock snake, Python sebae",1
+39,"common iguana, iguana, Iguana iguana",46,"green lizard, Lacerta viridis",1
+237,miniature pinscher,736,"pool table, billiard table, snooker table",1
+787,"shield, buckler",892,wall clock,1
+166,"Walker hound, Walker foxhound",162,beagle,1
+663,monastery,442,"bell cote, bell cot",1
+329,"sea cucumber, holothurian",397,"puffer, pufferfish, blowfish, globefish",1
+431,bassinet,435,"bathtub, bathing tub, bath, tub",1
+566,"French horn, horn",875,trombone,1
+764,rifle,171,Italian greyhound,1
+842,"swimming trunks, bathing trunks",543,dumbbell,1
+372,baboon,371,"patas, hussar monkey, Erythrocebus patas",1
+411,apron,443,bib,1
+867,"trailer truck, tractor trailer, trucking rig, rig, articulated lorry, semi",675,moving van,1
+503,cocktail shaker,899,water jug,1
+493,"chiffonier, commode",526,desk,1
+259,Pomeranian,154,"Pekinese, Pekingese, Peke",1
+724,"pirate, pirate ship",913,wreck,1
+737,"pop bottle, soda bottle",899,water jug,1
+632,"loudspeaker, speaker, speaker unit, loudspeaker system, speaker system",482,cassette player,1
+500,cliff dwelling,972,"cliff, drop, drop-off",1
+792,shovel,777,scabbard,1
+549,envelope,478,carton,1
+569,"garbage truck, dustcart",803,"snowplow, snowplough",1
+902,whistle,507,combination lock,1
+796,ski mask,735,poncho,1
+424,barbershop,423,barber chair,1
+894,"wardrobe, closet, press",799,sliding door,1
+861,toilet seat,896,"washbasin, handbasin, washbowl, lavabo, wash-hand basin",1
+982,"groom, bridegroom",501,cloak,1
+34,"leatherback turtle, leatherback, leathery turtle, Dermochelys coriacea",33,"loggerhead, loggerhead turtle, Caretta caretta",1
+960,"chocolate sauce, chocolate syrup",928,"ice cream, icecream",1
+285,Egyptian cat,281,"tabby, tabby cat",1
+932,pretzel,923,plate,1
+493,"chiffonier, commode",553,"file, file cabinet, filing cabinet",1
+928,"ice cream, icecream",968,cup,1
+503,cocktail shaker,505,coffeepot,1
+943,"cucumber, cuke",940,spaghetti squash,1
+632,"loudspeaker, speaker, speaker unit, loudspeaker system, speaker system",848,tape player,1
+465,bulletproof vest,570,"gasmask, respirator, gas helmet",1
+700,paper towel,440,beer bottle,1
+448,birdhouse,494,"chime, bell, gong",1
+697,"pajama, pyjama, pj's, jammies",614,kimono,1
+931,"bagel, beigel",933,cheeseburger,1
+882,"vacuum, vacuum cleaner",827,stove,1
+488,chain,679,necklace,1
+858,tile roof,706,"patio, terrace",1
+197,giant schnauzer,214,Gordon setter,1
+692,packet,728,plastic bag,1
+919,street sign,424,barbershop,1
+489,chainlink fence,880,"unicycle, monocycle",1
+903,wig,411,apron,1
+246,Great Dane,164,bluetick,1
+978,"seashore, coast, seacoast, sea-coast",975,"lakeside, lakeshore",1
+617,"lab coat, laboratory coat",823,stethoscope,1
+839,suspension bridge,718,pier,1
+883,vase,708,"pedestal, plinth, footstall",1
+227,kelpie,232,Border collie,1
+431,bassinet,811,space heater,1
+109,brain coral,973,coral reef,1
+725,"pitcher, ewer",469,"caldron, cauldron",1
+47,"African chameleon, Chamaeleo chamaeleon",46,"green lizard, Lacerta viridis",1
+830,stretcher,731,"plunger, plumber's helper",1
+61,"boa constrictor, Constrictor constrictor",62,"rock python, rock snake, Python sebae",1
+889,"violin, fiddle",486,"cello, violoncello",1
+794,shower curtain,648,"medicine chest, medicine cabinet",1
+436,"beach wagon, station wagon, wagon, estate car, beach waggon, station waggon, waggon",656,minivan,1
+79,centipede,69,trilobite,1
+996,"hen-of-the-woods, hen of the woods, Polyporus frondosus, Grifola frondosa",991,coral fungus,1
+771,safe,412,"ashcan, trash can, garbage can, wastebin, ash bin, ash-bin, ashbin, dustbin, trash barrel, trash bin",1
+650,"microphone, mike",626,"lighter, light, igniter, ignitor",1
+31,"tree frog, tree-frog",32,"tailed frog, bell toad, ribbed toad, tailed toad, Ascaphus trui",1
+673,"mouse, computer mouse",527,desktop computer,1
+809,soup bowl,925,consomme,1
+737,"pop bottle, soda bottle",838,"sunscreen, sunblock, sun blocker",1
+735,poncho,911,"wool, woolen, woollen",1
+620,"laptop, laptop computer",810,space bar,1
+66,"horned viper, cerastes, sand viper, horned asp, Cerastes cornutus",68,"sidewinder, horned rattlesnake, Crotalus cerastes",1
+905,window shade,904,window screen,1
+63,"Indian cobra, Naja naja",52,"thunder snake, worm snake, Carphophis amoenus",1
+14,"indigo bunting, indigo finch, indigo bird, Passerina cyanea",12,"house finch, linnet, Carpodacus mexicanus",1
+23,vulture,22,"bald eagle, American eagle, Haliaeetus leucocephalus",1
+862,torch,555,"fire engine, fire truck",1
+342,"wild boar, boar, Sus scrofa",341,"hog, pig, grunter, squealer, Sus scrofa",1
+167,English foxhound,166,"Walker hound, Walker foxhound",1
+664,monitor,782,"screen, CRT screen",1
+210,German short-haired pointer,211,"vizsla, Hungarian pointer",1
+655,"miniskirt, mini",514,cowboy boot,1
+419,Band Aid,473,"can opener, tin opener",1
+860,"tobacco shop, tobacconist shop, tobacconist",454,"bookshop, bookstore, bookstall",1
+248,"Eskimo dog, husky",250,Siberian husky,1
+116,"chiton, coat-of-mail shell, sea cradle, polyplacophore",327,"starfish, sea star",1
+806,sock,770,running shoe,1
+533,"dishrag, dishcloth",735,poncho,1
+741,"prayer rug, prayer mat",399,abaya,1
+97,drake,137,"American coot, marsh hen, mud hen, water hen, Fulica americana",1
+328,sea urchin,947,mushroom,1
+824,stole,452,"bonnet, poke bonnet",1
+967,espresso,809,soup bowl,1
+155,Shih-Tzu,204,"Lhasa, Lhasa apso",1
+809,soup bowl,926,"hot pot, hotpot",1
+526,desk,613,joystick,1
+390,eel,973,coral reef,1
+165,black-and-tan coonhound,166,"Walker hound, Walker foxhound",1
+4,"hammerhead, hammerhead shark",2,"great white shark, white shark, man-eater, man-eating shark, Carcharodon carcharias",1
+631,lotion,804,soap dispenser,1
+454,"bookshop, bookstore, bookstall",498,"cinema, movie theater, movie theatre, movie house, picture palace",1
+797,sleeping bag,902,whistle,1
+511,convertible,817,"sports car, sport car",1
+535,"disk brake, disc brake",528,"dial telephone, dial phone",1
+826,"stopwatch, stop watch",530,digital clock,1
+171,Italian greyhound,151,Chihuahua,1
+165,black-and-tan coonhound,236,"Doberman, Doberman pinscher",1
+656,minivan,734,"police van, police wagon, paddy wagon, patrol wagon, wagon, black Maria",1
+180,"American Staffordshire terrier, Staffordshire terrier, American pit bull terrier, pit bull terrier",179,"Staffordshire bullterrier, Staffordshire bull terrier",1
+698,palace,538,dome,1
+40,"American chameleon, anole, Anolis carolinensis",46,"green lizard, Lacerta viridis",1
+357,mink,209,Chesapeake Bay retriever,1
+622,"lens cap, lens cover",732,"Polaroid camera, Polaroid Land camera",1
+248,"Eskimo dog, husky",249,"malamute, malemute, Alaskan malamute",1
+573,go-kart,751,"racer, race car, racing car",1
+195,"Boston bull, Boston terrier",245,French bulldog,1
+619,"lampshade, lamp shade",818,"spotlight, spot",1
+585,hair spray,631,lotion,1
+650,"microphone, mike",819,stage,1
+197,giant schnauzer,233,"Bouvier des Flandres, Bouviers des Flandres",1
+884,vault,663,monastery,1
+765,"rocking chair, rocker",857,throne,1
+935,mashed potato,415,"bakery, bakeshop, bakehouse",1
+481,cassette,848,tape player,1
+865,toyshop,582,"grocery store, grocery, food market, market",1
+468,"cab, hack, taxi, taxicab",627,"limousine, limo",1
+282,tiger cat,207,golden retriever,1
+836,sunglass,880,"unicycle, monocycle",1
+993,gyromitra,997,bolete,1
+548,entertainment center,598,"home theater, home theatre",1
+867,"trailer truck, tractor trailer, trucking rig, rig, articulated lorry, semi",555,"fire engine, fire truck",1
+63,"Indian cobra, Naja naja",64,green mamba,1
+629,"lipstick, lip rouge",767,"rubber eraser, rubber, pencil eraser",1
+764,rifle,541,"drum, membranophone, tympan",1
+978,"seashore, coast, seacoast, sea-coast",879,umbrella,1
+862,torch,569,"garbage truck, dustcart",1
+400,"academic gown, academic robe, judge's robe",667,mortarboard,1
+988,acorn,113,snail,1
+922,menu,549,envelope,1
+826,"stopwatch, stop watch",531,digital watch,1
+814,speedboat,554,fireboat,1
+894,"wardrobe, closet, press",896,"washbasin, handbasin, washbowl, lavabo, wash-hand basin",1
+895,"warplane, military plane",908,wing,1
+691,oxygen mask,570,"gasmask, respirator, gas helmet",1
+361,"skunk, polecat, wood pussy",794,shower curtain,1
+3,"tiger shark, Galeocerdo cuvieri",2,"great white shark, white shark, man-eater, man-eating shark, Carcharodon carcharias",1
+478,carton,412,"ashcan, trash can, garbage can, wastebin, ash bin, ash-bin, ashbin, dustbin, trash barrel, trash bin",1
+213,"Irish setter, red setter",220,Sussex spaniel,1
+374,langur,377,marmoset,1
+57,"garter snake, grass snake",62,"rock python, rock snake, Python sebae",1
+74,"garden spider, Aranea diademata",72,"black and gold garden spider, Argiope aurantia",1
+60,"night snake, Hypsiglena torquata",61,"boa constrictor, Constrictor constrictor",1
+226,briard,202,soft-coated wheaten terrier,1
+52,"thunder snake, worm snake, Carphophis amoenus",56,"king snake, kingsnake",1
+686,oil filter,783,screw,1
+615,knee pad,529,"diaper, nappy, napkin",1
+523,crutch,893,"wallet, billfold, notecase, pocketbook",1
+201,"silky terrier, Sydney silky",187,Yorkshire terrier,1
+735,poncho,824,stole,1
+949,strawberry,953,"pineapple, ananas",1
+698,palace,624,library,1
+692,packet,553,"file, file cabinet, filing cabinet",1
+660,"mobile home, manufactured home",425,barn,1
+675,moving van,867,"trailer truck, tractor trailer, trucking rig, rig, articulated lorry, semi",1
+883,vase,725,"pitcher, ewer",1
+602,"horizontal bar, high bar",416,"balance beam, beam",1
+848,tape player,571,"gas pump, gasoline pump, petrol pump, island dispenser",1
+636,"mailbag, postbag",790,shopping basket,1
+47,"African chameleon, Chamaeleo chamaeleon",26,"common newt, Triturus vulgaris",1
+158,toy terrier,227,kelpie,1
+571,"gas pump, gasoline pump, petrol pump, island dispenser",707,"pay-phone, pay-station",1
+415,"bakery, bakeshop, bakehouse",928,"ice cream, icecream",1
+75,"black widow, Latrodectus mactans",73,"barn spider, Araneus cavaticus",1
+172,whippet,171,Italian greyhound,1
+418,"ballpoint, ballpoint pen, ballpen, Biro",767,"rubber eraser, rubber, pencil eraser",1
+431,bassinet,529,"diaper, nappy, napkin",1
+751,"racer, race car, racing car",656,minivan,1
+74,"garden spider, Aranea diademata",815,"spider web, spider's web",1
+332,"Angora, Angora rabbit",283,Persian cat,1
+921,"book jacket, dust cover, dust jacket, dust wrapper",424,barbershop,1
+445,"bikini, two-piece",876,"tub, vat",1
+693,"paddle, boat paddle",914,yawl,1
+235,"German shepherd, German shepherd dog, German police dog, alsatian",227,kelpie,1
+942,butternut squash,930,French loaf,1
+16,bulbul,94,hummingbird,1
+290,"jaguar, panther, Panthera onca, Felis onca",288,"leopard, Panthera pardus",1
+692,packet,419,Band Aid,1
+609,"jeep, landrover",781,scoreboard,1
+469,"caldron, cauldron",861,toilet seat,1
+478,carton,419,Band Aid,1
+374,langur,381,"spider monkey, Ateles geoffroyi",1
+955,"jackfruit, jak, jack",43,"frilled lizard, Chlamydosaurus kingi",1
+457,"bow tie, bow-tie, bowtie",869,trench coat,1
+394,sturgeon,395,"gar, garfish, garpike, billfish, Lepisosteus osseus",1
+131,"little blue heron, Egretta caerulea",128,"black stork, Ciconia nigra",1
+62,"rock python, rock snake, Python sebae",60,"night snake, Hypsiglena torquata",1
+602,"horizontal bar, high bar",702,"parallel bars, bars",1
+441,beer glass,503,cocktail shaker,1
+893,"wallet, billfold, notecase, pocketbook",748,purse,1
+656,minivan,581,"grille, radiator grille",1
+202,soft-coated wheaten terrier,194,"Dandie Dinmont, Dandie Dinmont terrier",1
+917,comic book,692,packet,1
+524,cuirass,787,"shield, buckler",1
+151,Chihuahua,172,whippet,1
+760,"refrigerator, icebox",651,"microwave, microwave oven",1
+949,strawberry,954,banana,1
+314,"cockroach, roach",310,"ant, emmet, pismire",1
+618,ladle,828,strainer,1
+487,"cellular telephone, cellular phone, cellphone, cell, mobile phone",626,"lighter, light, igniter, ignitor",1
+790,shopping basket,582,"grocery store, grocery, food market, market",1
+818,"spotlight, spot",650,"microphone, mike",1
+515,"cowboy hat, ten-gallon hat",546,electric guitar,1
+677,nail,494,"chime, bell, gong",1
+348,"ram, tup",825,stone wall,1
+1,"goldfish, Carassius auratus",534,"dishwasher, dish washer, dishwashing machine",1
+648,"medicine chest, medicine cabinet",892,wall clock,1
+597,holster,893,"wallet, billfold, notecase, pocketbook",1
+567,"frying pan, frypan, skillet",544,Dutch oven,1
+542,drumstick,650,"microphone, mike",1
+501,cloak,689,overskirt,1
+703,park bench,807,"solar dish, solar collector, solar furnace",1
+795,ski,448,birdhouse,1
+269,"timber wolf, grey wolf, gray wolf, Canis lupus",271,"red wolf, maned wolf, Canis rufus, Canis niger",1
+965,burrito,924,guacamole,1
+52,"thunder snake, worm snake, Carphophis amoenus",60,"night snake, Hypsiglena torquata",1
+492,chest,453,bookcase,1
+379,"howler monkey, howler",381,"spider monkey, Ateles geoffroyi",1
+415,"bakery, bakeshop, bakehouse",865,toyshop,1
+60,"night snake, Hypsiglena torquata",54,"hognose snake, puff adder, sand viper",1
+131,"little blue heron, Egretta caerulea",132,"American egret, great white heron, Egretta albus",1
+166,"Walker hound, Walker foxhound",161,"basset, basset hound",1
+49,"African crocodile, Nile crocodile, Crocodylus niloticus",50,"American alligator, Alligator mississipiensis",1
+860,"tobacco shop, tobacconist shop, tobacconist",509,"confectionery, confectionary, candy store",1
+896,"washbasin, handbasin, washbowl, lavabo, wash-hand basin",840,"swab, swob, mop",1
+556,"fire screen, fireguard",461,"breastplate, aegis, egis",1
+235,"German shepherd, German shepherd dog, German police dog, alsatian",174,"Norwegian elkhound, elkhound",1
+489,chainlink fence,378,"capuchin, ringtail, Cebus capucinus",1
+56,"king snake, kingsnake",60,"night snake, Hypsiglena torquata",1
+921,"book jacket, dust cover, dust jacket, dust wrapper",558,"flute, transverse flute",1
+477,"carpenter's kit, tool kit",784,screwdriver,1
+561,forklift,569,"garbage truck, dustcart",1
+311,"grasshopper, hopper",312,cricket,1
+457,"bow tie, bow-tie, bowtie",920,"traffic light, traffic signal, stoplight",1
+241,EntleBucher,238,Greater Swiss Mountain dog,1
+673,"mouse, computer mouse",664,monitor,1
+613,joystick,868,tray,1
+690,oxcart,346,"water buffalo, water ox, Asiatic buffalo, Bubalus bubalis",1
+484,catamaran,871,trimaran,1
+856,"thresher, thrasher, threshing machine",595,"harvester, reaper",1
+464,buckle,761,"remote control, remote",1
+208,Labrador retriever,205,flat-coated retriever,1
+2,"great white shark, white shark, man-eater, man-eating shark, Carcharodon carcharias",4,"hammerhead, hammerhead shark",1
+618,ladle,910,wooden spoon,1
+971,bubble,929,"ice lolly, lolly, lollipop, popsicle",1
+358,"polecat, fitch, foulmart, foumart, Mustela putorius",359,"black-footed ferret, ferret, Mustela nigripes",1
+636,"mailbag, postbag",459,"brassiere, bra, bandeau",1
+796,ski mask,540,"drilling platform, offshore rig",1
+119,"rock crab, Cancer irroratus",124,"crayfish, crawfish, crawdad, crawdaddy",1
+358,"polecat, fitch, foulmart, foumart, Mustela putorius",357,mink,1
+411,apron,775,sarong,1
+654,minibus,705,"passenger car, coach, carriage",1
+854,"theater curtain, theatre curtain",697,"pajama, pyjama, pj's, jammies",1
+799,sliding door,765,"rocking chair, rocker",1
+544,Dutch oven,521,Crock Pot,1
+77,"wolf spider, hunting spider",769,"rule, ruler",1
+967,espresso,550,espresso maker,1
+18,magpie,20,"water ouzel, dipper",1
+563,fountain pen,777,scabbard,1
+483,castle,976,"promontory, headland, head, foreland",1
+709,"pencil box, pencil case",529,"diaper, nappy, napkin",1
+509,"confectionery, confectionary, candy store",582,"grocery store, grocery, food market, market",1
+436,"beach wagon, station wagon, wagon, estate car, beach waggon, station waggon, waggon",733,pole,1
+7,cock,187,Yorkshire terrier,1
+408,"amphibian, amphibious vehicle",847,"tank, army tank, armored combat vehicle, armoured combat vehicle",1
+525,"dam, dike, dyke",544,Dutch oven,1
+58,water snake,49,"African crocodile, Nile crocodile, Crocodylus niloticus",1
+868,tray,778,"scale, weighing machine",1
+185,Norfolk terrier,186,Norwich terrier,1
+818,"spotlight, spot",882,"vacuum, vacuum cleaner",1
+474,cardigan,834,"suit, suit of clothes",1
+748,purse,893,"wallet, billfold, notecase, pocketbook",1
+681,"notebook, notebook computer",922,menu,1
+827,stove,505,coffeepot,1
+809,soup bowl,504,coffee mug,1
+780,schooner,724,"pirate, pirate ship",1
+998,"ear, spike, capitulum",452,"bonnet, poke bonnet",1
+976,"promontory, headland, head, foreland",460,"breakwater, groin, groyne, mole, bulwark, seawall, jetty",1
+367,"chimpanzee, chimp, Pan troglodytes",584,hair slide,1
+541,"drum, membranophone, tympan",819,stage,1
+770,running shoe,630,Loafer,1
+435,"bathtub, bathing tub, bath, tub",896,"washbasin, handbasin, washbowl, lavabo, wash-hand basin",1
+885,velvet,658,mitten,1
+346,"water buffalo, water ox, Asiatic buffalo, Bubalus bubalis",690,oxcart,1
+587,hammer,740,power drill,1
+871,trimaran,484,catamaran,1
+828,strainer,618,ladle,1
+552,"feather boa, boa",643,mask,1
+546,electric guitar,420,banjo,1
+608,"jean, blue jean, denim",457,"bow tie, bow-tie, bowtie",1
+826,"stopwatch, stop watch",563,fountain pen,1
+230,"Shetland sheepdog, Shetland sheep dog, Shetland",249,"malamute, malemute, Alaskan malamute",1
+265,toy poodle,233,"Bouvier des Flandres, Bouviers des Flandres",1
+121,"king crab, Alaska crab, Alaskan king crab, Alaska king crab, Paralithodes camtschatica",119,"rock crab, Cancer irroratus",1
+899,water jug,901,whiskey jug,1
+533,"dishrag, dishcloth",824,stole,1
+925,consomme,618,ladle,1
+724,"pirate, pirate ship",780,schooner,1
+709,"pencil box, pencil case",767,"rubber eraser, rubber, pencil eraser",1
+389,"barracouta, snoek",0,"tench, Tinca tinca",1
+764,rifle,763,"revolver, six-gun, six-shooter",1
+767,"rubber eraser, rubber, pencil eraser",696,paintbrush,1
+677,nail,421,"bannister, banister, balustrade, balusters, handrail",1
+791,shopping cart,790,shopping basket,1
+460,"breakwater, groin, groyne, mole, bulwark, seawall, jetty",718,pier,1
+872,tripod,488,chain,1
+846,table lamp,883,vase,1
+178,Weimaraner,246,Great Dane,1
+975,"lakeside, lakeshore",483,castle,1
+619,"lampshade, lamp shade",494,"chime, bell, gong",1
+707,"pay-phone, pay-station",771,safe,1
+445,"bikini, two-piece",638,maillot,1
+591,"handkerchief, hankie, hanky, hankey",549,envelope,1
+206,curly-coated retriever,227,kelpie,1
+601,"hoopskirt, crinoline",982,"groom, bridegroom",1
+794,shower curtain,749,"quill, quill pen",1
+59,vine snake,115,"sea slug, nudibranch",1
+667,mortarboard,400,"academic gown, academic robe, judge's robe",1
+330,"wood rabbit, cottontail, cottontail rabbit",331,hare,1
+168,redbone,159,Rhodesian ridgeback,1
+501,cloak,841,sweatshirt,1
+939,"zucchini, courgette",941,acorn squash,1
+268,Mexican hairless,246,Great Dane,1
+526,desk,754,"radio, wireless",1
+686,oil filter,818,"spotlight, spot",1
+282,tiger cat,457,"bow tie, bow-tie, bowtie",1
+836,sunglass,606,"iron, smoothing iron",1
+786,sewing machine,447,"binoculars, field glasses, opera glasses",1
+675,moving van,519,crate,1
+729,plate rack,618,ladle,1
+777,scabbard,893,"wallet, billfold, notecase, pocketbook",1
+448,birdhouse,807,"solar dish, solar collector, solar furnace",1
+842,"swimming trunks, bathing trunks",899,water jug,1
+248,"Eskimo dog, husky",213,"Irish setter, red setter",1
+474,cardigan,911,"wool, woolen, woollen",1
+490,"chain mail, ring mail, mail, chain armor, chain armour, ring armor, ring armour",679,necklace,1
+189,Lakeland terrier,182,Border terrier,1
+842,"swimming trunks, bathing trunks",445,"bikini, two-piece",1
+605,iPod,481,cassette,1
+655,"miniskirt, mini",395,"gar, garfish, garpike, billfish, Lepisosteus osseus",1
+712,Petri dish,969,eggnog,1
+477,"carpenter's kit, tool kit",662,modem,1
+698,palace,663,monastery,1
+73,"barn spider, Araneus cavaticus",74,"garden spider, Aranea diademata",1
+968,cup,441,beer glass,1
+104,"wallaby, brush kangaroo",277,"red fox, Vulpes vulpes",1
+497,"church, church building",442,"bell cote, bell cot",1
+611,jigsaw puzzle,455,bottlecap,1
+700,paper towel,476,"carousel, carrousel, merry-go-round, roundabout, whirligig",1
+460,"breakwater, groin, groyne, mole, bulwark, seawall, jetty",978,"seashore, coast, seacoast, sea-coast",1
+95,jacamar,92,bee eater,1
+711,"perfume, essence",549,envelope,1
+849,teapot,911,"wool, woolen, woollen",1
+61,"boa constrictor, Constrictor constrictor",60,"night snake, Hypsiglena torquata",1
+587,hammer,618,ladle,1
+272,"coyote, prairie wolf, brush wolf, Canis latrans",271,"red wolf, maned wolf, Canis rufus, Canis niger",1
+281,"tabby, tabby cat",282,tiger cat,1
+415,"bakery, bakeshop, bakehouse",931,"bagel, beigel",1
+949,strawberry,950,orange,1
+529,"diaper, nappy, napkin",742,printer,1
+453,bookcase,454,"bookshop, bookstore, bookstall",1
+159,Rhodesian ridgeback,180,"American Staffordshire terrier, Staffordshire terrier, American pit bull terrier, pit bull terrier",1
+862,torch,795,ski,1
+412,"ashcan, trash can, garbage can, wastebin, ash bin, ash-bin, ashbin, dustbin, trash barrel, trash bin",454,"bookshop, bookstore, bookstall",1
+570,"gasmask, respirator, gas helmet",691,oxygen mask,1
+815,"spider web, spider's web",475,car mirror,1
+924,guacamole,923,plate,1
+272,"coyote, prairie wolf, brush wolf, Canis latrans",269,"timber wolf, grey wolf, gray wolf, Canis lupus",1
+661,Model T,479,car wheel,1
+743,"prison, prison house",421,"bannister, banister, balustrade, balusters, handrail",1
+542,drumstick,541,"drum, membranophone, tympan",1
+283,Persian cat,770,running shoe,1
+725,"pitcher, ewer",883,vase,1
+302,"ground beetle, carabid beetle",304,"leaf beetle, chrysomelid",1
+153,"Maltese dog, Maltese terrier, Maltese",204,"Lhasa, Lhasa apso",1
+440,beer bottle,582,"grocery store, grocery, food market, market",1
+489,chainlink fence,519,crate,1
+494,"chime, bell, gong",577,"gong, tam-tam",1
+205,flat-coated retriever,256,"Newfoundland, Newfoundland dog",1
+345,ox,690,oxcart,1
+505,coffeepot,859,toaster,1
+692,packet,921,"book jacket, dust cover, dust jacket, dust wrapper",1
+842,"swimming trunks, bathing trunks",838,"sunscreen, sunblock, sun blocker",1
+173,"Ibizan hound, Ibizan Podenco",958,hay,1
+539,"doormat, welcome mat",721,pillow,1
+509,"confectionery, confectionary, candy store",722,ping-pong ball,1
+173,"Ibizan hound, Ibizan Podenco",176,"Saluki, gazelle hound",1
+356,weasel,358,"polecat, fitch, foulmart, foumart, Mustela putorius",1
+79,centipede,60,"night snake, Hypsiglena torquata",1
+427,"barrel, cask",756,rain barrel,1
+860,"tobacco shop, tobacconist shop, tobacconist",498,"cinema, movie theater, movie theatre, movie house, picture palace",1
+162,beagle,164,bluetick,1
+834,"suit, suit of clothes",451,"bolo tie, bolo, bola tie, bola",1
+735,poncho,474,cardigan,1
+270,"white wolf, Arctic wolf, Canis lupus tundrarum",269,"timber wolf, grey wolf, gray wolf, Canis lupus",1
+197,giant schnauzer,183,Kerry blue terrier,1
+654,minibus,734,"police van, police wagon, paddy wagon, patrol wagon, wagon, black Maria",1
+210,German short-haired pointer,217,"English springer, English springer spaniel",1
+227,kelpie,209,Chesapeake Bay retriever,1
+657,missile,744,"projectile, missile",1
+791,shopping cart,762,"restaurant, eating house, eating place, eatery",1
+265,toy poodle,259,Pomeranian,1
+602,"horizontal bar, high bar",830,stretcher,1
+173,"Ibizan hound, Ibizan Podenco",172,whippet,1
+442,"bell cote, bell cot",706,"patio, terrace",1
+488,chain,600,"hook, claw",1
+180,"American Staffordshire terrier, Staffordshire terrier, American pit bull terrier, pit bull terrier",246,Great Dane,1
+737,"pop bottle, soda bottle",440,beer bottle,1
+997,bolete,995,earthstar,1
+776,"sax, saxophone",513,"cornet, horn, trumpet, trump",1
+213,"Irish setter, red setter",226,briard,1
+648,"medicine chest, medicine cabinet",896,"washbasin, handbasin, washbowl, lavabo, wash-hand basin",1
+809,soup bowl,868,tray,1
+557,"flagpole, flagstaff",733,pole,1
+158,toy terrier,151,Chihuahua,1
+529,"diaper, nappy, napkin",562,fountain,1
+782,"screen, CRT screen",664,monitor,1
+446,"binder, ring-binder",664,monitor,1
+507,combination lock,771,safe,1
+183,Kerry blue terrier,206,curly-coated retriever,1
+587,hammer,558,"flute, transverse flute",1
+406,altar,698,palace,1
+191,"Airedale, Airedale terrier",999,"toilet tissue, toilet paper, bathroom tissue",1
+653,milk can,469,"caldron, cauldron",1
+445,"bikini, two-piece",490,"chain mail, ring mail, mail, chain armor, chain armour, ring armor, ring armour",1
+740,power drill,534,"dishwasher, dish washer, dishwashing machine",1
+591,"handkerchief, hankie, hanky, hankey",721,pillow,1
+161,"basset, basset hound",195,"Boston bull, Boston terrier",1
+968,cup,725,"pitcher, ewer",1
+257,Great Pyrenees,205,flat-coated retriever,1
+692,packet,644,matchstick,1
+831,"studio couch, day bed",721,pillow,1
+781,scoreboard,565,freight car,1
+858,tile roof,23,vulture,1
+646,"maze, labyrinth",580,"greenhouse, nursery, glasshouse",1
+848,tape player,485,CD player,1
+3,"tiger shark, Galeocerdo cuvieri",4,"hammerhead, hammerhead shark",1
+506,"coil, spiral, volute, whorl, helix",863,totem pole,1
+956,custard apple,519,crate,1
+784,screwdriver,633,"loupe, jeweler's loupe",1
+839,suspension bridge,821,steel arch bridge,1
+632,"loudspeaker, speaker, speaker unit, loudspeaker system, speaker system",485,CD player,1
+712,Petri dish,605,iPod,1
+483,castle,743,"prison, prison house",1
+42,agama,303,"long-horned beetle, longicorn, longicorn beetle",1
+492,chest,644,matchstick,1
+552,"feather boa, boa",629,"lipstick, lip rouge",1
+631,lotion,434,bath towel,1
+589,"hand blower, blow dryer, blow drier, hair dryer, hair drier",697,"pajama, pyjama, pj's, jammies",1
+976,"promontory, headland, head, foreland",150,sea lion,1
+971,bubble,75,"black widow, Latrodectus mactans",1
+309,bee,899,water jug,1
+862,torch,980,volcano,1
+811,space heater,545,"electric fan, blower",1
+817,"sports car, sport car",479,car wheel,1
+162,beagle,166,"Walker hound, Walker foxhound",1
+411,apron,591,"handkerchief, hankie, hanky, hankey",1
+317,leafhopper,312,cricket,1
+329,"sea cucumber, holothurian",126,isopod,1
+215,Brittany spaniel,218,Welsh springer spaniel,1
+975,"lakeside, lakeshore",703,park bench,1
+747,"punching bag, punch bag, punching ball, punchball",731,"plunger, plumber's helper",1
+630,Loafer,492,chest,1
+771,safe,844,"switch, electric switch, electrical switch",1
+504,coffee mug,960,"chocolate sauce, chocolate syrup",1
+930,French loaf,931,"bagel, beigel",1
+150,sea lion,706,"patio, terrace",1
+68,"sidewinder, horned rattlesnake, Crotalus cerastes",66,"horned viper, cerastes, sand viper, horned asp, Cerastes cornutus",1
+893,"wallet, billfold, notecase, pocketbook",464,buckle,1
+419,Band Aid,539,"doormat, welcome mat",1
+759,reflex camera,732,"Polaroid camera, Polaroid Land camera",1
+230,"Shetland sheepdog, Shetland sheep dog, Shetland",263,"Pembroke, Pembroke Welsh corgi",1
+743,"prison, prison house",594,harp,1
+572,goblet,441,beer glass,1
+229,"Old English sheepdog, bobtail",170,Irish wolfhound,1
+313,"walking stick, walkingstick, stick insect",70,"harvestman, daddy longlegs, Phalangium opilio",1
+862,torch,638,maillot,1
+751,"racer, race car, racing car",573,go-kart,1
+744,"projectile, missile",405,"airship, dirigible",1
+444,"bicycle-built-for-two, tandem bicycle, tandem",880,"unicycle, monocycle",1
+263,"Pembroke, Pembroke Welsh corgi",225,malinois,1
+215,Brittany spaniel,212,English setter,1
+919,street sign,498,"cinema, movie theater, movie theatre, movie house, picture palace",1
+620,"laptop, laptop computer",526,desk,1
+86,partridge,85,quail,1
+431,bassinet,520,"crib, cot",1
+353,gazelle,355,llama,1
+353,gazelle,352,"impala, Aepyceros melampus",1
+645,maypole,787,"shield, buckler",1
+689,overskirt,578,gown,1
+809,soup bowl,910,wooden spoon,1
+962,"meat loaf, meatloaf",940,spaghetti squash,1
+598,"home theater, home theatre",851,"television, television system",1
+999,"toilet tissue, toilet paper, bathroom tissue",686,oil filter,1
+912,"worm fence, snake fence, snake-rail fence, Virginia fence",421,"bannister, banister, balustrade, balusters, handrail",1
+305,dung beetle,304,"leaf beetle, chrysomelid",1
+942,butternut squash,935,mashed potato,1
+658,mitten,474,cardigan,1
+637,"mailbox, letter box",792,shovel,1
+558,"flute, transverse flute",541,"drum, membranophone, tympan",1
+936,head cabbage,580,"greenhouse, nursery, glasshouse",1
+938,cauliflower,987,corn,1
+809,soup bowl,968,cup,1
+893,"wallet, billfold, notecase, pocketbook",709,"pencil box, pencil case",1
+870,"tricycle, trike, velocipede",830,stretcher,1
+144,pelican,99,goose,1
+398,abacus,790,shopping basket,1
+952,fig,948,Granny Smith,1
+632,"loudspeaker, speaker, speaker unit, loudspeaker system, speaker system",754,"radio, wireless",1
+158,toy terrier,237,miniature pinscher,1
+187,Yorkshire terrier,589,"hand blower, blow dryer, blow drier, hair dryer, hair drier",1
+961,dough,792,shovel,1
+728,plastic bag,281,"tabby, tabby cat",1
+64,green mamba,60,"night snake, Hypsiglena torquata",1
+452,"bonnet, poke bonnet",515,"cowboy hat, ten-gallon hat",1
+456,bow,390,eel,1
+436,"beach wagon, station wagon, wagon, estate car, beach waggon, station waggon, waggon",479,car wheel,1
+280,"grey fox, gray fox, Urocyon cinereoargenteus",278,"kit fox, Vulpes macrotis",1
+753,radiator,686,oil filter,1
+927,trifle,928,"ice cream, icecream",1
+439,"bearskin, busby, shako",513,"cornet, horn, trumpet, trump",1
+989,"hip, rose hip, rosehip",114,slug,1
+329,"sea cucumber, holothurian",6,stingray,1
+416,"balance beam, beam",602,"horizontal bar, high bar",1
+660,"mobile home, manufactured home",609,"jeep, landrover",1
+723,pinwheel,457,"bow tie, bow-tie, bowtie",1
+787,"shield, buckler",455,bottlecap,1
+564,four-poster,516,cradle,1
+628,"liner, ocean liner",536,"dock, dockage, docking facility",1
+461,"breastplate, aegis, egis",643,mask,1
+470,"candle, taper, wax light",406,altar,1
+842,"swimming trunks, bathing trunks",472,canoe,1
+281,"tabby, tabby cat",725,"pitcher, ewer",1
+538,dome,497,"church, church building",1
+58,water snake,54,"hognose snake, puff adder, sand viper",1
+516,cradle,850,"teddy, teddy bear",1
+506,"coil, spiral, volute, whorl, helix",600,"hook, claw",1
+77,"wolf spider, hunting spider",120,fiddler crab,1
+872,tripod,759,reflex camera,1
+168,redbone,237,miniature pinscher,1
+854,"theater curtain, theatre curtain",498,"cinema, movie theater, movie theatre, movie house, picture palace",1
+314,"cockroach, roach",78,tick,1
+675,moving van,656,minivan,1
+33,"loggerhead, loggerhead turtle, Caretta caretta",36,terrapin,1
+930,French loaf,415,"bakery, bakeshop, bakehouse",1
+879,umbrella,701,"parachute, chute",1
+702,"parallel bars, bars",602,"horizontal bar, high bar",1
+912,"worm fence, snake fence, snake-rail fence, Virginia fence",716,"picket fence, paling",1
+675,moving van,734,"police van, police wagon, paddy wagon, patrol wagon, wagon, black Maria",1
+256,"Newfoundland, Newfoundland dog",223,schipperke,1
+369,"siamang, Hylobates syndactylus, Symphalangus syndactylus",381,"spider monkey, Ateles geoffroyi",1
+473,"can opener, tin opener",600,"hook, claw",1
+530,digital clock,409,analog clock,1
+414,"backpack, back pack, knapsack, packsack, rucksack, haversack",636,"mailbag, postbag",1

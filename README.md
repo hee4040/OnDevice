@@ -6,6 +6,8 @@
 
 ## 베이스라인 실측 결과 — 2026-10-14
 
+추가 분석: [ThinkingViT 실패 분석 — 수치·예시 이미지·ReaL 재평가](baseline/failure_analysis.md) (2026-10-15).
+
 **같은 배치에서 공식 forward와 실제 early exit를 비교했을 때, threshold별 validation 50,000장 전체의 Top-1 예측과 분기 선택이 모두 일치했다.** threshold 1.0의 batch-1 평균 latency는 19.277ms에서 12.371ms로 약 **35.8% 감소**했다. 이는 RTX 3090에서 수행한 baseline 측정이며, 선택적 토큰 갱신의 성능이나 모바일 기기 실측 결과는 아니다.
 
 ### 전체 validation 정확도

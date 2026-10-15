@@ -1,0 +1,315 @@
+{
+  "source_run": "results/20261015T041255.578722Z-stage-analysis",
+  "samples": 50000,
+  "routed_errors": 9848,
+  "early_exit_errors": 3139,
+  "routed_regressions": 945,
+  "source_regressions_true_in_wide_top5": 913,
+  "probability_rerun_predictions_reproduced": 945,
+  "probability_rerun_predictions_changed": 0,
+  "reproduced_true_rank_histogram": {
+    "2": 719,
+    "3": 126,
+    "4": 45,
+    "5": 23,
+    "6": 9,
+    "7": 5,
+    "8": 3,
+    "9": 3,
+    "10": 3,
+    "11": 1,
+    "12": 1,
+    "13": 1,
+    "14": 1,
+    "19": 1,
+    "20": 1,
+    "24": 1,
+    "43": 1,
+    "47": 1
+  },
+  "reproduced_wrong_probability_ge_0_5": 334,
+  "reproduced_wrong_probability_ge_0_9": 0,
+  "median_narrow_top1_margin": 0.13108070194721222,
+  "median_wide_top1_margin": 0.17806711792945862,
+  "worst_classes": [
+    {
+      "label": 620,
+      "name": "laptop, laptop computer",
+      "images": 50,
+      "narrow_errors": 42,
+      "wide_errors": 41,
+      "routed_errors": 41,
+      "routed_narrow_correct": 7,
+      "routed_regressions": 4,
+      "regression_rate_among_routed_narrow_correct": 0.5714285714285714
+    },
+    {
+      "label": 782,
+      "name": "screen, CRT screen",
+      "images": 50,
+      "narrow_errors": 41,
+      "wide_errors": 40,
+      "routed_errors": 40,
+      "routed_narrow_correct": 9,
+      "routed_regressions": 1,
+      "regression_rate_among_routed_narrow_correct": 0.1111111111111111
+    },
+    {
+      "label": 282,
+      "name": "tiger cat",
+      "images": 50,
+      "narrow_errors": 38,
+      "wide_errors": 39,
+      "routed_errors": 39,
+      "routed_narrow_correct": 8,
+      "routed_regressions": 4,
+      "regression_rate_among_routed_narrow_correct": 0.5
+    },
+    {
+      "label": 240,
+      "name": "Appenzeller",
+      "images": 50,
+      "narrow_errors": 31,
+      "wide_errors": 35,
+      "routed_errors": 36,
+      "routed_narrow_correct": 18,
+      "routed_regressions": 8,
+      "regression_rate_among_routed_narrow_correct": 0.4444444444444444
+    },
+    {
+      "label": 623,
+      "name": "letter opener, paper knife, paperknife",
+      "images": 50,
+      "narrow_errors": 42,
+      "wide_errors": 35,
+      "routed_errors": 36,
+      "routed_narrow_correct": 7,
+      "routed_regressions": 0,
+      "regression_rate_among_routed_narrow_correct": 0.0
+    },
+    {
+      "label": 836,
+      "name": "sunglass",
+      "images": 50,
+      "narrow_errors": 40,
+      "wide_errors": 38,
+      "routed_errors": 36,
+      "routed_narrow_correct": 7,
+      "routed_regressions": 4,
+      "regression_rate_among_routed_narrow_correct": 0.5714285714285714
+    },
+    {
+      "label": 68,
+      "name": "sidewinder, horned rattlesnake, Crotalus cerastes",
+      "images": 50,
+      "narrow_errors": 42,
+      "wide_errors": 32,
+      "routed_errors": 35,
+      "routed_narrow_correct": 6,
+      "routed_regressions": 1,
+      "regression_rate_among_routed_narrow_correct": 0.16666666666666666
+    },
+    {
+      "label": 818,
+      "name": "spotlight, spot",
+      "images": 50,
+      "narrow_errors": 38,
+      "wide_errors": 34,
+      "routed_errors": 35,
+      "routed_narrow_correct": 10,
+      "routed_regressions": 2,
+      "regression_rate_among_routed_narrow_correct": 0.2
+    },
+    {
+      "label": 516,
+      "name": "cradle",
+      "images": 50,
+      "narrow_errors": 38,
+      "wide_errors": 27,
+      "routed_errors": 34,
+      "routed_narrow_correct": 11,
+      "routed_regressions": 1,
+      "regression_rate_among_routed_narrow_correct": 0.09090909090909091
+    },
+    {
+      "label": 638,
+      "name": "maillot",
+      "images": 50,
+      "narrow_errors": 39,
+      "wide_errors": 34,
+      "routed_errors": 34,
+      "routed_narrow_correct": 11,
+      "routed_regressions": 4,
+      "regression_rate_among_routed_narrow_correct": 0.36363636363636365
+    },
+    {
+      "label": 885,
+      "name": "velvet",
+      "images": 50,
+      "narrow_errors": 43,
+      "wide_errors": 34,
+      "routed_errors": 34,
+      "routed_narrow_correct": 6,
+      "routed_regressions": 1,
+      "regression_rate_among_routed_narrow_correct": 0.16666666666666666
+    },
+    {
+      "label": 482,
+      "name": "cassette player",
+      "images": 50,
+      "narrow_errors": 40,
+      "wide_errors": 33,
+      "routed_errors": 33,
+      "routed_narrow_correct": 8,
+      "routed_regressions": 1,
+      "regression_rate_among_routed_narrow_correct": 0.125
+    },
+    {
+      "label": 689,
+      "name": "overskirt",
+      "images": 50,
+      "narrow_errors": 38,
+      "wide_errors": 33,
+      "routed_errors": 33,
+      "routed_narrow_correct": 12,
+      "routed_regressions": 3,
+      "regression_rate_among_routed_narrow_correct": 0.25
+    },
+    {
+      "label": 876,
+      "name": "tub, vat",
+      "images": 50,
+      "narrow_errors": 37,
+      "wide_errors": 30,
+      "routed_errors": 33,
+      "routed_narrow_correct": 11,
+      "routed_regressions": 2,
+      "regression_rate_among_routed_narrow_correct": 0.18181818181818182
+    },
+    {
+      "label": 60,
+      "name": "night snake, Hypsiglena torquata",
+      "images": 50,
+      "narrow_errors": 31,
+      "wide_errors": 31,
+      "routed_errors": 32,
+      "routed_narrow_correct": 17,
+      "routed_regressions": 4,
+      "regression_rate_among_routed_narrow_correct": 0.23529411764705882
+    }
+  ],
+  "top_regression_pairs": [
+    {
+      "target": 639,
+      "target_name": "maillot, tank suit",
+      "prediction": 638,
+      "prediction_name": "maillot",
+      "count": 6
+    },
+    {
+      "target": 240,
+      "target_name": "Appenzeller",
+      "prediction": 241,
+      "prediction_name": "EntleBucher",
+      "count": 5
+    },
+    {
+      "target": 250,
+      "target_name": "Siberian husky",
+      "prediction": 248,
+      "prediction_name": "Eskimo dog, husky",
+      "count": 5
+    },
+    {
+      "target": 837,
+      "target_name": "sunglasses, dark glasses, shades",
+      "prediction": 836,
+      "prediction_name": "sunglass",
+      "count": 5
+    },
+    {
+      "target": 435,
+      "target_name": "bathtub, bathing tub, bath, tub",
+      "prediction": 876,
+      "prediction_name": "tub, vat",
+      "count": 4
+    },
+    {
+      "target": 725,
+      "target_name": "pitcher, ewer",
+      "prediction": 899,
+      "prediction_name": "water jug",
+      "count": 4
+    },
+    {
+      "target": 638,
+      "target_name": "maillot",
+      "prediction": 639,
+      "prediction_name": "maillot, tank suit",
+      "count": 4
+    },
+    {
+      "target": 359,
+      "target_name": "black-footed ferret, ferret, Mustela nigripes",
+      "prediction": 358,
+      "prediction_name": "polecat, fitch, foulmart, foumart, Mustela putorius",
+      "count": 3
+    },
+    {
+      "target": 240,
+      "target_name": "Appenzeller",
+      "prediction": 238,
+      "prediction_name": "Greater Swiss Mountain dog",
+      "count": 3
+    },
+    {
+      "target": 236,
+      "target_name": "Doberman, Doberman pinscher",
+      "prediction": 234,
+      "prediction_name": "Rottweiler",
+      "count": 3
+    },
+    {
+      "target": 979,
+      "target_name": "valley, vale",
+      "prediction": 970,
+      "prediction_name": "alp",
+      "count": 3
+    },
+    {
+      "target": 64,
+      "target_name": "green mamba",
+      "prediction": 55,
+      "prediction_name": "green snake, grass snake",
+      "count": 3
+    },
+    {
+      "target": 513,
+      "target_name": "cornet, horn, trumpet, trump",
+      "prediction": 875,
+      "prediction_name": "trombone",
+      "count": 3
+    },
+    {
+      "target": 681,
+      "target_name": "notebook, notebook computer",
+      "prediction": 620,
+      "prediction_name": "laptop, laptop computer",
+      "count": 3
+    },
+    {
+      "target": 656,
+      "target_name": "minivan",
+      "prediction": 436,
+      "prediction_name": "beach wagon, station wagon, wagon, estate car, beach waggon, station waggon, waggon",
+      "count": 3
+    }
+  ],
+  "checkpoint_sha256": "9ead984e9e39887eb037a42c189c58c0af14cd9c2771ad27b4b01876997242b5",
+  "batch_size": 128,
+  "gpu": "NVIDIA GeForce RTX 3090",
+  "torch": "2.5.1+cu124",
+  "precision": "float32, AMP off, TF32 allowed",
+  "script_sha256": "388da6e4f7b3502a7120650ad1e2f137ab7f2d24d14023ceb9cb34b2950d60d3",
+  "note": "Class statistics use original full-validation records. Probability rerun uses only routed regressions; batch composition differs from the source and reproduction is reported explicitly. No automatic visual cause labels are assigned. 50 validation images per class."
+}

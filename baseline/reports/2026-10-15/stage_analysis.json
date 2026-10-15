@@ -1,0 +1,51 @@
+{
+  "complete": true,
+  "samples": 50000,
+  "full_validation": true,
+  "threshold": 1.0,
+  "hook_output_equality_verified_on_first_batch": true,
+  "groups": {
+    "all": {
+      "images": 50000,
+      "groups": {
+        "both_correct": 35522,
+        "corrected": 5198,
+        "regressed": 1245,
+        "both_wrong": 8035
+      },
+      "narrow_top1": 73.534,
+      "wide_top1": 81.44,
+      "routed_top1": 80.304,
+      "net_corrected_images": 3953
+    },
+    "routed_to_6h": {
+      "images": 18004,
+      "groups": {
+        "both_correct": 6965,
+        "corrected": 4330,
+        "regressed": 945,
+        "both_wrong": 5764
+      },
+      "narrow_top1": 43.93468118195956,
+      "wide_top1": 62.736058653632526,
+      "routed_top1": 62.736058653632526,
+      "net_corrected_images": 3385
+    },
+    "exited_at_3h": {
+      "images": 31996,
+      "groups": {
+        "both_correct": 28557,
+        "corrected": 868,
+        "regressed": 300,
+        "both_wrong": 2271
+      },
+      "narrow_top1": 90.18939867483435,
+      "wide_top1": 91.96462057757219,
+      "routed_top1": 90.18939867483435,
+      "net_corrected_images": 568
+    }
+  },
+  "source_run": "results/20261015T041255.578722Z-stage-analysis",
+  "csv_attention_alignment_verified": true,
+  "analysis_source_sha256": "c54551d2d862b71544f0cdae034878fff28bd0d10767f2866b9a4f59a78535eb"
+}
