@@ -96,3 +96,9 @@ CUDA_VISIBLE_DEVICES=0 .venv/bin/python baseline/evaluate_selective.py \
 평가기의 100% 갱신 경로는 첫 routed batch에서 공식 전체 6H 경로와 logits 및 Top-1이 일치해야
 계속 실행된다. 결과는 `results/<시각>-selective-refinement/summary.json`과 `summary.csv`에 저장한다.
 실험 정의, 실행 상태와 해석은 [`h1_selective_refinement.md`](h1_selective_refinement.md)에 정리한다.
+
+2026-10-21 전체 validation 실험에서 100% 갱신은 Top-1 80.312%였지만, CLS Attention Top-K
+25/50/75% 갱신은 57.800/57.768/57.784%였다. routed Top-1과 Correction Retention도 모두 0.25%
+미만이어서 현재의 무학습·전 블록 고정 마스크 방식으로는 H1이 지지되지 않았다. Random-K와
+Bottom-K보다 일관된 이점도 없었다. [추적용 결과 JSON](reports/2026-10-21/selective_refinement.json)에
+환경과 집계를 보존했다.
