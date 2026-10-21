@@ -76,3 +76,23 @@ CUDA_VISIBLE_DEVICES=0 .venv/bin/python baseline/analyze_stages.py --batch-size 
 ## 실패 분석 보고서
 
 [ThinkingViT 실패 분석](failure_analysis.md)에 전체 오류 통계, 3H 정답→6H 오답 945장의 확률 변화, ImageNet ReaL 재평가, 실제 입력 이미지 8개의 사례를 정리했다. 표본 선택 방법과 판정이 어려운 경우의 한계, 근거 JSON·CSV 및 재현 명령도 보고서에 포함했다.
+
+## H1 선택적 토큰 갱신 정확도 실험
+
+[`selective_refinement.py`](selective_refinement.py)는 6H의 각 블록을 dense하게 계산한 뒤 선택된
+토큰의 새 상태만 반영하는 정확도 oracle이다. CLS는 항상 갱신하고, 패치 선택 마스크는 3H 마지막
+블록의 CLS Attention으로 한 번 정한 뒤 12개 6H 블록에서 고정한다. 선택된 Query는 현재의 전체
+토큰을 Key/Value 문맥으로 사용한다. 이 구현은 선택 정책의 정확도 효과를 검증하기 위한 것으로,
+아직 FLOPs 또는 latency를 줄이지 않는다.
+
+```bash
+CUDA_VISIBLE_DEVICES=0 .venv/bin/python baseline/evaluate_selective.py \
+  --ratios 0 .25 .5 .75 1 \
+  --policies topk bottomk random \
+  --random-seeds 0 1 2 3 4 \
+  --batch-size 32
+```
+
+평가기의 100% 갱신 경로는 첫 routed batch에서 공식 전체 6H 경로와 logits 및 Top-1이 일치해야
+계속 실행된다. 결과는 `results/<시각>-selective-refinement/summary.json`과 `summary.csv`에 저장한다.
+실험 정의, 실행 상태와 해석은 [`h1_selective_refinement.md`](h1_selective_refinement.md)에 정리한다.

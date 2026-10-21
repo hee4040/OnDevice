@@ -2,7 +2,11 @@
 
 **Selective Token Refinement for Efficient ThinkingViT** 수업 프로젝트의 베이스라인 실험 코드다. 공식 ThinkingViT의 DeiT 기반 **3H → 6H** 모델을 ImageNet-1K에서 평가하고, 이후 선택적 토큰 갱신 모델과 비교할 기준을 마련한다.
 
-현재 제공하는 기능은 데이터 준비, 공식 EMA 가중치 다운로드, 공식 평가 재현, 실제 early-exit baseline, 정확도·batch-1 지연시간·GPU 메모리 측정이다. 선택적 토큰 갱신과 fine-tuning은 아직 구현하지 않았다.
+현재 제공하는 기능은 데이터 준비, 공식 EMA 가중치 다운로드, 공식 평가 재현, 실제 early-exit baseline, 정확도·batch-1 지연시간·GPU 메모리 측정이다. 실제 sparse 선택 연산과 fine-tuning은 아직 구현하지 않았다.
+
+H1 검증용 dense-mask 선택적 토큰 갱신 accuracy oracle과 평가기는 실험 브랜치에 추가되어 있다.
+이 구현은 정확도 가설만 검증하며 아직 실제 sparse 연산이나 latency 절감을 구현하지 않는다.
+[실험 정의와 상태](baseline/h1_selective_refinement.md)에서 선택 의미론, 지표와 실행 방법을 확인할 수 있다.
 
 ## 베이스라인 실측 결과 — 2026-10-14
 
