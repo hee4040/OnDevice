@@ -1,5 +1,7 @@
 # ThinkingViT 실제 early-exit baseline
 
+선택적 갱신 후속 실험: [전체 Attention + 선택적 MLP 갱신](h1_mlp_selective_refinement.md).
+
 공식 구현과 가중치를 그대로 사용하면서, 3H 예측의 Entropy가 threshold보다 낮으면 6H를 실행하지 않는다. 별도의 학습이나 게이트 모델은 없다. 공식 `model.entropy()`는 상위 10개 클래스 확률을 재정규화한 Entropy를 계산하며, 이 규칙도 그대로 사용한다.
 
 `third_party/ThinkingViT/`와 기존 `scripts/baseline.py`는 수정하지 않는다. `early_exit.py`는 실행 분기만 담당하고 `evaluate.py`는 검증과 측정을 담당한다. eval 모드, 3H → 6H를 지원한다. 레이턴시는 batch-1 경로, 정확도는 배치 내부에서 어려운 이미지만 골라 6H를 실행하는 경로를 사용한다.
