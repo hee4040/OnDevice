@@ -1,0 +1,71 @@
+{
+  "shared_vmin": 0,
+  "shared_vmax": 0.19488045781705998,
+  "heatmap_alpha": 0.4,
+  "cases": [
+    {
+      "dataset_index": 45369,
+      "attention_row": 28428,
+      "title": "wine bottle -> beer bottle",
+      "overlay": "overlays/wine_bottle_attention.png",
+      "entropy_nats": 4.0137934247386395,
+      "top10_mass": 0.5256338590635381
+    },
+    {
+      "dataset_index": 39085,
+      "attention_row": 43407,
+      "title": "scoreboard -> freight car",
+      "overlay": "overlays/scoreboard_attention.png",
+      "entropy_nats": 4.288636086632112,
+      "top10_mass": 0.3647529367522689
+    },
+    {
+      "dataset_index": 44814,
+      "attention_row": 28532,
+      "title": "washbasin, handbasin, washbowl, lavabo, wash-hand basin -> swab, swob, mop",
+      "overlay": "overlays/washbasin_attention.png",
+      "entropy_nats": 4.409448222050131,
+      "top10_mass": 0.3197166793954866
+    },
+    {
+      "dataset_index": 35635,
+      "attention_row": 43954,
+      "title": "Petri dish -> iPod",
+      "overlay": "overlays/petri_dish_attention.png",
+      "entropy_nats": 4.628675533060996,
+      "top10_mass": 0.3531017157232085
+    },
+    {
+      "dataset_index": 12878,
+      "attention_row": 43206,
+      "title": "Great Pyrenees -> flat-coated retriever",
+      "overlay": "overlays/two_dogs_attention.png",
+      "entropy_nats": 4.366790675861954,
+      "top10_mass": 0.4104037453021654
+    },
+    {
+      "dataset_index": 48365,
+      "attention_row": 31148,
+      "title": "espresso -> espresso maker",
+      "overlay": "overlays/espresso_attention.png",
+      "entropy_nats": 4.091437626497704,
+      "top10_mass": 0.5309481349145522
+    },
+    {
+      "dataset_index": 31922,
+      "attention_row": 10236,
+      "title": "maillot -> maillot, tank suit",
+      "overlay": "overlays/maillot_attention.png",
+      "entropy_nats": 4.322138823970443,
+      "top10_mass": 0.4624643424093239
+    },
+    {
+      "dataset_index": 26556,
+      "attention_row": 16066,
+      "title": "digital watch -> stopwatch, stop watch",
+      "overlay": "overlays/watch_attention.png",
+      "entropy_nats": 4.119203246258876,
+      "top10_mass": 0.5271835686161662
+    }
+  ]
+}

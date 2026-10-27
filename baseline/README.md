@@ -76,3 +76,5 @@ CUDA_VISIBLE_DEVICES=0 .venv/bin/python baseline/analyze_stages.py --batch-size 
 ## 실패 분석 보고서
 
 [ThinkingViT 실패 분석](failure_analysis.md)에 전체 오류 통계, 3H 정답→6H 오답 945장의 확률 변화, ImageNet ReaL 재평가, 실제 입력 이미지 8개의 사례를 정리했다. 표본 선택 방법과 판정이 어려운 경우의 한계, 근거 JSON·CSV 및 재현 명령도 보고서에 포함했다.
+
+2026-10-27 추가 실험은 같은 보고서의 10절에 있다. 저장된 CLS Attention의 그룹별 Entropy·Top-10 질량, 8장 Attention 오버레이, 6H 진입 표본 200장의 독립 패치 가리기 2,000회 결과를 포함한다. 공식 전처리와 모델 가중치는 유지했다. Attention 지도는 정답 기여도나 토큰 갱신 필요성의 확정적 근거로 해석하지 않는다.

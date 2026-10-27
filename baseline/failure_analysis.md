@@ -393,3 +393,142 @@ CUDA_VISIBLE_DEVICES=0 .venv/bin/python baseline/analyze_failures.py \
 | ReaL 및 무작위 점검 실행 | `20261015T045936.177850Z-failure-audit` |
 
 실행 ID의 시각은 UTC이며 분석일 표기는 한국 시간 기준이다. 기존 전체 평가의 batch 512 결과와 본 보고서의 batch 128 결과는 작은 부동소수점 차이가 있을 수 있다. 본 보고서의 수치는 batch 128 분석 안에서 일관되게 비교했다.
+
+## 10. CLS Attention 집중도와 패치 가리기 실험 — 2026-10-27
+
+### 10.1 목적과 계산 정의
+
+CLS가 높은 Attention을 주는 패치가 현재 1위 예측을 지지하는지, 경쟁 후보와 관련되는지 조사했다. 공식 전처리(224×224, crop_pct 0.9, bicubic, center crop)와 가중치는 그대로 유지했다. 이 실험은 토큰 선택 기준을 위한 진단이며, 선택적 토큰 갱신이나 fine-tuning의 성능 실험은 아니다.
+
+기존 `20261015T041255.578722Z-stage-analysis`의 `narrow_cls_attention.npy`와 `images.csv`를 사용했다. 50,000개 고유 인덱스와 CSV의 `attention_row` 대응, 전체 Attention 확률 합을 확인했다.
+
+3H 마지막 블록의 head 평균 CLS Attention에서 열 0(CLS 자체)을 제거하고 패치 열 1~196을 재정규화했다.
+
+```text
+p_i = attention_i / sum(attention_1 ... attention_196)
+H_patch = -sum(p_i * ln(p_i))
+T10 = sum(상위 10개 p_i)
+```
+
+Entropy는 자연로그 단위(nats)이며 최대는 `ln(196) ≈ 5.278`이다. 0인 항은 0으로 처리한다. 정규화한 Entropy `H_patch / ln(196)`도 CSV에 함께 저장했다. **이 Attention Entropy는 게이트에 쓰는 분류 출력 Entropy와 다른 값이다.**
+
+### 10.2 기존 파일만 사용한 그룹 비교
+
+| 그룹 | 이미지 수 | Attention H 평균 | H 중앙값 | Top-10 질량 평균 | Top-10 질량 중앙값 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 3H 종료 | 31,996 | 4.1174 | 4.1405 | 47.58% | 47.43% |
+| 6H 진입 | 18,004 | 4.3992 | 4.4273 | 39.13% | 38.54% |
+| 6H 진입 중 오답→정답 | 4,330 | 4.4087 | 4.4373 | 38.74% | 38.21% |
+| 6H 진입 중 정답→오답 | 945 | 4.4031 | 4.4274 | 39.22% | 38.76% |
+
+![Attention 분포 히스토그램](reports/2026-10-27/attention_histogram.png)
+
+히스토그램은 하나의 그림에 두 지표와 두 비교를 배치했다. 표본 수가 다르므로 빈도 대신 밀도를 사용하고, 지표별 동일한 bin 경계를 적용했다.
+
+3H 종료 집합은 6H 진입 집합보다 Attention이 더 집중됐다. 반면 교정·악화 집합의 평균 H 차이는 약 0.00565 nats, Top-10 질량 차이는 약 0.48%p로 작고 분포가 크게 겹친다. **집중도만으로 6H의 교정과 악화를 구분할 근거는 약하다.** 이 집계는 새로운 게이트의 성능이나 인과관계를 검증한 결과가 아니다.
+
+### 10.3 실패 분석 6절의 8장 Attention 지도
+
+아래는 6절과 동일한 8장의 실제 모델 입력 위에 3H CLS Attention을 겹친 결과다. 14×14 값을 각 16×16픽셀 셀에 그대로 표시했으며 보간·평활화를 하지 않았다. 원본 이미지 기여율은 0.6, 색상 지도는 0.4다. 모든 이미지에 **동일한 색상 범위 0~0.19488**을 사용해 이미지별 최댓값 정규화에 따른 착시를 피했다. 색이 밝을수록 재정규화한 Attention 값이 크다.
+
+![8장 CLS Attention 지도](reports/2026-10-27/attention_maps.png)
+
+| 사례 | H (nats) | Top-10 질량 | 개별 오버레이 |
+| --- | ---: | ---: | --- |
+| 와인병→맥주병 | 4.0138 | 52.56% | [이미지](reports/2026-10-27/overlays/wine_bottle_attention.png) |
+| 점수판→화물차 | 4.2886 | 36.48% | [이미지](reports/2026-10-27/overlays/scoreboard_attention.png) |
+| 세면대→대걸레 | 4.4094 | 31.97% | [이미지](reports/2026-10-27/overlays/washbasin_attention.png) |
+| 페트리 접시→iPod | 4.6287 | 35.31% | [이미지](reports/2026-10-27/overlays/petri_dish_attention.png) |
+| Great Pyrenees→flat-coated retriever | 4.3668 | 41.04% | [이미지](reports/2026-10-27/overlays/two_dogs_attention.png) |
+| espresso→espresso maker | 4.0914 | 53.09% | [이미지](reports/2026-10-27/overlays/espresso_attention.png) |
+| maillot 638→maillot 639 | 4.3221 | 46.25% | [이미지](reports/2026-10-27/overlays/maillot_attention.png) |
+| digital watch→stopwatch | 4.1192 | 52.72% | [이미지](reports/2026-10-27/overlays/watch_attention.png) |
+
+Attention은 정답 클래스에 대한 기여도 지도와 같지 않다. 마지막 블록의 패치 특징에는 이전 블록에서 다른 패치와 교환한 정보가 포함되므로, 특정 좌표의 높은 Attention을 그 위치의 원본 픽셀만이 원인이라는 뜻으로 읽지 않는다. 8개 사례의 개별 14×14 배열도 같은 `overlays/` 폴더에 NPY로 저장했다.
+
+### 10.4 GPU 가리기 실험의 방법
+
+기존 6H 진입 대상 18,004장을 dataset_index로 정렬한 뒤 seed `20261027`로 **200장을 균등 무작위 비복원 추출**했다. 표본은 정답 유지 71장, 두 단계 오답 66장, 교정 45장, 악화 18장이다. 위의 8장만을 실험한 것이 아니다.
+
+각 이미지에서 저장된 3H Attention 상위 10개 패치를 선택했다. 패치 하나를 가릴 때마다 원래 이미지에서 시작하며, 누적해서 가리지 않았다. 공식 정규화가 끝난 입력에서 해당 16×16 영역의 3채널을 0으로 바꿨다. 이는 RGB 공간의 정규화 평균색에 해당하며 검은색 마스크가 아니다.
+
+가리기 전 3H의 1위 클래스 `c1`, 2위 클래스 `c2`를 고정하고, 가린 후 순위가 바뀌어도 같은 두 클래스의 logit을 사용했다.
+
+```text
+m_before = z_before[c1] - z_before[c2]
+m_after  = z_after[c1]  - z_after[c2]
+delta_m  = m_after - m_before
+
+delta_m < 0: 가리면 1위 우위가 약해짐 → 원래 1위 상대 지지
+delta_m > 0: 가리면 1위 우위가 강해짐 → 원래 1위 우위에 반대하는 방향
+```
+
+각 이미지당 동일한 무가림 입력 2개와 독립 가림 10개를 한 배치로 실행했다. 3H만 실행했고 6H는 재실행하지 않았다. GPU 0의 RTX 3090, FP32, AMP off, TF32 allowed 조건이다. **원래 CSV의 3H Top-1은 200장 모두 재현**됐고, 두 무가림 입력의 margin 차이는 전부 0이었다.
+
+### 10.5 가리기 결과
+
+요청한 부호 기준으로 2,000개 독립 가리기를 분류하면 다음과 같다. 각 이미지가 10패치씩 기여하므로 패치 비율은 이미지별 비율의 평균과 같다.
+
+| 부호 기준 | 패치 수 / 2,000 | 비율 |
+| --- | ---: | ---: |
+| 차이가 줄어듦: 1위 상대 지지 | 939 | 46.95% |
+| 차이가 늘어남: 1위 우위에 반대 | 1,061 | 53.05% |
+| 정확히 변화 없음 | 0 | 0.00% |
+
+아주 작은 변화를 별도로 처리하기 위해 `epsilon = max(1e-4, 10 × 무가림 margin 최대 오차)`도 적용했다. 이번에는 epsilon=0.0001이며, 양수 1개가 거의 변화 없음으로 분류됐다.
+
+| 원래 3H→6H 그룹 | 이미지 수 | 가린 패치 수 | 1위 상대 지지 | 1위 우위에 반대 | 거의 변화 없음 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 전체 | 200 | 2,000 | 46.95% | 53.00% | 0.05% |
+| 정답 유지 | 71 | 710 | 45.21% | 54.79% | 0.00% |
+| 둘 다 오답 | 66 | 660 | 43.64% | 56.21% | 0.15% |
+| 오답→정답 | 45 | 450 | 54.44% | 45.56% | 0.00% |
+| 정답→오답 | 18 | 180 | 47.22% | 52.78% | 0.00% |
+
+이미지별 Top-10 중 1위 상대 지지 비율의 평균·중앙값은 **46.95%·40%**, 반대 방향 비율은 **53.00%·60%**였다. 2,000개 delta_m의 평균은 **−0.00815**, 중앙값은 **+0.01000**, 절댓값 평균은 **0.21579 logit**이었다. 따라서 부호의 개수와 변화 크기를 함께 보아야 한다. 158회(7.9%)의 가리기에서 Top-1이 다른 클래스로 바뀌었으며, 반드시 원래 2위로 바뀐다는 뜻은 아니다.
+
+같은 이미지의 10패치는 독립 표본이 아니므로 **이미지 200장을 단위로** 10,000회 bootstrap(seed 20261027)을 수행했다. 허용 오차 적용 후 비율의 95% percentile 구간은 1위 상대 지지 **42.50~51.55%**, 반대 방향 **48.40~57.45%**다. 어느 방향이 전체 모집단에서 확실히 더 많다고 결론 내리기 어렵고, 특히 악화 집합은 18장뿐이므로 그룹 간 차이를 확정하지 않는다.
+
+### 10.6 “정답 근거”와 “헷갈림”에 대한 해석
+
+**높은 Attention을 받은 패치가 모두 현재 1위를 지지하는 것은 아니었다.** 그러나 다음 이유로 이를 “정답 패치 46.95%, 헷갈리는 패치 53.05%”라고 부를 수는 없다.
+
+1. 표본 200장 중 원래 3H의 1위가 정답인 이미지는 89장이다. 1위가 틀린 111장 중 원래 2위가 정답인 이미지는 39장이다. 따라서 1위 지지/2위 상대 지지를 정답/오답과 동일시할 수 없다.
+2. margin은 두 logit의 차이다. 허용 오차 기준 양수 1,060개 중 156개는 **가린 뒤 두 logit이 모두 낮아졌지만 2위가 더 낮아져서** 차이가 커졌다. 이것만으로 해당 패치가 2위만의 근거라고 할 수 없다. 각 logit의 변화도 CSV에 기록했다.
+3. 입력 패치를 평균색으로 바꾸는 것은 전체 네트워크의 입력을 바꾸는 개입이다. 마지막 블록 Attention과 같은 위치의 픽셀 기여를 직접 동일시할 수 없으며, 가림에 따른 입력 분포 변화도 포함된다.
+4. 입력 패치를 가리는 실험은 그 토큰의 **6H 갱신을 생략하는 실험과 다르다.** 이 결과로 어떤 토큰을 동결해야 하는지 확정할 수 없다.
+5. Random 패치나 Attention 하위 패치와의 비교는 이번에 수행하지 않았다. 따라서 상위 패치가 다른 패치보다 중요하거나 덜 중요하다는 상대적 결론은 아직 없다.
+
+현재 결과로는 **CLS Attention을 곧바로 “정답 근거 점수”로 사용하는 해석을 보류**하는 것이 타당하다. Attention Top-K는 비교 기준으로 유지하되, Random 선택과 실제 선택적 갱신의 효과를 비교해야 한다. margin 변화의 부호와 크기는 사후 진단 신호로 활용할 수 있지만, 10번의 추가 추론을 요구하므로 그대로 경량 배포 게이트로 사용할 수는 없다.
+
+### 10.7 결과 파일과 재현
+
+| 파일 | 내용 |
+| --- | --- |
+| [attention_groups.csv](reports/2026-10-27/attention_groups.csv) | 그룹별 평균·중앙값·표준편차 |
+| [attention_statistics.json](reports/2026-10-27/attention_statistics.json) | 정의·원본 파일 해시·CPU 집계 |
+| [overlay_cases.json](reports/2026-10-27/overlay_cases.json) | 8장 행 대응·공통 색상 범위 |
+| [occlusion_summary.json](reports/2026-10-27/occlusion_summary.json) | 그룹별 가리기 결과·환경·실행 코드 해시 |
+| [occlusion_sample_indices.json](reports/2026-10-27/occlusion_sample_indices.json) | 200장 표본 인덱스와 seed |
+| [occlusion_images.csv](reports/2026-10-27/occlusion_images.csv) | 이미지별 상위 10패치의 분류 비율 |
+| [occlusion_patches.csv](reports/2026-10-27/occlusion_patches.csv) | 2,000개 패치 좌표·Attention·고정 클래스·가리기 전후 logit·차이 |
+| [occlusion_supplement.json](reports/2026-10-27/occlusion_supplement.json) | 이미지 단위 bootstrap 구간·1위/2위와 정답의 관계 |
+
+```bash
+.venv/bin/python -m pip install -r requirements-analysis.txt
+
+# GPU 불필요: 50,000장 통계, 히스토그램 한 그림, 8장 오버레이
+.venv/bin/python baseline/analyze_attention.py \
+  --source results/20261015T041255.578722Z-stage-analysis \
+  --output results/20261027-attention-analysis
+
+# GPU 필요: 200장 × 10개 독립 패치 가리기
+CUDA_VISIBLE_DEVICES=0 .venv/bin/python baseline/occlude_attention.py \
+  --source results/20261015T041255.578722Z-stage-analysis \
+  --output results/20261027-attention-occlusion \
+  --samples 200 --seed 20261027
+
+.venv/bin/python -m unittest discover -s tests -p test_attention_experiments.py
+```
+
+이미지별 50,000장 Attention 지표는 로컬 `results/20261027-attention-analysis/image_metrics.csv`에 있다. 8장 모델 입력의 해시와 원본 예측 ID, 가리기의 비누적성·패치 위치·부호 분류를 검증했다.

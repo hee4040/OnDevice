@@ -1,0 +1,69 @@
+{
+  "source": "results/20261015T041255.578722Z-stage-analysis",
+  "samples": 50000,
+  "groups": [
+    {
+      "group": "exited_at_3h",
+      "samples": 31996,
+      "entropy_nats_mean": 4.1174113181195375,
+      "entropy_nats_median": 4.140466146486483,
+      "entropy_nats_std": 0.3161302191667901,
+      "normalized_entropy_mean": 0.7800912984940356,
+      "normalized_entropy_median": 0.7844593029530949,
+      "normalized_entropy_std": 0.05989453423751086,
+      "top10_mass_mean": 0.4758305637467853,
+      "top10_mass_median": 0.47431471894415805,
+      "top10_mass_std": 0.1060196161211865
+    },
+    {
+      "group": "routed_to_6h",
+      "samples": 18004,
+      "entropy_nats_mean": 4.399186503585504,
+      "entropy_nats_median": 4.42728090425558,
+      "entropy_nats_std": 0.24785640974722603,
+      "normalized_entropy_mean": 0.8334768733930558,
+      "normalized_entropy_median": 0.8387996832378443,
+      "normalized_entropy_std": 0.04695926969183356,
+      "top10_mass_mean": 0.391297110425004,
+      "top10_mass_median": 0.38537409644202125,
+      "top10_mass_std": 0.08922973924489025
+    },
+    {
+      "group": "routed_corrected",
+      "samples": 4330,
+      "entropy_nats_mean": 4.408704494518001,
+      "entropy_nats_median": 4.437272813480932,
+      "entropy_nats_std": 0.24587666423793791,
+      "normalized_entropy_mean": 0.8352801670967744,
+      "normalized_entropy_median": 0.840692766255258,
+      "normalized_entropy_std": 0.04658418395817564,
+      "top10_mass_mean": 0.38740091932499415,
+      "top10_mass_median": 0.3821303051282008,
+      "top10_mass_std": 0.08875692349982772
+    },
+    {
+      "group": "routed_regressed",
+      "samples": 945,
+      "entropy_nats_mean": 4.403054551078828,
+      "entropy_nats_median": 4.427358557970244,
+      "entropy_nats_std": 0.24199260306449252,
+      "normalized_entropy_mean": 0.8342097198246047,
+      "normalized_entropy_median": 0.8388143956341596,
+      "normalized_entropy_std": 0.045848303549315475,
+      "top10_mass_mean": 0.39220780051597515,
+      "top10_mass_median": 0.38757655779286126,
+      "top10_mass_std": 0.0875996978926102
+    }
+  ],
+  "definitions": {
+    "attention": "Final narrow block, mean over 3 heads; remove CLS column then normalize 196 patch weights to sum to 1.",
+    "entropy": "-sum(p*ln(p)), nats; maximum ln(196); normalized entropy H/ln(196). This is NOT classifier output entropy.",
+    "top10_mass": "Sum of the ten largest normalized patch weights.",
+    "histogram": "One figure with shared-bin density histograms; two metrics and two comparisons."
+  },
+  "source_sha256": {
+    "images.csv": "3fb1c251f6b71749f59b548ad9ea1eae03377e3e74abf392f4c33b3153a8125b",
+    "narrow_cls_attention.npy": "6f44d343e280a962408c87cf0de40aaafea8857914810aff5528281395ee5329"
+  },
+  "script_sha256": "b9bb6c5815d1f579951677663bd13b2a426db4de16082081ead5447d69eed947"
+}

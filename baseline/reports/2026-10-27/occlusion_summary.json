@@ -1,0 +1,151 @@
+{
+  "source": "results/20261015T041255.578722Z-stage-analysis",
+  "samples": 200,
+  "seed": 20261027,
+  "epsilon": 0.0001,
+  "max_abs_noop_margin_delta": 0.0,
+  "source_top1_changes": 0,
+  "all": {
+    "images": 200,
+    "patches": 2000,
+    "counts": {
+      "opposes_top1_margin": 1060,
+      "supports_top1_margin": 939,
+      "near_zero": 1
+    },
+    "strict_sign_counts": {
+      "opposes_top1_margin": 1061,
+      "supports_top1_margin": 939
+    },
+    "mean_delta_margin": -0.008145996928215027,
+    "median_delta_margin": 0.009999990463256836,
+    "mean_abs_delta_margin": 0.21579120981693267,
+    "masked_top1_flips": 158,
+    "opposing_patches_with_both_logits_decreasing": 156
+  },
+  "groups": {
+    "both_correct": {
+      "images": 71,
+      "patches": 710,
+      "counts": {
+        "opposes_top1_margin": 389,
+        "supports_top1_margin": 321
+      },
+      "strict_sign_counts": {
+        "opposes_top1_margin": 389,
+        "supports_top1_margin": 321
+      },
+      "mean_delta_margin": -0.010009512431185011,
+      "median_delta_margin": 0.016707897186279297,
+      "mean_abs_delta_margin": 0.21188140721388266,
+      "masked_top1_flips": 38,
+      "opposing_patches_with_both_logits_decreasing": 51
+    },
+    "both_wrong": {
+      "images": 66,
+      "patches": 660,
+      "counts": {
+        "opposes_top1_margin": 371,
+        "supports_top1_margin": 288,
+        "near_zero": 1
+      },
+      "strict_sign_counts": {
+        "opposes_top1_margin": 372,
+        "supports_top1_margin": 288
+      },
+      "mean_delta_margin": 0.0198441050269387,
+      "median_delta_margin": 0.015500068664550781,
+      "mean_abs_delta_margin": 0.19184627171718713,
+      "masked_top1_flips": 54,
+      "opposing_patches_with_both_logits_decreasing": 52
+    },
+    "corrected": {
+      "images": 45,
+      "patches": 450,
+      "counts": {
+        "opposes_top1_margin": 205,
+        "supports_top1_margin": 245
+      },
+      "strict_sign_counts": {
+        "opposes_top1_margin": 205,
+        "supports_top1_margin": 245
+      },
+      "mean_delta_margin": -0.02753590212927924,
+      "median_delta_margin": -0.018129348754882812,
+      "mean_abs_delta_margin": 0.2453879001405504,
+      "masked_top1_flips": 43,
+      "opposing_patches_with_both_logits_decreasing": 42
+    },
+    "regressed": {
+      "images": 18,
+      "patches": 180,
+      "counts": {
+        "supports_top1_margin": 85,
+        "opposes_top1_margin": 95
+      },
+      "strict_sign_counts": {
+        "supports_top1_margin": 85,
+        "opposes_top1_margin": 95
+      },
+      "mean_delta_margin": -0.0549510743882921,
+      "median_delta_margin": 0.010807275772094727,
+      "mean_abs_delta_margin": 0.24501958953009711,
+      "masked_top1_flips": 23,
+      "opposing_patches_with_both_logits_decreasing": 11
+    }
+  },
+  "fraction_distribution": {
+    "supports_top1_margin": {
+      "mean": 0.46950000000000003,
+      "median": 0.4
+    },
+    "opposes_top1_margin": {
+      "mean": 0.53,
+      "median": 0.6
+    },
+    "near_zero": {
+      "mean": 0.0005,
+      "median": 0.0
+    }
+  },
+  "protocol": {
+    "patches": "Top 10 from saved pre-intervention attention; 16x16 pixels, 14x14 row-major grid.",
+    "intervention": "Each patch independently set to zero AFTER official normalization. Other 195 patches unchanged. This corresponds to RGB normalization mean, not black.",
+    "forward": "Only 3H; fixed original unmasked top1 and top2 classes for all ten masks; original routing population retained.",
+    "batch": "12 inputs per image: 2 identical unmasked controls and 10 independent masks.",
+    "interpretation": "Negative delta margin supports original top1 relative to top2; positive opposes that margin. Not proof of ground-truth evidence or psychological confusion. Last-block attention is used to select input-level interventions; not token-update intervention.",
+    "numerics": "float32; AMP off; TF32 allowed; epsilon=max(1e-4,10*max_abs_noop_delta); strict signs also reported."
+  },
+  "environment": {
+    "gpu": "NVIDIA GeForce RTX 3090",
+    "torch": "2.5.1+cu124",
+    "cuda": "12.4",
+    "preprocessing": {
+      "input_size": [
+        3,
+        224,
+        224
+      ],
+      "interpolation": "bicubic",
+      "mean": [
+        0.485,
+        0.456,
+        0.406
+      ],
+      "std": [
+        0.229,
+        0.224,
+        0.225
+      ],
+      "crop_pct": 0.9,
+      "crop_mode": "center"
+    },
+    "checkpoint_sha256": "9ead984e9e39887eb037a42c189c58c0af14cd9c2771ad27b4b01876997242b5",
+    "repo_commit": "9254c4950d3159937ad682592d58a2be69708c42"
+  },
+  "script_sha256": "01a0ccf06753dc0a5311538fc10e9ab2d5ea4ab6c156c3721388ffadf2cea955",
+  "source_sha256": {
+    "images.csv": "3fb1c251f6b71749f59b548ad9ea1eae03377e3e74abf392f4c33b3153a8125b",
+    "narrow_cls_attention.npy": "6f44d343e280a962408c87cf0de40aaafea8857914810aff5528281395ee5329"
+  }
+}

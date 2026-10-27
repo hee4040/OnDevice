@@ -1,0 +1,23 @@
+{
+  "bootstrap": {
+    "supports_top1_margin": {
+      "mean": 0.46950000000000003,
+      "percentile_95_interval": [
+        0.425,
+        0.5155
+      ]
+    },
+    "opposes_top1_margin": {
+      "mean": 0.53,
+      "percentile_95_interval": [
+        0.48400000000000004,
+        0.5745
+      ]
+    }
+  },
+  "method": "10,000 bootstrap replicates resampling 200 images (not 2,000 patches), NumPy default_rng seed 20261027; percentile intervals; each image contributes its mean over 10 patches.",
+  "original_top1_is_target": 89,
+  "original_top1_is_not_target": 111,
+  "original_top2_is_target_among_top1_wrong": 39,
+  "patch_csv_sha256": "b0c4a5ee7d77a01bc7a5f1cea19b6d7042d02cb2cbd74f8d6b63cc20ece3967a"
+}
