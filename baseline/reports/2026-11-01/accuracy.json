@@ -1,0 +1,47 @@
+[
+  {
+    "implementation": "early_exit",
+    "threshold": 10.0,
+    "samples": 50000,
+    "batch_size": 128,
+    "top1": 73.534,
+    "top5": 92.048,
+    "stage_2_fraction": 0.0,
+    "stage_2_execution_fraction": 0.0,
+    "official_same_batch_top1": 73.534,
+    "official_same_batch_top5": 92.048,
+    "top1_prediction_disagreements": 0,
+    "routing_disagreements": 0,
+    "max_abs_logit_error": 0.0
+  },
+  {
+    "implementation": "early_exit",
+    "threshold": 0.0,
+    "samples": 50000,
+    "batch_size": 128,
+    "top1": 81.44,
+    "top5": 95.72,
+    "stage_2_fraction": 1.0,
+    "stage_2_execution_fraction": 1.0,
+    "official_same_batch_top1": 81.44,
+    "official_same_batch_top5": 95.72,
+    "top1_prediction_disagreements": 0,
+    "routing_disagreements": 0,
+    "max_abs_logit_error": 0.0
+  },
+  {
+    "implementation": "early_exit",
+    "threshold": 1.0,
+    "samples": 50000,
+    "batch_size": 128,
+    "top1": 80.304,
+    "top5": 95.278,
+    "stage_2_fraction": 0.36008,
+    "stage_2_execution_fraction": 0.36008,
+    "official_same_batch_top1": 80.304,
+    "official_same_batch_top5": 95.278,
+    "top1_prediction_disagreements": 0,
+    "routing_disagreements": 0,
+    "max_abs_logit_error": 0.0
+  }
+]

@@ -1,0 +1,353 @@
+{
+  "date": "2026-11-01",
+  "machine": "AIX408-20 (RTX 4090 24GB, driver 535.183.01, Ubuntu 22.04)",
+  "runs": {
+    "early_exit_accuracy": {
+      "local_run_directory": "results/20261101T120502.028011Z-early-exit-accuracy",
+      "code": "main@ac7ff72",
+      "arguments": {
+        "mode": "accuracy",
+        "data_dir": "data/imagenet1k",
+        "checkpoint": "checkpoints/thinkingvit_3h6h_ema.pth",
+        "repo": "third_party/ThinkingViT",
+        "thresholds": [
+          10.0,
+          0.0,
+          1.0
+        ],
+        "samples": 1000,
+        "verify_samples": 128,
+        "warmup": 50,
+        "batch_size": 128,
+        "workers": 4,
+        "compare_official": true,
+        "seed": 42
+      },
+      "python": "3.10.12 (main, Aug 31 2026, 10:18:17) [GCC 11.4.0]",
+      "platform": "Linux-6.2.0-39-generic-x86_64-with-glibc2.35",
+      "torch": "2.5.1+cu124",
+      "cuda": "12.4",
+      "gpu": "NVIDIA GeForce RTX 4090",
+      "precision": "float32, AMP off, TF32 allowed (official default)",
+      "repo_commit": "9254c4950d3159937ad682592d58a2be69708c42",
+      "repo_status": "",
+      "checkpoint_sha256": "9ead984e9e39887eb037a42c189c58c0af14cd9c2771ad27b4b01876997242b5",
+      "baseline_source_sha256": {
+        "early_exit.py": "1f2739653a223ecb95137f31689bcd6c640ad8f57f72d6d3507651dbbdf47857",
+        "evaluate.py": "2bacd5fd1b28dccadb9f1619002961e62b6c88910cf5bf60a5bded5063cf10e0"
+      }
+    },
+    "h1_selective_refinement": {
+      "local_run_directory": "results/20261101T120900.742447Z-selective-refinement",
+      "code": "experiment/h1-selective-token-refinement@dcc13c6",
+      "arguments": {
+        "data_dir": "data/imagenet1k",
+        "checkpoint": "checkpoints/thinkingvit_3h6h_ema.pth",
+        "repo": "third_party/ThinkingViT",
+        "threshold": 1.0,
+        "ratios": [
+          0.0,
+          0.25,
+          0.5,
+          0.75,
+          1.0
+        ],
+        "policies": [
+          "topk",
+          "bottomk",
+          "random"
+        ],
+        "random_seeds": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "samples": 50000,
+        "batch_size": 32,
+        "workers": 4,
+        "seed": 42
+      },
+      "python": "3.10.12 (main, Aug 31 2026, 10:18:17) [GCC 11.4.0]",
+      "platform": "Linux-6.2.0-39-generic-x86_64-with-glibc2.35",
+      "torch": "2.5.1+cu124",
+      "cuda": "12.4",
+      "gpu": "NVIDIA GeForce RTX 4090",
+      "precision": "float32, AMP off, TF32 allowed (official default)",
+      "preprocessing": {
+        "input_size": [
+          3,
+          224,
+          224
+        ],
+        "interpolation": "bicubic",
+        "mean": [
+          0.485,
+          0.456,
+          0.406
+        ],
+        "std": [
+          0.229,
+          0.224,
+          0.225
+        ],
+        "crop_pct": 0.9,
+        "crop_mode": "center"
+      },
+      "repo_commit": "9254c4950d3159937ad682592d58a2be69708c42",
+      "repo_status": "",
+      "checkpoint_sha256": "9ead984e9e39887eb037a42c189c58c0af14cd9c2771ad27b4b01876997242b5",
+      "source_sha256": {
+        "evaluate_selective.py": "5d43cb54f5ee0063dfc02bf89e9617edc4117f411ddf6cbdf242092515e804b2",
+        "selective_refinement.py": "620c5b8b20c83c6e068c2082a153f533df689fd3d8e5d16672fe20623087425a"
+      },
+      "semantics": "Static per-image token mask across all 12 wide blocks; CLS always updated; selected queries use all current tokens as K/V; dense compute then masked state update.",
+      "claim_scope": "Accuracy/H1 oracle only. Dense block compute does not reduce FLOPs or latency."
+    },
+    "h1_selective_refinement_76_100": {
+      "local_run_directory": "results/20261101T122702.976533Z-selective-refinement",
+      "code": "experiment/h1-selective-token-refinement@dcc13c6",
+      "arguments": {
+        "data_dir": "data/imagenet1k",
+        "checkpoint": "checkpoints/thinkingvit_3h6h_ema.pth",
+        "repo": "third_party/ThinkingViT",
+        "threshold": 1.0,
+        "ratios": [
+          0.76,
+          0.77,
+          0.78,
+          0.79,
+          0.8,
+          0.81,
+          0.82,
+          0.83,
+          0.84,
+          0.85,
+          0.86,
+          0.87,
+          0.88,
+          0.89,
+          0.9,
+          0.91,
+          0.92,
+          0.93,
+          0.94,
+          0.95,
+          0.96,
+          0.97,
+          0.98,
+          0.99,
+          1.0
+        ],
+        "policies": [
+          "topk",
+          "bottomk",
+          "random"
+        ],
+        "random_seeds": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "samples": 50000,
+        "batch_size": 32,
+        "workers": 4,
+        "seed": 42
+      },
+      "python": "3.10.12 (main, Aug 31 2026, 10:18:17) [GCC 11.4.0]",
+      "platform": "Linux-6.2.0-39-generic-x86_64-with-glibc2.35",
+      "torch": "2.5.1+cu124",
+      "cuda": "12.4",
+      "gpu": "NVIDIA GeForce RTX 4090",
+      "precision": "float32, AMP off, TF32 allowed (official default)",
+      "preprocessing": {
+        "input_size": [
+          3,
+          224,
+          224
+        ],
+        "interpolation": "bicubic",
+        "mean": [
+          0.485,
+          0.456,
+          0.406
+        ],
+        "std": [
+          0.229,
+          0.224,
+          0.225
+        ],
+        "crop_pct": 0.9,
+        "crop_mode": "center"
+      },
+      "repo_commit": "9254c4950d3159937ad682592d58a2be69708c42",
+      "repo_status": "",
+      "checkpoint_sha256": "9ead984e9e39887eb037a42c189c58c0af14cd9c2771ad27b4b01876997242b5",
+      "source_sha256": {
+        "evaluate_selective.py": "5d43cb54f5ee0063dfc02bf89e9617edc4117f411ddf6cbdf242092515e804b2",
+        "selective_refinement.py": "620c5b8b20c83c6e068c2082a153f533df689fd3d8e5d16672fe20623087425a"
+      },
+      "semantics": "Static per-image token mask across all 12 wide blocks; CLS always updated; selected queries use all current tokens as K/V; dense compute then masked state update.",
+      "claim_scope": "Accuracy/H1 oracle only. Dense block compute does not reduce FLOPs or latency."
+    },
+    "h1_mlp_selective_refinement": {
+      "local_run_directory": "results/20261101T121238.147039Z-mlp-selective-refinement",
+      "code": "experiment/h1-attention-full-mlp-selective@f30d821",
+      "arguments": {
+        "data_dir": "data/imagenet1k",
+        "checkpoint": "checkpoints/thinkingvit_3h6h_ema.pth",
+        "repo": "third_party/ThinkingViT",
+        "threshold": 1.0,
+        "ratios": [
+          0.0,
+          0.25,
+          0.5,
+          0.75,
+          1.0
+        ],
+        "policies": [
+          "topk",
+          "bottomk",
+          "random"
+        ],
+        "random_seeds": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "samples": 50000,
+        "batch_size": 32,
+        "workers": 4,
+        "seed": 42
+      },
+      "python": "3.10.12 (main, Aug 31 2026, 10:18:17) [GCC 11.4.0]",
+      "platform": "Linux-6.2.0-39-generic-x86_64-with-glibc2.35",
+      "torch": "2.5.1+cu124",
+      "cuda": "12.4",
+      "gpu": "NVIDIA GeForce RTX 4090",
+      "precision": "float32, AMP off, TF32 allowed (official default)",
+      "preprocessing": {
+        "input_size": [
+          3,
+          224,
+          224
+        ],
+        "interpolation": "bicubic",
+        "mean": [
+          0.485,
+          0.456,
+          0.406
+        ],
+        "std": [
+          0.229,
+          0.224,
+          0.225
+        ],
+        "crop_pct": 0.9,
+        "crop_mode": "center"
+      },
+      "repo_commit": "9254c4950d3159937ad682592d58a2be69708c42",
+      "repo_status": "",
+      "checkpoint_sha256": "9ead984e9e39887eb037a42c189c58c0af14cd9c2771ad27b4b01876997242b5",
+      "source_sha256": {
+        "evaluate_mlp_selective.py": "0708ed6e9bf4b120d8621127165aafb413a31afd221d4599df89c4801c13ec82",
+        "mlp_selective_refinement.py": "f149ebb27575dc960f95cf2cc57b86f0425a94b5c75dfefd0d0be8ae61579cc3"
+      },
+      "semantics": "All 197 tokens receive Attention updates in every wide block. A static per-image mask controls only MLP residual updates; CLS is always selected.",
+      "claim_scope": "Accuracy oracle only. Dense MLP compute does not reduce FLOPs or latency."
+    },
+    "h1_mlp_selective_refinement_76_100": {
+      "local_run_directory": "results/20261101T125149.686638Z-mlp-selective-refinement",
+      "code": "experiment/h1-attention-full-mlp-selective@f30d821",
+      "arguments": {
+        "data_dir": "data/imagenet1k",
+        "checkpoint": "checkpoints/thinkingvit_3h6h_ema.pth",
+        "repo": "third_party/ThinkingViT",
+        "threshold": 1.0,
+        "ratios": [
+          0.76,
+          0.77,
+          0.78,
+          0.79,
+          0.8,
+          0.81,
+          0.82,
+          0.83,
+          0.84,
+          0.85,
+          0.86,
+          0.87,
+          0.88,
+          0.89,
+          0.9,
+          0.91,
+          0.92,
+          0.93,
+          0.94,
+          0.95,
+          0.96,
+          0.97,
+          0.98,
+          0.99,
+          1.0
+        ],
+        "policies": [
+          "topk",
+          "bottomk",
+          "random"
+        ],
+        "random_seeds": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "samples": 50000,
+        "batch_size": 32,
+        "workers": 4,
+        "seed": 42
+      },
+      "python": "3.10.12 (main, Aug 31 2026, 10:18:17) [GCC 11.4.0]",
+      "platform": "Linux-6.2.0-39-generic-x86_64-with-glibc2.35",
+      "torch": "2.5.1+cu124",
+      "cuda": "12.4",
+      "gpu": "NVIDIA GeForce RTX 4090",
+      "precision": "float32, AMP off, TF32 allowed (official default)",
+      "preprocessing": {
+        "input_size": [
+          3,
+          224,
+          224
+        ],
+        "interpolation": "bicubic",
+        "mean": [
+          0.485,
+          0.456,
+          0.406
+        ],
+        "std": [
+          0.229,
+          0.224,
+          0.225
+        ],
+        "crop_pct": 0.9,
+        "crop_mode": "center"
+      },
+      "repo_commit": "9254c4950d3159937ad682592d58a2be69708c42",
+      "repo_status": "",
+      "checkpoint_sha256": "9ead984e9e39887eb037a42c189c58c0af14cd9c2771ad27b4b01876997242b5",
+      "source_sha256": {
+        "evaluate_mlp_selective.py": "0708ed6e9bf4b120d8621127165aafb413a31afd221d4599df89c4801c13ec82",
+        "mlp_selective_refinement.py": "f149ebb27575dc960f95cf2cc57b86f0425a94b5c75dfefd0d0be8ae61579cc3"
+      },
+      "semantics": "All 197 tokens receive Attention updates in every wide block. A static per-image mask controls only MLP residual updates; CLS is always selected.",
+      "claim_scope": "Accuracy oracle only. Dense MLP compute does not reduce FLOPs or latency."
+    }
+  }
+}
