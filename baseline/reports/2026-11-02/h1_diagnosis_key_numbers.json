@@ -1,0 +1,86 @@
+{
+  "gmacs": {
+    "narrow": 1.2536832,
+    "wide_full": 4.61340672,
+    "threshold_avg": 2.9148786917376004
+  },
+  "accuracy": {
+    "narrow_only_top1": 73.53399991989136,
+    "wide_all_top1": 81.44000172615051,
+    "threshold_top1": 80.304,
+    "routed_narrow_top1": 43.93468201160431,
+    "routed_wide_top1": 62.73605823516846,
+    "routed_images": 18004
+  },
+  "sink": {
+    "same_top1_share": 0.37613863585869806,
+    "top2_overlap_share": {
+      "0": 0.26299711175294377,
+      "1": 0.5058875805376583,
+      "2": 0.23111530770939792
+    },
+    "attention_top2_mass": {
+      "p10": 0.07,
+      "median": 0.111,
+      "p90": 0.178
+    },
+    "norm3_at_top_attention_over_median": {
+      "p10": 1.368,
+      "median": 1.645,
+      "p90": 1.849
+    },
+    "norm3_max_over_median": {
+      "p10": 1.532,
+      "median": 1.713,
+      "p90": 1.886
+    },
+    "norm6_at_top_attention_over_median": {
+      "p10": 1.268,
+      "median": 1.632,
+      "p90": 1.849
+    },
+    "norm6_max_over_median": {
+      "p10": 1.675,
+      "median": 1.832,
+      "p90": 1.985
+    },
+    "top_attention_top5_positions": [
+      [
+        [
+          1,
+          12
+        ],
+        1.79
+      ],
+      [
+        [
+          1,
+          1
+        ],
+        1.56
+      ],
+      [
+        [
+          12,
+          1
+        ],
+        1.07
+      ],
+      [
+        [
+          12,
+          12
+        ],
+        1.04
+      ],
+      [
+        [
+          6,
+          1
+        ],
+        0.9
+      ]
+    ],
+    "top_attention_border_share": 0.25483225949788935
+  }
+}

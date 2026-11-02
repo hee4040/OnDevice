@@ -1,0 +1,45 @@
+{
+  "arguments": {
+    "data_dir": "data/imagenet1k",
+    "checkpoint": "checkpoints/thinkingvit_3h6h_ema.pth",
+    "repo": "third_party/ThinkingViT",
+    "threshold": 1.0,
+    "samples": 50000,
+    "batch_size": 32,
+    "workers": 4,
+    "seed": 42
+  },
+  "python": "3.10.12 (main, Aug 31 2026, 10:18:17) [GCC 11.4.0]",
+  "platform": "Linux-6.2.0-39-generic-x86_64-with-glibc2.35",
+  "torch": "2.5.1+cu124",
+  "cuda": "12.4",
+  "gpu": "NVIDIA GeForce RTX 4090",
+  "precision": "float32, AMP off, TF32 allowed (official default)",
+  "preprocessing": {
+    "input_size": [
+      3,
+      224,
+      224
+    ],
+    "interpolation": "bicubic",
+    "mean": [
+      0.485,
+      0.456,
+      0.406
+    ],
+    "std": [
+      0.229,
+      0.224,
+      0.225
+    ],
+    "crop_pct": 0.9,
+    "crop_mode": "center"
+  },
+  "repo_commit": "9254c4950d3159937ad682592d58a2be69708c42",
+  "checkpoint_sha256": "9ead984e9e39887eb037a42c189c58c0af14cd9c2771ad27b4b01876997242b5",
+  "source_sha256": {
+    "evaluate_h1_diagnosis.py": "91c28acc49d1a11db742d9855656d22c367fcee7e320652ac9160eac2a56e85b",
+    "selective_refinement.py": "db3ec24ccbb8ea7e1a0fd0106c3267404ab4e1666896da0906b8a0c85f4657de",
+    "mlp_selective_refinement.py": "ab34ca6422057173ec8ed8f417a84c5ec77955f13063bd0632167eea207b4894"
+  }
+}
