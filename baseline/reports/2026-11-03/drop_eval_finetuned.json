@@ -1,0 +1,24 @@
+{
+  "model": "finetuned",
+  "weights": "results/20261103T060348.171262Z-finetune-drop/student.pth",
+  "weights_sha256": "a14958ad4da105c9e0290aacadd6c7d83ce6003831090351cfc0fd13eb6562bd",
+  "routed_at_threshold_1": 18071,
+  "gpu": "NVIDIA GeForce RTX 4090",
+  "precision": "float32, TF32 allowed (official default)",
+  "full_path_matches_official": true,
+  "top1": {
+    "narrow_all": 73.6,
+    "wide_all": 81.03200000000001,
+    "wide_threshold_1": 79.974,
+    "drop_10_all": 72.492,
+    "drop_10_threshold_1": 74.208,
+    "drop_25_all": 79.13799999999999,
+    "drop_25_threshold_1": 78.43,
+    "drop_50_all": 80.638,
+    "drop_50_threshold_1": 79.65,
+    "drop_75_all": 81.05,
+    "drop_75_threshold_1": 79.99000000000001,
+    "drop_90_all": 81.062,
+    "drop_90_threshold_1": 79.976
+  }
+}

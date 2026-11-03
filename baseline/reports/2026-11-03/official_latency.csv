@@ -1,0 +1,7 @@
+implementation,threshold,samples,batch_size,mean_ms,p50_ms,p95_ms,peak_allocated_mib,peak_reserved_mib,stage_2_fraction,stage_2_execution_fraction,measurement
+official,10.0,1000,1,9.92643425334245,9.864245308563113,10.254690260626376,97.6953125,114.0,0.0,1.0,batch-1 synchronized wall time; includes gate synchronization; excludes preprocessing and H2D; memory includes model
+early_exit,10.0,1000,1,4.50406568357721,4.482003394514322,4.596938565373421,95.7109375,112.0,0.0,0.0,batch-1 synchronized wall time; includes gate synchronization; excludes preprocessing and H2D; memory includes model
+official,0.0,1000,1,9.857566922903061,9.791550925001502,10.102623351849616,97.6953125,114.0,1.0,1.0,batch-1 synchronized wall time; includes gate synchronization; excludes preprocessing and H2D; memory includes model
+early_exit,0.0,1000,1,9.797080093994737,9.748947340995073,9.977890038862824,97.6953125,114.0,1.0,1.0,batch-1 synchronized wall time; includes gate synchronization; excludes preprocessing and H2D; memory includes model
+official,1.0,1000,1,9.925583833362907,9.855004027485847,10.17579233739525,97.6953125,114.0,0.332,1.0,batch-1 synchronized wall time; includes gate synchronization; excludes preprocessing and H2D; memory includes model
+early_exit,1.0,1000,1,6.285206112544984,4.494620719924569,9.865302010439336,97.6953125,114.0,0.332,0.332,batch-1 synchronized wall time; includes gate synchronization; excludes preprocessing and H2D; memory includes model

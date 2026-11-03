@@ -1,0 +1,139 @@
+{
+  "environment": {
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "torch": "2.5.1+cu124",
+    "platform": "Linux-6.2.0-39-generic-x86_64-with-glibc2.35",
+    "cpu": "13th Gen Intel(R) Core(TM) i5-13400",
+    "precision": "float32, TF32 allowed",
+    "batch_size": 1,
+    "measurement": "synchronized wall time of one stage, median; excludes preprocessing and H2D"
+  },
+  "rows": [
+    {
+      "setting": "GPU",
+      "stage": "3H",
+      "median_ms": 3.860173746943474,
+      "p90_ms": 3.9308632258325815,
+      "runs": 500
+    },
+    {
+      "setting": "GPU",
+      "stage": "3H + attention",
+      "median_ms": 3.9501450955867767,
+      "p90_ms": 4.005679674446583,
+      "runs": 500
+    },
+    {
+      "setting": "GPU",
+      "stage": "6H full",
+      "median_ms": 4.642463754862547,
+      "p90_ms": 4.697655141353607,
+      "runs": 500
+    },
+    {
+      "setting": "GPU",
+      "stage": "6H drop Top-K 25%",
+      "median_ms": 4.757172893732786,
+      "p90_ms": 4.831106076017022,
+      "runs": 500
+    },
+    {
+      "setting": "GPU",
+      "stage": "6H drop Top-K 50%",
+      "median_ms": 4.769358783960342,
+      "p90_ms": 4.82602184638381,
+      "runs": 500
+    },
+    {
+      "setting": "GPU",
+      "stage": "6H drop Top-K 75%",
+      "median_ms": 4.7717709094285965,
+      "p90_ms": 4.860748630017042,
+      "runs": 500
+    },
+    {
+      "setting": "CPU 4 threads",
+      "stage": "3H",
+      "median_ms": 11.25226216390729,
+      "p90_ms": 11.459792265668511,
+      "runs": 50
+    },
+    {
+      "setting": "CPU 4 threads",
+      "stage": "3H + attention",
+      "median_ms": 11.428351048380136,
+      "p90_ms": 11.844655964523554,
+      "runs": 50
+    },
+    {
+      "setting": "CPU 4 threads",
+      "stage": "6H full",
+      "median_ms": 27.08949614316225,
+      "p90_ms": 27.49851825647056,
+      "runs": 50
+    },
+    {
+      "setting": "CPU 4 threads",
+      "stage": "6H drop Top-K 25%",
+      "median_ms": 12.7022759988904,
+      "p90_ms": 12.877379590645432,
+      "runs": 50
+    },
+    {
+      "setting": "CPU 4 threads",
+      "stage": "6H drop Top-K 50%",
+      "median_ms": 16.74708630889654,
+      "p90_ms": 16.985611245036125,
+      "runs": 50
+    },
+    {
+      "setting": "CPU 4 threads",
+      "stage": "6H drop Top-K 75%",
+      "median_ms": 21.86636719852686,
+      "p90_ms": 22.05749382264912,
+      "runs": 50
+    },
+    {
+      "setting": "CPU 1 thread",
+      "stage": "3H",
+      "median_ms": 28.01294717937708,
+      "p90_ms": 28.15168364904821,
+      "runs": 30
+    },
+    {
+      "setting": "CPU 1 thread",
+      "stage": "3H + attention",
+      "median_ms": 28.17086409777403,
+      "p90_ms": 28.559197206050158,
+      "runs": 30
+    },
+    {
+      "setting": "CPU 1 thread",
+      "stage": "6H full",
+      "median_ms": 85.18111985176802,
+      "p90_ms": 85.49322849139571,
+      "runs": 30
+    },
+    {
+      "setting": "CPU 1 thread",
+      "stage": "6H drop Top-K 25%",
+      "median_ms": 29.83119897544384,
+      "p90_ms": 30.051101744174957,
+      "runs": 30
+    },
+    {
+      "setting": "CPU 1 thread",
+      "stage": "6H drop Top-K 50%",
+      "median_ms": 47.47357778251171,
+      "p90_ms": 47.61961563490331,
+      "runs": 30
+    },
+    {
+      "setting": "CPU 1 thread",
+      "stage": "6H drop Top-K 75%",
+      "median_ms": 65.51060266792774,
+      "p90_ms": 65.86533421650529,
+      "runs": 30
+    }
+  ]
+}

@@ -1,0 +1,345 @@
+{
+  "official_threshold_1": {
+    "gmacs": 2.9148786917376004,
+    "top1": 80.304
+  },
+  "no_retraining": [
+    {
+      "ratio": 10,
+      "gmacs": 1.4418906670694398,
+      "top1": 63.804,
+      "curve_gmacs_same_top1": 1.2536832,
+      "curve_top1": 74.702,
+      "gain": -10.898,
+      "gain_ci95": [
+        -11.232000000000001,
+        -10.574
+      ]
+    },
+    {
+      "ratio": 25,
+      "gmacs": 1.67045216722944,
+      "top1": 73.81400000000001,
+      "curve_gmacs_same_top1": 1.2968646868992,
+      "curve_top1": 75.994,
+      "gain": -2.18,
+      "gain_ci95": [
+        -2.47205,
+        -1.8979500000000005
+      ]
+    },
+    {
+      "ratio": 50,
+      "gmacs": 2.0693255847936003,
+      "top1": 78.61,
+      "curve_gmacs_same_top1": 2.267248656384,
+      "curve_top1": 77.89,
+      "gain": 0.72,
+      "gain_ci95": [
+        0.49395,
+        0.964
+      ]
+    },
+    {
+      "ratio": 75,
+      "gmacs": 2.48413442629632,
+      "top1": 79.952,
+      "curve_gmacs_same_top1": 2.743352229888,
+      "curve_top1": 79.304,
+      "gain": 0.6479999999999999,
+      "gain_ci95": [
+        0.48195,
+        0.822
+      ]
+    },
+    {
+      "ratio": 90,
+      "gmacs": 2.7371399774208003,
+      "top1": 80.118,
+      "curve_gmacs_same_top1": 2.8258399420416,
+      "curve_top1": 79.93599999999999,
+      "gain": 0.182,
+      "gain_ci95": [
+        0.068,
+        0.2960499999999997
+      ]
+    }
+  ],
+  "fine_tuned": [
+    {
+      "ratio": 10,
+      "gmacs": 1.4425910614425599,
+      "top1": 74.208,
+      "curve_gmacs_same_top1": 1.3591456776192,
+      "curve_top1": 74.708,
+      "gain": -0.5,
+      "gain_ci95": [
+        -0.79,
+        -0.214
+      ]
+    },
+    {
+      "ratio": 25,
+      "gmacs": 1.6720031292825601,
+      "top1": 78.43,
+      "curve_gmacs_same_top1": 2.2078279778304,
+      "curve_top1": 76.00200000000001,
+      "gain": 2.428,
+      "gain_ci95": [
+        2.172,
+        2.69205
+      ]
+    },
+    {
+      "ratio": 50,
+      "gmacs": 2.0723609124864,
+      "top1": 79.65,
+      "curve_gmacs_same_top1": 2.6313387147264,
+      "curve_top1": 77.908,
+      "gain": 1.7420000000000002,
+      "gain_ci95": [
+        1.54,
+        1.96
+      ]
+    },
+    {
+      "ratio": 75,
+      "gmacs": 2.48871342163968,
+      "top1": 79.99000000000001,
+      "curve_gmacs_same_top1": 2.7641125601280003,
+      "curve_top1": 79.322,
+      "gain": 0.668,
+      "gain_ci95": [
+        0.49795,
+        0.8460499999999999
+      ]
+    },
+    {
+      "ratio": 90,
+      "gmacs": 2.7426605064192,
+      "top1": 79.976,
+      "curve_gmacs_same_top1": 2.7584842039295996,
+      "curve_top1": 79.946,
+      "gain": 0.03,
+      "gain_ci95": [
+        -0.124,
+        0.194
+      ]
+    }
+  ],
+  "hard_images": {
+    "count": 18004,
+    "official_3h": 43.93468118195957,
+    "official_full_6h": 62.73605865363253,
+    "official_drop_10": 16.912908242612755,
+    "official_drop_25": 44.712286158631414,
+    "official_drop_50": 58.03154854476783,
+    "official_drop_75": 61.75849811153077,
+    "official_drop_90": 62.219506776271935,
+    "fine_tuned_3h": 44.14574538991335,
+    "fine_tuned_full_6h": 61.78626971784048,
+    "fine_tuned_drop_10": 45.71206398578094,
+    "fine_tuned_drop_25": 57.49833370362142,
+    "fine_tuned_drop_50": 60.90313263719174,
+    "fine_tuned_drop_75": 61.83070428793601,
+    "fine_tuned_drop_90": 61.791824039102416
+  },
+  "all_images": {
+    "official_3h": 73.534,
+    "official_full_6h": 81.44,
+    "fine_tuned_3h": 73.6,
+    "fine_tuned_full_6h": 81.03200000000001
+  },
+  "routed_share": {
+    "official": 0.36008,
+    "fine_tuned": 0.36142
+  },
+  "split_half_no_retraining": {
+    "splits": 200,
+    "held_out_gain_mean": 0.6839399933815002,
+    "held_out_gain_p5_p95": [
+      0.515999972820282,
+      0.8362000584602356
+    ],
+    "held_out_gain_positive_share": 1.0,
+    "chosen_ratio_counts": {
+      "10": 0,
+      "25": 0,
+      "50": 150,
+      "75": 50,
+      "90": 0
+    }
+  },
+  "latency": {
+    "environment": {
+      "gpu": "NVIDIA GeForce RTX 4090",
+      "torch": "2.5.1+cu124",
+      "platform": "Linux-6.2.0-39-generic-x86_64-with-glibc2.35",
+      "cpu": "13th Gen Intel(R) Core(TM) i5-13400",
+      "precision": "float32, TF32 allowed",
+      "batch_size": 1,
+      "measurement": "synchronized wall time of one stage, median; excludes preprocessing and H2D"
+    },
+    "stage_median_ms": {
+      "GPU": {
+        "3H": 3.860173746943474,
+        "3H + attention": 3.9501450955867767,
+        "6H full": 4.642463754862547,
+        "6H drop Top-K 25%": 4.757172893732786,
+        "6H drop Top-K 50%": 4.769358783960342,
+        "6H drop Top-K 75%": 4.7717709094285965
+      },
+      "CPU 4 threads": {
+        "3H": 11.25226216390729,
+        "3H + attention": 11.428351048380136,
+        "6H full": 27.08949614316225,
+        "6H drop Top-K 25%": 12.7022759988904,
+        "6H drop Top-K 50%": 16.74708630889654,
+        "6H drop Top-K 75%": 21.86636719852686
+      },
+      "CPU 1 thread": {
+        "3H": 28.01294717937708,
+        "3H + attention": 28.17086409777403,
+        "6H full": 85.18111985176802,
+        "6H drop Top-K 25%": 29.83119897544384,
+        "6H drop Top-K 50%": 47.47357778251171,
+        "6H drop Top-K 75%": 65.51060266792774
+      }
+    },
+    "pipeline_threshold_1_ms": {
+      "GPU": {
+        "official": 5.53183209579438,
+        "drop_25": 5.663107911162078,
+        "drop_50": 5.667495806515217,
+        "drop_75": 5.668364364653826
+      },
+      "CPU 4 threads": {
+        "official": 21.006647935137153,
+        "drop_25": 16.002186590060592,
+        "drop_50": 17.458641886487605,
+        "drop_75": 19.301992549225687
+      },
+      "CPU 1 thread": {
+        "official": 58.6849648156017,
+        "drop_25": 38.91248222485184,
+        "drop_50": 45.265149985700845,
+        "drop_75": 51.75992190644145
+      }
+    },
+    "official_evaluate_py": [
+      {
+        "implementation": "official",
+        "threshold": 10.0,
+        "samples": 1000,
+        "batch_size": 1,
+        "mean_ms": 9.92643425334245,
+        "p50_ms": 9.864245308563113,
+        "p95_ms": 10.254690260626376,
+        "peak_allocated_mib": 97.6953125,
+        "peak_reserved_mib": 114.0,
+        "stage_2_fraction": 0.0,
+        "stage_2_execution_fraction": 1.0,
+        "measurement": "batch-1 synchronized wall time; includes gate synchronization; excludes preprocessing and H2D; memory includes model"
+      },
+      {
+        "implementation": "early_exit",
+        "threshold": 10.0,
+        "samples": 1000,
+        "batch_size": 1,
+        "mean_ms": 4.50406568357721,
+        "p50_ms": 4.482003394514322,
+        "p95_ms": 4.596938565373421,
+        "peak_allocated_mib": 95.7109375,
+        "peak_reserved_mib": 112.0,
+        "stage_2_fraction": 0.0,
+        "stage_2_execution_fraction": 0.0,
+        "measurement": "batch-1 synchronized wall time; includes gate synchronization; excludes preprocessing and H2D; memory includes model"
+      },
+      {
+        "implementation": "official",
+        "threshold": 0.0,
+        "samples": 1000,
+        "batch_size": 1,
+        "mean_ms": 9.857566922903061,
+        "p50_ms": 9.791550925001502,
+        "p95_ms": 10.102623351849616,
+        "peak_allocated_mib": 97.6953125,
+        "peak_reserved_mib": 114.0,
+        "stage_2_fraction": 1.0,
+        "stage_2_execution_fraction": 1.0,
+        "measurement": "batch-1 synchronized wall time; includes gate synchronization; excludes preprocessing and H2D; memory includes model"
+      },
+      {
+        "implementation": "early_exit",
+        "threshold": 0.0,
+        "samples": 1000,
+        "batch_size": 1,
+        "mean_ms": 9.797080093994737,
+        "p50_ms": 9.748947340995073,
+        "p95_ms": 9.977890038862824,
+        "peak_allocated_mib": 97.6953125,
+        "peak_reserved_mib": 114.0,
+        "stage_2_fraction": 1.0,
+        "stage_2_execution_fraction": 1.0,
+        "measurement": "batch-1 synchronized wall time; includes gate synchronization; excludes preprocessing and H2D; memory includes model"
+      },
+      {
+        "implementation": "official",
+        "threshold": 1.0,
+        "samples": 1000,
+        "batch_size": 1,
+        "mean_ms": 9.925583833362907,
+        "p50_ms": 9.855004027485847,
+        "p95_ms": 10.17579233739525,
+        "peak_allocated_mib": 97.6953125,
+        "peak_reserved_mib": 114.0,
+        "stage_2_fraction": 0.332,
+        "stage_2_execution_fraction": 1.0,
+        "measurement": "batch-1 synchronized wall time; includes gate synchronization; excludes preprocessing and H2D; memory includes model"
+      },
+      {
+        "implementation": "early_exit",
+        "threshold": 1.0,
+        "samples": 1000,
+        "batch_size": 1,
+        "mean_ms": 6.285206112544984,
+        "p50_ms": 4.494620719924569,
+        "p95_ms": 9.865302010439336,
+        "peak_allocated_mib": 97.6953125,
+        "peak_reserved_mib": 114.0,
+        "stage_2_fraction": 0.332,
+        "stage_2_execution_fraction": 0.332,
+        "measurement": "batch-1 synchronized wall time; includes gate synchronization; excludes preprocessing and H2D; memory includes model"
+      }
+    ]
+  },
+  "finetune": {
+    "data_dir": "data/imagenet1k",
+    "checkpoint": "checkpoints/thinkingvit_3h6h_ema.pth",
+    "repo": "third_party/ThinkingViT",
+    "ratios": [
+      0.25,
+      0.5
+    ],
+    "epochs": 3.0,
+    "max_steps": null,
+    "batch_size": 128,
+    "lr": 5e-05,
+    "warmup": 500,
+    "workers": 14,
+    "seed": 42,
+    "resume": "results/20261103T050441.329645Z-finetune-drop/student.pth",
+    "start_step": 20000,
+    "steps": 30027,
+    "train_transform": "Compose(\n    RandomResizedCropAndInterpolation(size=(224, 224), scale=(0.08, 1.0), ratio=(0.75, 1.3333), interpolation=bicubic)\n    RandomHorizontalFlip(p=0.5)\n    ColorJitter(brightness=(0.6, 1.4), contrast=(0.6, 1.4), saturation=(0.6, 1.4), hue=None)\n    ToTensor()\n    Normalize(mean=tensor([0.4850, 0.4560, 0.4060]), std=tensor([0.2290, 0.2240, 0.2250]))\n)",
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "last_log": {
+      "step": 30027,
+      "loss_3h": 0.007740804459899664,
+      "loss_drop_6h": 0.036857880651950836,
+      "ratio": 0.5,
+      "lr": 0.0,
+      "images_per_s": 1336.0981828412457
+    }
+  }
+}

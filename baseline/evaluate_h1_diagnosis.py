@@ -21,6 +21,8 @@ import platform
 import subprocess
 import sys
 
+import torch
+
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 from prepare_imagenet import check_counts
@@ -98,8 +100,6 @@ def main():
     check_counts(args.data_dir / "validation", 50000)
     os.environ.setdefault("HF_HOME", str(ROOT / ".cache/huggingface"))
     sys.path.insert(0, str(args.repo))
-    global torch
-    import torch
     import timm
     from torchvision.datasets import ImageFolder
     from torch.utils.data import DataLoader, Subset
