@@ -1,0 +1,72 @@
+# OnDevice 실험에 쓴 Python 패키지 전체 목록 (버전 고정)
+#
+# 2026-11-03 문화관 AIX408-20 PC의 .venv에서 `pip freeze`로 뽑은 그대로다.
+# 이 브랜치의 모든 결과(baseline, H1, 토큰 제거, 파인튜닝, 추론 시간)는 이 버전으로 만들었다.
+#
+# 확인한 환경: Ubuntu 22.04.5 LTS, Python 3.10.12, NVIDIA driver 535.183.01, RTX 4090 24GB
+#
+# 설치 (저장소 루트에서):
+#   python3.10 -m venv .venv
+#   .venv/bin/pip install -r requirements.txt
+#   bash scripts/bootstrap.sh          # ThinkingViT 공식 코드 clone + 가중치 다운로드
+#
+# 주의 1) timm은 설치하지 않는다. 스크립트가 third_party/ThinkingViT/ 안의 수정된 timm을 경로 맨 앞에 넣어 쓴다.
+#         (공식 timm과 이름이 같아 헷갈리지 않도록 PyPI timm은 깔지 않는 것을 권장)
+# 주의 2) torch 2.5.1의 리눅스 휠은 CUDA 12.4 런타임(nvidia-* 패키지)을 함께 설치한다.
+#         따로 CUDA Toolkit을 깔 필요는 없고, NVIDIA 드라이버만 525.60 이상이면 된다.
+# 주의 3) scripts/bootstrap.sh는 이 파일 대신 requirements-data.txt와 ThinkingViT의 requirements.txt를
+#         설치한다. 버전은 이 파일과 같으며, 그림용 matplotlib만 requirements-analysis.txt에 따로 있다.
+
+# ---- 1. 모델 실행 (ThinkingViT 공식 requirements.txt와 같은 버전) ----
+torch==2.5.1
+torchvision==0.20.1
+PyYAML==6.0.2
+huggingface-hub==0.26.5
+safetensors==0.4.5
+absl-py==2.2.2
+
+# ---- 2. 데이터 준비 (scripts/prepare_imagenet.py: Parquet 읽기, 이미지 검사) ----
+pyarrow==18.1.0
+pillow==11.0.0
+
+# ---- 3. 그림 (baseline/plot_*.py, baseline/analyze_*.py) ----
+matplotlib==3.10.7
+
+# ---- 4. 위 패키지가 자동으로 설치하는 의존성 (버전 고정용) ----
+certifi==2026.10.23
+charset-normalizer==3.5.2
+contourpy==1.3.2
+cycler==0.12.1
+filelock==4.1.0
+fonttools==4.65.0
+fsspec==2026.9.0
+idna==3.20
+Jinja2==3.1.6
+kiwisolver==1.5.1
+MarkupSafe==3.0.4
+mpmath==1.3.0
+networkx==3.4.2
+numpy==2.2.6
+nvidia-cublas-cu12==12.4.5.8
+nvidia-cuda-cupti-cu12==12.4.127
+nvidia-cuda-nvrtc-cu12==12.4.127
+nvidia-cuda-runtime-cu12==12.4.127
+nvidia-cudnn-cu12==9.1.0.70
+nvidia-cufft-cu12==11.2.1.3
+nvidia-curand-cu12==10.3.5.147
+nvidia-cusolver-cu12==11.6.1.9
+nvidia-cusparse-cu12==12.3.1.170
+nvidia-nccl-cu12==2.21.5
+nvidia-nvjitlink-cu12==12.4.127
+nvidia-nvtx-cu12==12.4.127
+packaging==26.3
+pyparsing==3.3.3
+python-dateutil==3.0.0
+requests==2.34.2
+six==1.17.0
+sympy==1.13.1
+tqdm==4.70.1
+triton==3.1.0
+typing_extensions==4.16.0
+tzdata==2026.6
+urllib3==2.8.0

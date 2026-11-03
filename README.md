@@ -1,287 +1,158 @@
-# OnDevice: ThinkingViT ImageNet-1K Baseline
+# OnDevice: ThinkingViT 선택적 토큰 재계산(H1) 실험
 
-**Selective Token Refinement for Efficient ThinkingViT** 수업 프로젝트의 베이스라인 실험 코드다. 공식 ThinkingViT의 DeiT 기반 **3H → 6H** 모델을 ImageNet-1K에서 평가하고, 이후 선택적 토큰 갱신 모델과 비교할 기준을 마련한다.
+온디바이스 AI 4조 프로젝트 저장소입니다. ThinkingViT(3H → 6H)에서 6H가 일부 토큰만 다시 계산하게 만들어 연산을 줄이는 방법(H1)을 실험합니다.
 
-현재 제공하는 기능은 데이터 준비, 공식 EMA 가중치 다운로드, 공식 평가 재현, 실제 early-exit baseline, 정확도·batch-1 지연시간·GPU 메모리 측정이다. 선택적 토큰 갱신과 fine-tuning은 아직 구현하지 않았다.
+> **이 브랜치(`experiment/h1-diagnosis`)는 장준용의 실험 브랜치입니다.**
+> - main(준철님의 베이스라인)과 희우님의 H1 두 브랜치 결과를 RTX 4090에서 재현했습니다.
+> - 그 위에 H1 실패 원인 분석, 토큰 제거, 파인튜닝, 추론 시간 측정을 더했습니다.
+> - main과 다른 브랜치는 수정하지 않았습니다.
 
-## 베이스라인 실측 결과 — 2026-10-14
+## 한눈에 보기
 
-추가 분석: [ThinkingViT 실패 분석 — 수치·예시 이미지·ReaL 재평가](baseline/failure_analysis.md) (2026-10-15).
+ImageNet-1K 검증 50,000장, 기준값 τ = 1.0 기준입니다. 추론 시간은 이미지 한 장의 평균이며, 검증 이미지 1,000장을 한 장씩(배치 1) 넣어 쟀습니다.
 
-**같은 배치에서 공식 forward와 실제 early exit를 비교했을 때, threshold별 validation 50,000장 전체의 Top-1 예측과 분기 선택이 모두 일치했다.** threshold 1.0의 batch-1 평균 latency는 19.277ms에서 12.371ms로 약 **35.8% 감소**했다. 이는 RTX 3090에서 수행한 baseline 측정이며, 선택적 토큰 갱신의 성능이나 모바일 기기 실측 결과는 아니다.
-
-### 전체 validation 정확도
-
-GPU 1장, batch 128, FP32·AMP off·TF32 허용 조건에서 같은 입력 배치로 직접 비교했다. 공식 경로는 6H를 항상 실행하고, early exit는 배치 안에서 어려운 이미지만 6H로 보낸다.
-
-| Threshold | 공식 Top-1 (%) | Early exit Top-1 (%) | 공식 Top-5 (%) | Early exit Top-5 (%) | Early exit 실제 6H 실행 비율 |
+| 방법 | 전체 정확도 | 평균 GMACs | GPU (RTX 4090) | CPU 4코어 | CPU 1코어 |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| 10.0 | 73.534 | 73.534 | 92.048 | 92.048 | 0.000% |
-| 0.0 | 81.440 | 81.440 | 95.720 | 95.720 | 100.000% |
-| 1.0 | 80.304 | 80.304 | 95.278 | 95.278 | 36.008% |
+| 3H만 사용 | 73.53% | 1.25 | 4.0 ms | 11.3 ms | 28.0 ms |
+| 원래 ThinkingViT (τ = 1.0) | 80.30% | 2.92 | 5.5 ms | 20.4 ms | 56.6 ms |
+| 모든 이미지를 6H까지 | 81.44% | 5.87 | 8.7 ms | 38.6 ms | 114.0 ms |
+| 기존 H1 방식 50% | 57.77% | 2.23\* | 5.7 ms | 20.6 ms | 57.0 ms |
+| **토큰 제거 25% + 파인튜닝** | **78.43%** | **1.67** | 5.7 ms | 15.7 ms | **38.2 ms** |
+| **토큰 제거 50% + 파인튜닝** | **79.65%** | **2.07** | 5.7 ms | 17.1 ms | **44.1 ms** |
 
-모든 threshold에서 Top-1 예측 불일치와 분기 선택 불일치는 각각 **0 / 50,000**이었다. threshold 10.0과 0.0의 logits는 정확히 일치했다. threshold 1.0은 logits의 최대 절댓값 차이가 **0.00828648**이므로 완전한 수치 일치로 보고하지 않는다. 전체 데이터에서 확인한 것은 Top-1 예측·분기 선택의 일치와 위 정확도이며, 모든 logits가 사전 검증의 허용 오차를 만족한다고 주장하지 않는다.
+\* 이론값입니다. 지금 구현은 모든 토큰을 계산한 뒤 결과를 버리므로 실제 시간은 원래 모델과 같습니다.
 
-이전 공식 실행기(batch 512)의 Top-1은 73.536 / 81.440 / 80.310%였다. batch 128의 공식 경로에서도 소수의 정답 수 차이가 나타났으므로, 이전 수치와의 차이를 early exit에 의한 정확도 손실로 해석하지 않는다. 배치 구성과 GPU 수치 연산 조건을 맞춘 직접 비교 결과를 기준으로 사용한다.
+**기존 H1이 망가진 이유**
+- 계산하지 않은 토큰이 처음 상태 그대로 남아, 다른 토큰의 계산을 방해했습니다.
+- 이 토큰을 6H에서 아예 빼면(토큰 제거) 학습 없이도 정확도가 대부분 돌아옵니다.
 
-[전체 정확도 비교 JSON](baseline/reports/2026-10-14/accuracy.json) · [기존 공식 실행기 결과](baseline/reports/2026-10-14/official_accuracy.json)
+**토큰 제거 + 파인튜닝의 성능**
+- 같은 연산량에서 τ만 조정한 원래 모델보다 정확도가 1.7~2.4%p 높습니다.
+- 원래 모델(τ = 1.0) 그대로와 비교하면 정확도는 0.65~1.87%p 낮고, 연산량은 29~43% 적습니다.
 
-### Batch-1 latency
+**실제 속도**
+- CPU에서는 줄인 연산만큼 빨라집니다. 1코어 기준 56.6ms → 38.2ms입니다.
+- GPU에서 한 장씩 처리할 때는 빨라지지 않습니다.
 
-같은 GPU에서 같은 validation 표본 1,000장(seed 42)을 사용했다. 각 경로의 두 분기를 각각 50회 warmup했고, CUDA 동기화 wall-clock 시간으로 측정했다. Entropy 판단과 분기 동기화는 포함하고 이미지 로딩·전처리·GPU 전송은 제외했다.
+## 문서 지도
 
-| Threshold | 공식 평균 (ms) | Early exit 평균 (ms) | Early exit p95 (ms) | 표본 내 실제 6H 실행 비율 |
-| --- | ---: | ---: | ---: | ---: |
-| 10.0 | 19.388 | 9.114 | 9.599 | 0.0% |
-| 0.0 | 19.240 | 19.279 | 19.851 | 100.0% |
-| 1.0 | 19.277 | 12.371 | 19.443 | 33.2% |
+| 알고 싶은 것 | 볼 문서 |
+| --- | --- |
+| H1 실험 전체를 쉬운 말로 (A4 3쪽) | [`docs/H1_실험보고서_1103.pdf`](docs/H1_실험보고서_1103.pdf) (한글 원본 `.hwp`도 같은 폴더) |
+| H1 실험 상세: 실험 1~7, 표, 재현 명령 | [`baseline/h1_diagnosis.md`](baseline/h1_diagnosis.md) |
+| RTX 4090 재현과 H1 76~100% sweep | [`baseline/rtx4090_reproduction.md`](baseline/rtx4090_reproduction.md) |
+| 베이스라인(early exit) 측정, RTX 3090 | [`docs/baseline.md`](docs/baseline.md) |
+| ThinkingViT가 틀리는 사례 분석 | [`baseline/failure_analysis.md`](baseline/failure_analysis.md) |
+| early-exit 실행기 사용법 | [`baseline/README.md`](baseline/README.md) |
+| 결과 파일(JSON·CSV·그림) 날짜별 안내 | [`baseline/reports/README.md`](baseline/reports/README.md) |
 
-모든 이미지를 6H로 보내는 threshold 0.0에서는 두 경로의 시간이 비슷하다. threshold 1.0의 peak allocated memory는 두 경로 모두 97.695 MiB였다. 정확도는 전체 50,000장, latency는 1,000장 표본이므로 두 실험의 6H 실행 비율은 다르다. 한 번의 실행 결과이며 반복 실험 신뢰구간은 측정하지 않았다.
+## 1. 필요한 환경
 
-[Latency·메모리 상세 JSON](baseline/reports/2026-10-14/latency.json) · [실험 환경·revision·해시](baseline/reports/2026-10-14/provenance.json) · [측정 표본 인덱스](baseline/reports/2026-10-14/latency_sample_indices.json)
+| 항목 | 실험에 쓴 환경 | 필요 조건 |
+| --- | --- | --- |
+| OS | Ubuntu 22.04.5 LTS | 리눅스 (Windows는 확인하지 않음) |
+| Python | 3.10.12 | 3.10 |
+| GPU | RTX 4090 24GB (베이스라인은 RTX 3090에서도 확인) | 평가 1GB 이하, 파인튜닝(배치 128) 약 6GB |
+| NVIDIA 드라이버 | 535.183.01 | 525.60 이상. CUDA 12.4 런타임은 pip가 함께 설치하므로 CUDA Toolkit은 필요 없음 |
+| CPU / RAM | Core i5-13400 (10코어 16스레드) / 32GB | 파인튜닝 속도는 CPU의 이미지 디코딩에 좌우됨 (데이터 로더 14개 기준) |
+| 디스크 | 약 155GB 사용 | 검증 6.4GB, train 140GB, `.venv` 5.4GB, 가중치 85MB. train의 원본 Parquet를 지우지 않으면 약 140GB가 더 필요 |
+| 계정 | Hugging Face | ImageNet-1K 접근 승인을 받은 계정 |
 
-### 측정 환경과 재현
-
-- NVIDIA GeForce RTX 3090 1장, Python 3.10.12, PyTorch 2.5.1+cu124 / CUDA 12.4
-- 공식 ThinkingViT commit: `9254c4950d3159937ad682592d58a2be69708c42`, 원본 코드 변경 없음
-- 공식 일반 EMA 가중치, 입력 224×224, crop_pct 0.9, bicubic 보간, ImageNet mean/std
-- 정확도는 GPU 한 장에 큰 배치를 사용하고, latency는 단일 이미지의 응답시간을 보기 위해 batch 1을 사용한다.
-
-아래 설치·데이터 준비를 마친 뒤 저장소 루트에서 실행한다.
-
-```bash
-# 전체 50,000장 정확도 및 동일 배치의 공식 출력과 직접 비교
-CUDA_VISIBLE_DEVICES=0 .venv/bin/python baseline/evaluate.py \
-  --mode accuracy --batch-size 128 --verify-samples 128 --compare-official
-
-# 같은 1,000장에서 공식 forward와 실제 early exit의 latency 비교
-CUDA_VISIBLE_DEVICES=0 .venv/bin/python baseline/evaluate.py \
-  --mode latency --samples 1000 --warmup 50 --verify-samples 100
-```
-
-공식 실행기와 실제 early-exit 코드는 분리되어 있다. [`scripts/baseline.py`](scripts/baseline.py)는 공식 평가를 호출하고, [`baseline/`](baseline/README.md)은 실제 early exit와 검증·측정을 담당한다. 공유용 요약은 [`baseline/reports/2026-10-14/`](baseline/reports/2026-10-14/)에, 이미지별 전체 측정 로그는 로컬 `results/`에 저장한다.
-
-## 1. 요구 환경
-
-- Linux, Python 3.10, Git
-- 데이터·가중치 다운로드가 가능한 네트워크
-- ImageNet-1K 접근 승인을 받은 Hugging Face 계정
-- 평가 시 CUDA를 사용할 수 있는 NVIDIA GPU와 드라이버
-- train 전체를 준비할 경우 수백 GB의 디스크 여유: 원본 Parquet와 추출 이미지를 함께 보관한다.
-
-GPU는 데이터와 가중치를 받을 때는 필요하지 않다. 이 저장소의 평가 스크립트는 CUDA를 요구한다. 모델 의존성은 [공식 requirements.txt](https://github.com/ds-kiel/ThinkingViT/blob/main/requirements.txt)를 따르며, 현재 PyTorch 2.5.1 / torchvision 0.20.1을 사용한다. 공식 저장소에 포함된 custom `timm`을 사용해야 한다.
-
-## 2. 빠른 시작
-
-### 저장소와 가상환경 준비
+## 2. 설치
 
 ```bash
-git clone https://github.com/hee4040/OnDevice.git
+git clone -b experiment/h1-diagnosis https://github.com/hee4040/OnDevice.git
 cd OnDevice
-bash scripts/bootstrap.sh --data-only
+python3.10 -m venv .venv
+.venv/bin/pip install -r requirements.txt   # 실험에 쓴 패키지 46개, 버전 고정
+bash scripts/bootstrap.sh                    # ThinkingViT 공식 코드 clone, 가중치 다운로드·검증
 ```
 
-프로젝트 내부 `.venv`에 데이터 준비용 패키지를 설치한다. 이후 명령은 저장소 루트에서 실행한다.
+| 파일 | 들어 있는 것 | 언제 쓰나 |
+| --- | --- | --- |
+| [`requirements.txt`](requirements.txt) | 실험 PC의 `pip freeze` 그대로 46개 (torch 2.5.1, torchvision 0.20.1 등) | 처음 설치할 때 이것 하나면 됨 |
+| [`requirements-data.txt`](requirements-data.txt) | 데이터 준비용 3개 | `bootstrap.sh --data-only`가 설치 |
+| [`requirements-analysis.txt`](requirements-analysis.txt) | 그림용 matplotlib | 그림만 다시 그릴 때 |
+| `third_party/ThinkingViT/requirements.txt` | 모델 실행용 (torch 등) | `bootstrap.sh`가 설치. 버전은 `requirements.txt`와 같음 |
 
-### ImageNet 접근 승인 및 로그인
+`timm`은 PyPI에서 설치하지 않습니다. 스크립트가 `third_party/ThinkingViT/` 안의 수정된 timm을 씁니다. ThinkingViT 공식 코드는 commit `9254c4950d3159937ad682592d58a2be69708c42`입니다.
 
-먼저 [ILSVRC/imagenet-1k](https://huggingface.co/datasets/ILSVRC/imagenet-1k)에서 이용 조건을 확인하고 접근 승인을 받는다. 그 계정의 읽기 권한 토큰으로 터미널에서 로그인한다.
+## 3. 데이터 준비
 
 ```bash
 export HF_HOME="$PWD/.cache/huggingface"
-.venv/bin/huggingface-cli login
+.venv/bin/huggingface-cli login                                   # ImageNet-1K 접근 승인된 계정의 읽기 토큰
+.venv/bin/python scripts/prepare_imagenet.py --splits validation  # 5만 장 (평가용)
+.venv/bin/python scripts/prepare_imagenet.py --splits train       # 128만 장 (파인튜닝용, 학교망 기준 약 24시간)
 ```
 
-토큰을 코드나 커밋에 넣지 않는다. 로그인 캐시가 있는 `.cache/`는 Git 추적에서 제외한다.
+- 중간에 끊겨도 같은 명령을 다시 실행하면 이어서 받습니다.
+- 토큰은 코드나 커밋에 넣지 않습니다.
+- 자세한 옵션은 [`docs/baseline.md`](docs/baseline.md)의 "3. 데이터 준비와 재개"에 있습니다.
 
-### Validation 준비
+## 4. 실험 재현 순서
 
-초기 베이스라인 평가에는 validation만 있으면 된다.
+모든 명령은 저장소 루트에서 `CUDA_VISIBLE_DEVICES=0 .venv/bin/python`으로 실행합니다. 시간은 RTX 4090 기준이고, 결과는 `results/<시각>-<이름>/`에 저장됩니다.
 
-```bash
-.venv/bin/python scripts/prepare_imagenet.py --splits validation
-```
+| 순서 | 할 일 | 스크립트 | 시간 |
+| ---: | --- | --- | ---: |
+| 1 | 베이스라인 정확도·지연 (공식 출력과 일치 확인) | `baseline/evaluate.py --mode accuracy` / `--mode latency` | 수 분 |
+| 2 | H1 진단: 실험 1~4 | `baseline/evaluate_h1_diagnosis.py` → `baseline/plot_h1_diagnosis.py` | 15분 |
+| 3 | 학습 없는 토큰 제거 평가 | `baseline/evaluate_drop.py` | 2분 |
+| 4 | 토큰 제거 파인튜닝 (train 필요) | `baseline/finetune_drop.py --epochs 3 --lr 5e-5` | 50분 |
+| 5 | 파인튜닝 모델 평가 | `baseline/evaluate_drop.py --weights results/<4번 폴더>/student.pth` | 2분 |
+| 6 | 6H 단계 시간 / 방법별 전체 추론 시간 | `baseline/measure_latency.py` / `--mode pipeline --images 1000` | 2분 / 15분 |
+| 7 | 분석과 그림 | `baseline/analyze_followup.py` (인자는 문서 참고) | 1분 |
 
-완료되면 `data/imagenet1k/validation/`에 이미지 50,000장과 클래스 폴더 1,000개가 생성된다.
+전체 명령과 인자는 [`baseline/h1_diagnosis.md`의 "재현"](baseline/h1_diagnosis.md#재현)에 있습니다. 단위 테스트는 `.venv/bin/python -m unittest discover -s tests`로 돌리며, 26개가 통과합니다.
 
-### 공식 모델과 가중치 설치
-
-```bash
-bash scripts/bootstrap.sh
-```
-
-이 명령은 다음 작업을 수행한다.
-
-1. 공식 ThinkingViT 코드를 `third_party/ThinkingViT/`에 clone한다. 이미 있으면 그 checkout을 유지한다.
-2. 공식 모델 의존성을 `.venv`에 설치한다.
-3. [ThinkingViT DeiT 3H → 6H의 일반 EMA 가중치](https://huggingface.co/NCPS/thinkingvit_deit-3h-6h-imagenet1k)를 다운로드한다.
-4. 가중치를 모델에 `strict=True`로 로딩하여 확인하고, 공식 평가기용 checkpoint로 저장한다.
-
-가중치 위치는 `checkpoints/thinkingvit_3h6h_ema.pth`다. 같은 폴더의 JSON에 모델 저장소, revision, SHA256을 기록한다. 일반 모델을 사용하며 800-epoch 모델은 별도 실험으로 취급한다.
-
-### 정확도 및 지연시간 평가
-
-```bash
-# Validation 전체 50,000장: Top-1, Top-5, 단계별 출력 선택 비율
-.venv/bin/python scripts/baseline.py --mode accuracy
-
-# Validation에서 1,000장 표본: batch-1 latency, peak GPU memory
-.venv/bin/python scripts/baseline.py --mode latency
-
-# 실제 early exit: 공식 경로와 같은 이미지로 batch-1 latency 비교
-CUDA_VISIBLE_DEVICES=0 .venv/bin/python baseline/evaluate.py --mode latency
-
-# 실제 early exit: 전체 정확도와 같은 배치의 공식 예측 비교
-CUDA_VISIBLE_DEVICES=0 .venv/bin/python baseline/evaluate.py \
-  --mode accuracy --batch-size 128 --compare-official
-```
-
-실행마다 `results/` 아래에 UTC timestamp가 포함된 결과 폴더가 생성된다. 초기 베이스라인은 threshold `10.0`, `0.0`, `1.0`을 비교한다. 정확도와 지연시간의 해석은 아래 **측정 시 주의점**을 함께 확인한다. early-exit 실행기의 세부 사용법은 [`baseline/README.md`](baseline/README.md)에 정리했다.
-
-## 3. 데이터 준비와 재개
-
-| Split | 이미지 수 | 사용 목적 |
-| --- | ---: | --- |
-| Train | 1,281,167 | 후속 학습·fine-tuning |
-| Validation | 50,000 | 정답이 공개된 베이스라인 평가 |
-| Test | 100,000 | 정답 비공개, 서버 제출 평가 |
-
-ThinkingViT 공식 성능 비교에는 validation을 사용한다. 이 저장소의 다운로드 스크립트는 train과 validation을 지원하며 test는 받지 않는다. [데이터셋 설명](https://huggingface.co/datasets/ILSVRC/imagenet-1k)
-
-```bash
-# Validation 이후 train 전체 준비: 기본 실행 순서
-.venv/bin/python scripts/prepare_imagenet.py
-
-# Train만 추가 준비
-.venv/bin/python scripts/prepare_imagenet.py --splits train
-
-# 다른 디스크에 저장
-.venv/bin/python scripts/prepare_imagenet.py --output /path/to/imagenet1k
-```
-
-중단 후 같은 명령을 다시 실행하면 완료한 shard를 건너뛰고 이어서 준비한다. 원본 이미지 bytes를 재인코딩하거나 크기를 변경하지 않고 저장하며, 최초 추출 시 이미지를 디코딩하여 확인한다.
-
-느린 연결에 대비해 메타데이터 요청 timeout은 60초, 다운로드 응답 timeout은 120초로 설정한다. 일시적인 연결 오류와 HTTP 408·429·5xx 오류에는 최대 8회 추가 시도하며, 재시도 간 대기는 5초부터 최대 60초까지 늘어난다. 인증·권한 오류는 즉시 표시한다. 재시도를 모두 소진해 종료되어도 완료 기록과 다운로드 캐시는 유지된다. 기존 `HF_HUB_ETAG_TIMEOUT`, `HF_HUB_DOWNLOAD_TIMEOUT` 환경변수가 있으면 해당 값을 우선한다.
-
-```bash
-# 연결 지연이 길 때 timeout과 재시도 횟수를 직접 지정
-HF_HUB_ETAG_TIMEOUT=120 HF_HUB_DOWNLOAD_TIMEOUT=180 \
-  .venv/bin/python scripts/prepare_imagenet.py --splits train --retries 12
-```
-
-클래스 폴더 `0000`~`0999`는 Hugging Face의 정수 label을 보존한다. 폴더의 사전순 정렬과 분류 인덱스가 일치한다. 원본 파일명, 이미지 크기(bytes), SHA256은 `.preparation/`의 shard별 manifest에 남긴다. 재개 시 완료 여부는 파일 존재와 크기로 확인하며 전체 SHA256을 다시 계산하지는 않는다.
-
-데이터 revision은 최초 접근 성공 시 고정한다. split별 `*-complete.json`은 전체 이미지 수와 클래스별 개수 검증 후에 생성된다. validation은 클래스마다 50장이어야 한다. 원본 Parquet는 `.cache/huggingface/`에 남겨 재개에 사용하며 자동 삭제하지 않는다.
-
-## 4. 평가 설정과 실행 예시
-
-실제로 6H 실행을 생략하는 baseline은 별도 [`baseline/`](baseline/README.md)에 있다. 아래 기존 스크립트는 공식 forward를 그대로 평가하며, `baseline/evaluate.py`는 공식 경로와 실제 early exit의 출력 일치 및 속도를 비교한다. 정확도는 batch 128, 지연시간은 batch 1을 기본으로 사용한다.
-
-| 항목 | 기본 설정 |
-| --- | --- |
-| 모델 / stages | `thinkingvit` / `3 6` |
-| 입력 / 패치 / Transformer blocks | 224×224 / 16×16 / 12 |
-| Embedding dimension | 192 → 384 |
-| 가중치 | 공식 일반 EMA export |
-| 정확도 batch size | 공식 실행기 512 / early-exit 실행기 128 |
-| 전처리 | 공식 모델 config 자동 적용 |
-| 정밀도 | float32, AMP off, 공식 코드와 같이 TF32 허용 |
-| 기본 thresholds | 10.0 / 0.0 / 1.0 |
-
-현재 공식 모델 config는 crop_pct=0.9, bicubic 보간, ImageNet mean/std를 사용한다. 학습 설정과 모델 파라미터는 변경하지 않는다.
-
-```bash
-# GPU 메모리가 부족하면 batch size를 명시적으로 조절
-.venv/bin/python scripts/baseline.py --mode accuracy --batch-size 128
-
-# 공식 threshold sweep
-.venv/bin/python scripts/baseline.py --mode accuracy \
-  --thresholds 0 0.1 0.2 0.3 0.5 0.8 1.0 1.2 1.4 1.6 2 5
-
-# 데이터 경로 지정: 그 아래 validation/이 있어야 함
-.venv/bin/python scripts/baseline.py --mode accuracy \
-  --data-dir /path/to/imagenet1k
-
-# Latency 표본 수와 warmup 변경
-.venv/bin/python scripts/baseline.py --mode latency \
-  --samples 1000 --warmup 50 --seed 42
-```
-
-`--checkpoint`와 `--repo`로 다른 checkpoint 및 공식 코드 경로를 지정할 수도 있다. 데이터 개수 검사기는 이 저장소에서 생성한 숫자 클래스 폴더 구성을 요구한다. 일반 synset 폴더 형태의 기존 ImageNet은 그대로 이 검사기를 통과하지 않는다. batch size는 자동으로 축소하지 않는다.
-
-### 공식 참고 성능
-
-| 조건 | Threshold | Top-1 (%) | GMACs |
-| --- | ---: | ---: | ---: |
-| 3H 출력 | 10.0 | 73.536 | 1.250 |
-| 전체 3H → 6H 출력 | 0.0 | 81.440 | 5.850 |
-| Entropy 기반 출력 선택 | 1.0 | 80.310 | 2.907 |
-
-위 값은 [공식 README](https://github.com/ds-kiel/ThinkingViT)의 보고값이며, 이 프로젝트의 공식 실행기(batch 512) 평가에서도 같은 Top-1을 재현했다. 별도 early-exit 실행기의 결과와 측정 조건은 이 문서 상단의 실측 결과에 정리한다.
-
-### 결과 파일
-
-- 공통: `environment.json`, `summary.json`, `summary.csv`
-- 정확도: threshold별 공식 실행 로그와 명령 인수 JSON
-- 지연시간: `preprocessing.json`, `sample_indices.json`, threshold별 개별 지연시간과 선택 단계 JSON
-
-실행 환경에는 GPU, PyTorch/CUDA 버전, 공식 코드 commit과 변경 상태, checkpoint SHA256을 기록한다. 설치 시의 코드 commit은 `third_party/ThinkingViT.commit`, 설치 패키지는 `requirements-installed.txt`에도 남긴다. 로컬 환경 기록과 측정 결과는 기본 Git 추적에서 제외한다.
-
-## 5. 측정 시 주의점
-
-### 출력 선택과 실제 early-exit 구분
-
-확인한 [공식 forward](https://github.com/ds-kiel/ThinkingViT/blob/9254c4950d3159937ad682592d58a2be69708c42/timm/models/vision_transformer.py)는 3H와 6H를 모두 계산한 뒤 entropy로 logits를 선택한다. 따라서 threshold=10의 결과는 **3H 출력의 정확도**지만, 그 forward의 실행시간은 3H만 계산한 시간이 아니다.
-
-Entropy는 전체 1,000개가 아닌 **상위 10개 클래스 확률을 재정규화하여 계산**한다. 향후 선택적 갱신 모델과 비교할 때도 같은 정의를 적용해야 한다.
-
-[공식 평가 코드](https://github.com/ds-kiel/ThinkingViT/blob/9254c4950d3159937ad682592d58a2be69708c42/validate.py)의 GMACs는 `1.25 + 4.6 × stage_2_fraction`이다. 이는 routing을 가정한 추정치이며, profiler로 측정한 실행 연산량이 아니다. 결과 파일에서도 `gmacs_official_routing_estimate`로 구분한다.
-
-`baseline/early_exit.py`는 같은 Entropy 규칙과 Token Recycling을 유지하면서 실제 실행을 분기한다. batch-1 경로는 확실한 이미지에서 즉시 반환하고, 정확도용 배치 경로는 어려운 이미지만 모아 6H를 실행한 뒤 원래 순서로 출력을 합친다. 공식 모델 코드와 가중치는 변경하지 않는다. 후속 선택적 토큰 갱신 모델의 속도는 이 early-exit 기준선과 비교한다.
-
-### Latency 및 메모리 측정 범위
-
-Latency는 이 프로젝트에서 추가한 프로토콜이다. batch=1, seed=42로 validation 전체에서 1,000장을 무작위 선택한다. 기존 공식 실행기는 threshold마다 50회 warmup하고, early-exit 비교 실행기는 각 경로를 측정하기 전 두 분기를 각각 50회 warmup한다. CUDA 동기화 wall-clock 시간으로 평균, p50, p95를 기록한다.
-
-이미지 로딩·전처리·CPU→GPU 전송은 제외하고 모델 forward의 Python dispatch 비용을 포함한다. peak allocated/reserved GPU memory에는 모델이 포함되며 시스템 RAM 사용량과 다르다. 데스크톱 GPU에서 측정한 값을 온디바이스 실측값으로 표기하지 않는다.
-
-early exit의 GPU → CPU 분기 동기화도 시간에 포함한다. `stage_2_fraction`은 6H 출력 선택 비율이며, 별도 `stage_2_execution_fraction`이 실제 실행 비율이다. 공식 경로는 항상 6H를 실행한다. 전체 측정 중 일부 이미지라도 6H로 진입하면 early exit도 같은 peak memory를 보일 수 있다. 한 번의 측정 결과이므로 반복 실험의 신뢰구간은 제공하지 않는다.
-
-## 6. 저장소 구조와 검증
+## 5. 폴더 구조
 
 ```text
 OnDevice/
-├── README.md
-├── requirements-data.txt
-├── baseline/
-│   ├── README.md               # 실제 early-exit 사용법과 검증 방법
-│   ├── early_exit.py           # batch-1 / 배치 내 선택적 6H 실행
-│   ├── evaluate.py             # 출력 검증, 정확도 및 지연시간 비교
-│   └── reports/                # 공유용 결과 요약과 재현 정보
-├── scripts/
-│   ├── bootstrap.sh            # 가상환경, 공식 코드·의존성, 가중치 설치
-│   ├── prepare_imagenet.py     # 다운로드, ImageFolder 변환, 개수 검증
-│   ├── prepare_weights.py      # 공식 EMA 다운로드 및 strict loading
-│   └── baseline.py             # 공식 정확도 평가 및 batch-1 측정
-└── tests/
-    ├── test_preparation.py     # 결과 파싱, 불완전 데이터 거부 검사
-    ├── test_download_retry.py  # timeout 재시도, 영구 오류, 재시도 한도 검사
-    └── test_early_exit.py      # 실제 실행 생략, 특징 재활용, 배치 복원 검사
+├── README.md                  # 이 문서
+├── requirements.txt           # 패키지 전체 46개, 버전 고정
+├── requirements-data.txt      # 데이터 준비용 (bootstrap.sh가 사용)
+├── requirements-analysis.txt  # 그림용 matplotlib
+├── docs/
+│   ├── H1_실험보고서_1103.pdf    # 쉬운 요약 보고서 (한글 원본 .hwp 포함)
+│   └── baseline.md              # 10/14 베이스라인 측정 상세 (원래 루트 README)
+├── scripts/                   # 설치·데이터·가중치 준비, 공식 평가기 호출
+├── baseline/                  # 실험 코드와 문서 (아래 표)
+│   └── reports/<날짜>/         # 공유용 결과: JSON·CSV·그림
+└── tests/                     # 단위 테스트
 ```
 
-`.venv/`, `.cache/`, `data/`, `checkpoints/`, `third_party/`, `results/`는 실행 중 생성하며 커밋에 포함하지 않는다.
+`.venv/`, `.cache/`, `data/`, `checkpoints/`, `third_party/`, `results/`는 실행하면서 생기며 Git에 올리지 않습니다. 파인튜닝 가중치(`student.pth`)와 이미지별 결과(`per_image.pt`)도 용량 때문에 올리지 않았습니다.
 
-```bash
-.venv/bin/python -m unittest discover -s tests -v
-python3 -m compileall -q scripts baseline tests
-bash -n scripts/bootstrap.sh
-```
+### `baseline/` 파일 안내
 
-2026-10-14 기준 validation 50,000장·1,000개 클래스 준비와 개수 검증을 완료했으며, 단위 테스트 16개를 통과했다. GPU에서 수행한 전체 정확도 평가 및 공식 출력과의 비교 결과는 상단에 별도로 기록한다. 단위 테스트만으로 모델 정확도를 검증했다고 간주하지 않는다.
+| 단계 | 파일 | 하는 일 | 작성 |
+| --- | --- | --- | --- |
+| 베이스라인 | `early_exit.py` | 3H가 확신하면 6H를 실제로 건너뛰는 실행기 | 준철, 10/14 |
+| | `evaluate.py` | 공식 결과와 일치 확인, 정확도·지연 측정 | 준철, 10/14 |
+| 실패 분석 | `analyze_failures.py`, `audit_failures.py`, `analyze_stages.py` | 3H·6H가 틀리는 사례, ReaL 라벨 재평가 | 준철, 10/15 |
+| attention 분석 | `analyze_attention.py`, `occlude_attention.py` | CLS attention 지도, 패치 가림 실험 | 준철, 10/27 |
+| H1 원본 | `selective_refinement.py` | 기존 H1 방식: 고른 토큰만 갱신, 나머지는 그대로 | 희우 (`experiment/h1-selective-token-refinement`에서 가져옴) |
+| | `mlp_selective_refinement.py` | attention은 전체, MLP만 고른 토큰에 적용 | 희우 (`experiment/h1-attention-full-mlp-selective`에서 가져옴) |
+| 4090 재현 | `plot_h1_ratio_sweep.py` | H1 76~100% sweep 그림 | 장준용, 11/1 |
+| H1 진단 | `evaluate_h1_diagnosis.py`, `plot_h1_diagnosis.py` | 실험 1~4: 기존 H1 vs 토큰 제거, 앞 k층 전체 계산, 같은 연산량 비교, sink 토큰 | 장준용, 11/2 |
+| 후속 실험 | `evaluate_drop.py` | 이미지마다 3H·6H·토큰 제거의 정답 여부 기록 (원래·파인튜닝 모델) | 장준용, 11/3 |
+| | `finetune_drop.py` | 토큰 제거 파인튜닝 (원래 모델을 교사로 쓰는 지식 증류) | 장준용, 11/3 |
+| | `measure_latency.py` | 6H 단계 시간, 방법별 전체 추론 시간 (GPU, CPU 4코어, CPU 1코어) | 장준용, 11/3 |
+| | `analyze_followup.py` | 같은 연산량 비교, 부트스트랩, 반 나눠 검증, 그림 | 장준용, 11/3 |
+
+## 6. 브랜치
+
+| 브랜치 | 내용 |
+| --- | --- |
+| `main` | 베이스라인: early exit, 실패 분석, attention 분석 (준철, 10/14~10/27) |
+| `experiment/h1-selective-token-refinement` | 기존 H1 방식 첫 실험 (희우, 10/21) |
+| `experiment/h1-attention-full-mlp-selective` | MLP만 고른 토큰에 적용하는 방식 (희우, 10/22) |
+| `experiment/rtx4090-reproduction` | RTX 4090 재현과 76~100% sweep (장준용, 11/1) |
+| `experiment/h1-diagnosis` | **이 브랜치.** 위 내용 전부에 H1 진단, 토큰 제거, 파인튜닝, 추론 시간을 더함 (장준용, 11/2~11/3) |
 
 ## 참고 자료
 
-- [ThinkingViT 공식 코드](https://github.com/ds-kiel/ThinkingViT)
-- [ThinkingViT 논문](https://arxiv.org/abs/2507.10800)
-- [공식 3H → 6H EMA 가중치](https://huggingface.co/NCPS/thinkingvit_deit-3h-6h-imagenet1k)
+- [ThinkingViT 공식 코드](https://github.com/ds-kiel/ThinkingViT) · [논문](https://arxiv.org/abs/2507.10800) · [3H → 6H EMA 가중치](https://huggingface.co/NCPS/thinkingvit_deit-3h-6h-imagenet1k)
 - [ImageNet-1K 데이터셋](https://huggingface.co/datasets/ILSVRC/imagenet-1k)
