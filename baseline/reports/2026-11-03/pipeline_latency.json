@@ -1,0 +1,205 @@
+{
+  "environment": {
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "torch": "2.5.1+cu124",
+    "platform": "Linux-6.2.0-39-generic-x86_64-with-glibc2.35",
+    "cpu": "13th Gen Intel(R) Core(TM) i5-13400",
+    "precision": "float32, TF32 allowed",
+    "batch_size": 1,
+    "measurement": "mean synchronized wall time per image, whole inference including the entropy gate; excludes preprocessing and H2D"
+  },
+  "rows": [
+    {
+      "setting": "GPU",
+      "method": "3H only",
+      "mean_ms": 3.9569003650358354,
+      "p50_ms": 3.9501820028817747,
+      "images": 1000,
+      "routed_share": 0.0
+    },
+    {
+      "setting": "GPU",
+      "method": "Official, threshold 1.0",
+      "mean_ms": 5.544351308923069,
+      "p50_ms": 3.970077999838395,
+      "images": 1000,
+      "routed_share": 0.332
+    },
+    {
+      "setting": "GPU",
+      "method": "6H for every image",
+      "mean_ms": 8.673537718943408,
+      "p50_ms": 8.664265998959308,
+      "images": 1000,
+      "routed_share": 1.0
+    },
+    {
+      "setting": "GPU",
+      "method": "H1 freeze Top-K 50%",
+      "mean_ms": 5.705942276999849,
+      "p50_ms": 4.078819001733791,
+      "images": 1000,
+      "routed_share": 0.332
+    },
+    {
+      "setting": "GPU",
+      "method": "MLP-selective Top-K 75%",
+      "mean_ms": 5.711004204931669,
+      "p50_ms": 4.078091002156725,
+      "images": 1000,
+      "routed_share": 0.332
+    },
+    {
+      "setting": "GPU",
+      "method": "Drop Top-K 25%",
+      "mean_ms": 5.674371492026694,
+      "p50_ms": 4.071780000231229,
+      "images": 1000,
+      "routed_share": 0.332
+    },
+    {
+      "setting": "GPU",
+      "method": "Drop Top-K 50%",
+      "mean_ms": 5.682115435956803,
+      "p50_ms": 4.069591999723343,
+      "images": 1000,
+      "routed_share": 0.332
+    },
+    {
+      "setting": "GPU",
+      "method": "Drop Top-K 75%",
+      "mean_ms": 5.677285525009211,
+      "p50_ms": 4.066222998517333,
+      "images": 1000,
+      "routed_share": 0.332
+    },
+    {
+      "setting": "CPU 4 threads",
+      "method": "3H only",
+      "mean_ms": 11.304289257048367,
+      "p50_ms": 11.28103200244368,
+      "images": 1000,
+      "routed_share": 0.0
+    },
+    {
+      "setting": "CPU 4 threads",
+      "method": "Official, threshold 1.0",
+      "mean_ms": 20.39502086898574,
+      "p50_ms": 11.331423000228824,
+      "images": 1000,
+      "routed_share": 0.332
+    },
+    {
+      "setting": "CPU 4 threads",
+      "method": "6H for every image",
+      "mean_ms": 38.57831978095783,
+      "p50_ms": 38.47618500003591,
+      "images": 1000,
+      "routed_share": 1.0
+    },
+    {
+      "setting": "CPU 4 threads",
+      "method": "H1 freeze Top-K 50%",
+      "mean_ms": 20.628720022006746,
+      "p50_ms": 11.497734998556552,
+      "images": 1000,
+      "routed_share": 0.332
+    },
+    {
+      "setting": "CPU 4 threads",
+      "method": "MLP-selective Top-K 75%",
+      "mean_ms": 20.624448725026014,
+      "p50_ms": 11.494281003251672,
+      "images": 1000,
+      "routed_share": 0.332
+    },
+    {
+      "setting": "CPU 4 threads",
+      "method": "Drop Top-K 25%",
+      "mean_ms": 15.74974537696471,
+      "p50_ms": 11.558546000742353,
+      "images": 1000,
+      "routed_share": 0.332
+    },
+    {
+      "setting": "CPU 4 threads",
+      "method": "Drop Top-K 50%",
+      "mean_ms": 17.115940769010194,
+      "p50_ms": 11.500594999233726,
+      "images": 1000,
+      "routed_share": 0.332
+    },
+    {
+      "setting": "CPU 4 threads",
+      "method": "Drop Top-K 75%",
+      "mean_ms": 18.776667998983612,
+      "p50_ms": 11.46787100151414,
+      "images": 1000,
+      "routed_share": 0.332
+    },
+    {
+      "setting": "CPU 1 thread",
+      "method": "3H only",
+      "mean_ms": 28.018703243014897,
+      "p50_ms": 28.002412000205368,
+      "images": 1000,
+      "routed_share": 0.0
+    },
+    {
+      "setting": "CPU 1 thread",
+      "method": "Official, threshold 1.0",
+      "mean_ms": 56.59440168693982,
+      "p50_ms": 28.356647002510726,
+      "images": 1000,
+      "routed_share": 0.332
+    },
+    {
+      "setting": "CPU 1 thread",
+      "method": "6H for every image",
+      "mean_ms": 113.96152496401191,
+      "p50_ms": 113.88385800091783,
+      "images": 1000,
+      "routed_share": 1.0
+    },
+    {
+      "setting": "CPU 1 thread",
+      "method": "H1 freeze Top-K 50%",
+      "mean_ms": 56.970474186982756,
+      "p50_ms": 28.518154998891987,
+      "images": 1000,
+      "routed_share": 0.332
+    },
+    {
+      "setting": "CPU 1 thread",
+      "method": "MLP-selective Top-K 75%",
+      "mean_ms": 56.96240411798499,
+      "p50_ms": 28.537631998915458,
+      "images": 1000,
+      "routed_share": 0.332
+    },
+    {
+      "setting": "CPU 1 thread",
+      "method": "Drop Top-K 25%",
+      "mean_ms": 38.20422088007399,
+      "p50_ms": 28.50670000043465,
+      "images": 1000,
+      "routed_share": 0.332
+    },
+    {
+      "setting": "CPU 1 thread",
+      "method": "Drop Top-K 50%",
+      "mean_ms": 44.11489058697407,
+      "p50_ms": 28.506554001069162,
+      "images": 1000,
+      "routed_share": 0.332
+    },
+    {
+      "setting": "CPU 1 thread",
+      "method": "Drop Top-K 75%",
+      "mean_ms": 50.11114153704693,
+      "p50_ms": 28.45948899994255,
+      "images": 1000,
+      "routed_share": 0.332
+    }
+  ]
+}

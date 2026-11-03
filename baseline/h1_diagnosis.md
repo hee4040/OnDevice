@@ -128,6 +128,21 @@ ThinkingViT는 먼저 작은 모델(**3H**)로 보고, 답이 확실하면(엔�
 - GPU는 오히려 2~3% 느리다. GPU는 수천 개를 동시에 계산하는 기계라 토큰이 197개든 99개든 한 장을 처리하는 시간이 거의 같다. 시간은 계산보다 명령을 내리는 데 들고, 토큰을 고르는 과정만 더해진다. 사진 수십 장을 한꺼번에 넣으면 달라질 수 있지만, 이번에는 재지 않았다.
 - 휴대폰처럼 CPU로 돌리는 온디바이스 환경에서는 빼기의 계산 절약이 실제 시간 절약으로 이어진다는 근거다. 팀 기준 측정(`evaluate.py --mode latency`)은 4090에서 3H만 4.5 ms, τ = 1.0 조기 종료 평균 6.3 ms였다(3090: 9.1 / 12.4 ms).
 
+**방법별 전체 추론 시간.** 위 표는 6H 단계만 잰 것이다. 이미지 한 장을 넣어 3H → 6H로 보낼지 판단 → (필요하면) 6H까지 끝내는 전체 시간을 검증 1,000장으로 쟀다(배치 1, 평균, 1,000장 중 6H로 간 비율 33.2%).
+
+| 방법 | 전체 정확도 | 평균 GMACs | GPU | CPU 4코어 | CPU 1코어 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 3H만 | 73.53% | 1.25 | 4.0 ms | 11.3 ms | 28.0 ms |
+| 공식 (τ = 1.0) | 80.30% | 2.92 | 5.5 ms | 20.4 ms | 56.6 ms |
+| 모든 사진 6H | 81.44% | 5.87 | 8.7 ms | 38.6 ms | 114.0 ms |
+| 얼리기(H1) Top-K 50% | 57.77% | 2.23\* | 5.7 ms | 20.6 ms | 57.0 ms |
+| MLP 선택 Top-K 75% | 66.71% | 2.67\* | 5.7 ms | 20.6 ms | 57.0 ms |
+| 빼기 Top-K 25% (파인튜닝 후) | 78.43% | 1.67 | 5.7 ms | 15.7 ms | **38.2 ms** |
+| 빼기 Top-K 50% (파인튜닝 후) | 79.65% | 2.07 | 5.7 ms | 17.1 ms | **44.1 ms** |
+| 빼기 Top-K 75% (파인튜닝 후) | 79.99% | 2.48 | 5.7 ms | 18.8 ms | 50.1 ms |
+
+\* 이론값. 지금의 얼리기·MLP 선택 구현은 모든 토큰을 계산한 뒤 결과를 버리므로 실제 시간은 공식과 같다. 빼기의 시간은 파인튜닝 전후가 같다(구조가 같다). CPU 1코어에서 빼기 25%는 공식보다 32%, 50%는 22% 빠르고, GPU에서는 모든 방법이 5.5~5.7 ms로 거의 같다.
+
 ### 실험 6: +0.7%p는 부풀려진 걸까 → 아니다
 
 5만 장에서 비율 여러 개를 시험하고 제일 좋은 것을 보고하면, 운 좋게 잘 나온 것을 고른 효과가 섞인다. 두 가지로 확인했다.
@@ -171,6 +186,7 @@ CUDA_VISIBLE_DEVICES=0 .venv/bin/python baseline/evaluate_h1_diagnosis.py       
 .venv/bin/python baseline/plot_h1_diagnosis.py results/<위 실행 폴더> --output baseline/reports/2026-11-02
 # 11/3 후속 실험 (train 필요)
 CUDA_VISIBLE_DEVICES=0 .venv/bin/python baseline/measure_latency.py               # 실험 5, 약 2분
+CUDA_VISIBLE_DEVICES=0 .venv/bin/python baseline/measure_latency.py --mode pipeline --images 1000   # 방법별 전체 추론 시간, 약 15분
 CUDA_VISIBLE_DEVICES=0 .venv/bin/python baseline/evaluate.py --mode latency --samples 1000 --warmup 50 --verify-samples 100
 CUDA_VISIBLE_DEVICES=0 .venv/bin/python baseline/evaluate_drop.py                 # 실험 6, 약 2분
 CUDA_VISIBLE_DEVICES=0 .venv/bin/python baseline/finetune_drop.py --epochs 3 --lr 5e-5   # 실험 7, 약 1시간
@@ -183,5 +199,5 @@ cd baseline && ../.venv/bin/python analyze_followup.py --official ../results/<�
 - `baseline/selective_refinement.py`(`dcc13c6`)와 `baseline/mlp_selective_refinement.py`(`f30d821`)는 두 H1 브랜치의 파일을 그대로 가져왔다.
 - `reports/2026-11-02/`에는 그림 4장, 설정별 결과 표 `h1_diagnosis.csv`, 실행 결과 `h1_diagnosis_summary.json`, 환경 `h1_diagnosis_environment.json`, 핵심 수치 `h1_diagnosis_key_numbers.json`이 있다.
 - 이미지별 결과(`per_image.pt`)와 파인튜닝 가중치(`student.pth`)는 `.gitignore` 대상이라 올리지 않았다. 가중치의 SHA-256은 `drop_eval_finetuned.json`에 있다.
-- `reports/2026-11-03/`에는 그림 2장(`followup_pareto.png`, 지연 `followup_latency.png`), 핵심 수치 `followup_key_numbers.json`, 평가 요약 `drop_eval_*.json`, 지연 원자료 `latency.json`·`official_latency.csv`, 학습 기록 `finetune_log.json`이 있다.
+- `reports/2026-11-03/`에는 그림 2장(`followup_pareto.png`, 지연 `followup_latency.png`), 핵심 수치 `followup_key_numbers.json`, 평가 요약 `drop_eval_*.json`, 지연 원자료 `latency.json`(6H 단계)·`pipeline_latency.json`(방법별 전체)·`official_latency.csv`, 학습 기록 `finetune_log.json`이 있다.
 - 이전 재현 결과와 1% 간격 sweep은 [`rtx4090_reproduction.md`](rtx4090_reproduction.md)에 있다.
