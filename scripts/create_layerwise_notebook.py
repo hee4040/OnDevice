@@ -53,6 +53,7 @@ run('git', '-C', official, 'checkout', OFFICIAL_COMMIT)
 run(PYTHON, '-c', 'import torch; print(torch.__version__, torch.cuda.get_device_name() if torch.cuda.is_available() else "NO GPU"); assert torch.cuda.is_available(), "Select GPU runtime first"')
 run(PYTHON, '-m', 'unittest', 'discover', '-s', 'tests', '-p', 'test_layerwise_drop.py', '-v')
 run(PYTHON, 'scripts/prepare_weights.py')
+run(PYTHON, 'baseline/check_layerwise_model.py')
 ''')
 cell('markdown', '''
 ## Drive 저장 위치
@@ -68,6 +69,7 @@ STORE = Path('/content/drive/MyDrive/OnDevice')
 DATA_DRIVE = STORE / 'data/imagenet1k'
 RESULTS = STORE / 'results/layerwise-drop-v1'
 RESULTS.mkdir(parents=True, exist_ok=True)
+shutil.copy2(PROJECT / 'results/layerwise-model-check.json', RESULTS / 'model-check.json')
 print('Persistent data:', DATA_DRIVE)
 print('Persistent results:', RESULTS)
 print('Drive free GiB:', round(shutil.disk_usage(STORE).free / 1024**3, 1))
