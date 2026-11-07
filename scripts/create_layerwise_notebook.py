@@ -29,6 +29,7 @@ cell('code', '''
 import os, sys, subprocess, json, shutil
 from pathlib import Path
 
+os.environ['MPLBACKEND'] = 'Agg'
 PROJECT = Path('/content/OnDevice')
 BRANCH = 'codex/layer-wise-drop'
 OFFICIAL_COMMIT = '9254c4950d3159937ad682592d58a2be69708c42'
