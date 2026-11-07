@@ -1,5 +1,18 @@
 # OnDevice: ThinkingViT 선택적 토큰 재계산(H1) 실험
 
+## 추가 실험: Layer-wise Drop (Colab)
+
+`codex/layer-wise-drop`는 `experiment/h1-diagnosis`의 `5d53816`에서 분기한 후속 실험입니다.
+6H의 Block별 토큰 유지율을 바꾸어 고정 Drop과 정확도·연산량·실제 시간을 비교합니다.
+아래 본문의 기존 수치는 H1 진단 브랜치에서 측정한 결과이며, 새 실험 결과가 아닙니다.
+
+[Colab에서 열기](https://colab.research.google.com/github/hee4040/OnDevice/blob/codex/layer-wise-drop/notebooks/layerwise_drop.ipynb)
+· [실험 설계와 설정 안내](baseline/layerwise_drop.md)
+
+Colab의 **런타임 → 런타임 유형 변경 → T4 GPU**를 선택하고 셀을 위에서부터 실행합니다.
+Drive 연결과 ImageNet 승인 계정의 Hugging Face 토큰 입력은 사용자가 직접 수행합니다.
+데이터·결과는 Drive의 `MyDrive/OnDevice/`에 저장합니다.
+
 온디바이스 AI 4조 프로젝트 저장소입니다. ThinkingViT(3H → 6H)에서 6H가 일부 토큰만 다시 계산하게 만들어 연산을 줄이는 방법(H1)을 실험합니다.
 
 > **이 브랜치(`experiment/h1-diagnosis`)는 장준용의 실험 브랜치입니다.**
