@@ -34,7 +34,14 @@ BRANCH = 'codex/layer-wise-drop'
 OFFICIAL_COMMIT = '9254c4950d3159937ad682592d58a2be69708c42'
 
 def run(*command, **kwargs):
-    subprocess.run([str(x) for x in command], check=True, **kwargs)
+    command = [str(x) for x in command]
+    with subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                          text=True, bufsize=1, **kwargs) as process:
+        for line in process.stdout:
+            print(line, end='', flush=True)
+        code = process.wait()
+        if code:
+            raise subprocess.CalledProcessError(code, command)
 
 if not PROJECT.exists():
     run('git', 'clone', '--branch', BRANCH, 'https://github.com/hee4040/OnDevice.git', PROJECT)
