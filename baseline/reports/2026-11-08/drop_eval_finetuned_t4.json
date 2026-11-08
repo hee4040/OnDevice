@@ -1,0 +1,24 @@
+{
+  "model": "finetuned",
+  "weights": "/tmp/OnDevice/student.pth",
+  "weights_sha256": "a14958ad4da105c9e0290aacadd6c7d83ce6003831090351cfc0fd13eb6562bd",
+  "routed_at_threshold_1": 18069,
+  "gpu": "Tesla T4",
+  "precision": "float32, TF32 allowed (official default)",
+  "full_path_matches_official": true,
+  "top1": {
+    "narrow_all": 73.59599999999999,
+    "wide_all": 81.03399999999999,
+    "wide_threshold_1": 79.976,
+    "drop_10_all": 72.47200000000001,
+    "drop_10_threshold_1": 74.18,
+    "drop_25_all": 79.142,
+    "drop_25_threshold_1": 78.43,
+    "drop_50_all": 80.672,
+    "drop_50_threshold_1": 79.666,
+    "drop_75_all": 81.036,
+    "drop_75_threshold_1": 79.97800000000001,
+    "drop_90_all": 81.066,
+    "drop_90_threshold_1": 79.97999999999999
+  }
+}

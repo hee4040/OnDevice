@@ -33,6 +33,7 @@ ImageNet-1K 검증 50,000장, 기준값 τ = 1.0 기준입니다. 추론 시간�
 **실제 속도**
 - CPU에서는 줄인 연산만큼 빨라집니다. 1코어 기준 56.6ms → 38.2ms입니다.
 - GPU에서 한 장씩 처리할 때는 빨라지지 않습니다.
+- 실험 2(11/8, Kaggle T4): torch.compile + CUDA Graphs로 바꾸면 GPU 추론 자체가 4.8~8.5배 빨라지고(19.1 → FP32 4.0, FP16 2.3 ms), 그때부터 토큰 제거도 GPU 시간을 줄입니다(FP32 3.98 → 3.20 ms). FP16으로 바꿔도 정확도 차이는 0.03%p 이하입니다.
 
 ## 문서 지도
 
@@ -40,6 +41,7 @@ ImageNet-1K 검증 50,000장, 기준값 τ = 1.0 기준입니다. 추론 시간�
 | --- | --- |
 | H1 실험 전체를 쉬운 말로 (A4 3쪽) | [`docs/H1_실험보고서_1103.pdf`](docs/H1_실험보고서_1103.pdf) (한글 원본 `.hwp`도 같은 폴더) |
 | H1 실험 상세: 실험 1~7, 표, 재현 명령 | [`baseline/h1_diagnosis.md`](baseline/h1_diagnosis.md) |
+| 실험 2 GPU 최적화 (torch.compile, CUDA Graphs, FP16) | [`docs/실험2_GPU최적화_1108.pdf`](docs/실험2_GPU최적화_1108.pdf), 상세는 [`baseline/gpu_optimization.md`](baseline/gpu_optimization.md) |
 | RTX 4090 재현과 H1 76~100% sweep | [`baseline/rtx4090_reproduction.md`](baseline/rtx4090_reproduction.md) |
 | 베이스라인(early exit) 측정, RTX 3090 | [`docs/baseline.md`](docs/baseline.md) |
 | ThinkingViT가 틀리는 사례 분석 | [`baseline/failure_analysis.md`](baseline/failure_analysis.md) |
