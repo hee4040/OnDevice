@@ -80,7 +80,8 @@ RESULTS.mkdir(parents=True, exist_ok=True)
 shutil.copy2(PROJECT / 'results/layerwise-model-check.json', RESULTS / 'model-check.json')
 print('Persistent data:', DATA_DRIVE)
 print('Persistent results:', RESULTS)
-print('Drive free GiB:', round(shutil.disk_usage(STORE).free / 1024**3, 1))
+print('Colab local free GiB:', round(shutil.disk_usage('/content').free / 1024**3, 1))
+print('Google Drive storage quota must be checked in the Drive web UI.')
 ''')
 cell('markdown', '''
 ## ImageNet 접근 인증
@@ -161,6 +162,31 @@ display(Image(filename=str(RESULTS / 'figures/pareto.png')))
 display(Image(filename=str(RESULTS / 'figures/schedules.png')))
 # Share summary/environment/figures, not credentials or the ImageNet images.
 print('Saved:', RESULTS)
+''')
+cell('markdown', '''
+## 4. 공유용 결과 다운로드
+정확도·시간 측정이 모두 끝난 뒤 실행합니다. summary, 실행 환경, 그래프와 모델 점검 결과만 묶습니다.
+이미지·토큰·가중치·배치별 텐서는 포함하지 않습니다. ZIP은 Drive에도 남습니다.
+''')
+cell('code', '''
+from zipfile import ZipFile, ZIP_DEFLATED
+from google.colab import files
+share_files = [RESULTS / mode / name for mode in ('accuracy', 'latency-gpu')
+               for name in ('summary.json', 'summary.csv', 'environment.json')]
+share_files += [RESULTS / 'figures' / name for name in ('pareto.png', 'schedules.png')]
+model_check = PROJECT / 'results/layerwise-model-check.json'
+if model_check.exists():
+    shutil.copy2(model_check, RESULTS / 'model-check.json')
+    share_files.append(RESULTS / 'model-check.json')
+assert json.loads((RESULTS / 'accuracy/summary.json').read_text())['rows'][0]['samples'] == 50000
+assert all(path.is_file() for path in share_files)
+bundle = Path('/content/layerwise-drop-results.zip')
+with ZipFile(bundle, 'w', compression=ZIP_DEFLATED) as archive:
+    for path in share_files:
+        archive.write(path, arcname=str(path.relative_to(RESULTS)))
+shutil.copy2(bundle, RESULTS / bundle.name)
+print('Share bundle ready:', bundle.name, bundle.stat().st_size, 'bytes', flush=True)
+files.download(str(bundle))
 ''')
 
 notebook = dict(cells=cells, metadata=dict(colab=dict(name='layerwise_drop.ipynb'),

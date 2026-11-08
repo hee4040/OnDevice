@@ -1,0 +1,401 @@
+{
+  "gpu": "Tesla T4",
+  "torch": "2.5.1+cu124",
+  "input": "2 seeded random tensors; not ImageNet; no accuracy claim",
+  "checks": [
+    {
+      "uniform_ratio": 0.25,
+      "max_abs_error": 0.0
+    },
+    {
+      "uniform_ratio": 0.5,
+      "max_abs_error": 0.0
+    },
+    {
+      "uniform_ratio": 0.75,
+      "max_abs_error": 0.0
+    },
+    {
+      "uniform_ratio": 1.0,
+      "max_abs_error": 0.0
+    },
+    {
+      "name": "full",
+      "block_token_counts": [
+        197,
+        197,
+        197,
+        197,
+        197,
+        197,
+        197,
+        197,
+        197,
+        197,
+        197,
+        197
+      ],
+      "finite_logits": true
+    },
+    {
+      "name": "uniform_25",
+      "block_token_counts": [
+        50,
+        50,
+        50,
+        50,
+        50,
+        50,
+        50,
+        50,
+        50,
+        50,
+        50,
+        50
+      ],
+      "finite_logits": true
+    },
+    {
+      "name": "staged_25",
+      "block_token_counts": [
+        197,
+        197,
+        197,
+        197,
+        123,
+        123,
+        123,
+        123,
+        50,
+        50,
+        50,
+        50
+      ],
+      "finite_logits": true
+    },
+    {
+      "name": "linear_25",
+      "block_token_counts": [
+        197,
+        184,
+        170,
+        157,
+        144,
+        130,
+        117,
+        103,
+        90,
+        77,
+        63,
+        50
+      ],
+      "finite_logits": true
+    },
+    {
+      "name": "late_25",
+      "block_token_counts": [
+        197,
+        197,
+        197,
+        197,
+        197,
+        197,
+        197,
+        197,
+        50,
+        50,
+        50,
+        50
+      ],
+      "finite_logits": true
+    },
+    {
+      "name": "uniform_50",
+      "block_token_counts": [
+        99,
+        99,
+        99,
+        99,
+        99,
+        99,
+        99,
+        99,
+        99,
+        99,
+        99,
+        99
+      ],
+      "finite_logits": true
+    },
+    {
+      "name": "staged_50",
+      "block_token_counts": [
+        197,
+        197,
+        197,
+        197,
+        148,
+        148,
+        148,
+        148,
+        99,
+        99,
+        99,
+        99
+      ],
+      "finite_logits": true
+    },
+    {
+      "name": "linear_50",
+      "block_token_counts": [
+        197,
+        188,
+        179,
+        170,
+        161,
+        152,
+        144,
+        135,
+        126,
+        117,
+        108,
+        99
+      ],
+      "finite_logits": true
+    },
+    {
+      "name": "late_50",
+      "block_token_counts": [
+        197,
+        197,
+        197,
+        197,
+        197,
+        197,
+        197,
+        197,
+        99,
+        99,
+        99,
+        99
+      ],
+      "finite_logits": true
+    },
+    {
+      "name": "uniform_75",
+      "block_token_counts": [
+        148,
+        148,
+        148,
+        148,
+        148,
+        148,
+        148,
+        148,
+        148,
+        148,
+        148,
+        148
+      ],
+      "finite_logits": true
+    },
+    {
+      "name": "staged_75",
+      "block_token_counts": [
+        197,
+        197,
+        197,
+        197,
+        173,
+        173,
+        173,
+        173,
+        148,
+        148,
+        148,
+        148
+      ],
+      "finite_logits": true
+    },
+    {
+      "name": "linear_75",
+      "block_token_counts": [
+        197,
+        193,
+        188,
+        184,
+        179,
+        175,
+        170,
+        166,
+        161,
+        157,
+        152,
+        148
+      ],
+      "finite_logits": true
+    },
+    {
+      "name": "late_75",
+      "block_token_counts": [
+        197,
+        197,
+        197,
+        197,
+        197,
+        197,
+        197,
+        197,
+        148,
+        148,
+        148,
+        148
+      ],
+      "finite_logits": true
+    },
+    {
+      "name": "uniform_n124",
+      "block_token_counts": [
+        125,
+        125,
+        125,
+        125,
+        125,
+        125,
+        125,
+        125,
+        125,
+        125,
+        125,
+        125
+      ],
+      "finite_logits": true
+    },
+    {
+      "name": "uniform_n123",
+      "block_token_counts": [
+        124,
+        124,
+        124,
+        124,
+        124,
+        124,
+        124,
+        124,
+        124,
+        124,
+        124,
+        124
+      ],
+      "finite_logits": true
+    },
+    {
+      "name": "uniform_n149",
+      "block_token_counts": [
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150
+      ],
+      "finite_logits": true
+    },
+    {
+      "name": "uniform_n148",
+      "block_token_counts": [
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149
+      ],
+      "finite_logits": true
+    },
+    {
+      "name": "uniform_n147",
+      "block_token_counts": [
+        148,
+        148,
+        148,
+        148,
+        148,
+        148,
+        148,
+        148,
+        148,
+        148,
+        148,
+        148
+      ],
+      "finite_logits": true
+    },
+    {
+      "name": "uniform_n164",
+      "block_token_counts": [
+        165,
+        165,
+        165,
+        165,
+        165,
+        165,
+        165,
+        165,
+        165,
+        165,
+        165,
+        165
+      ],
+      "finite_logits": true
+    },
+    {
+      "name": "uniform_n172",
+      "block_token_counts": [
+        173,
+        173,
+        173,
+        173,
+        173,
+        173,
+        173,
+        173,
+        173,
+        173,
+        173,
+        173
+      ],
+      "finite_logits": true
+    },
+    {
+      "name": "uniform_n180",
+      "block_token_counts": [
+        181,
+        181,
+        181,
+        181,
+        181,
+        181,
+        181,
+        181,
+        181,
+        181,
+        181,
+        181
+      ],
+      "finite_logits": true
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "measurement": "Batch-1 full inference: 3H, attention capture for drop, entropy gate, optional 6H, sorting/gather; excludes loading, preprocessing and H2D",
+  "rows": [
+    {
+      "name": "full",
+      "samples": 1000,
+      "mean_ms": 26.155293254999677,
+      "p50_ms": 22.39052850003039,
+      "p95_ms": 54.23080020010878,
+      "routed_fraction": 0.332
+    },
+    {
+      "name": "uniform_50",
+      "samples": 1000,
+      "mean_ms": 22.9897904796638,
+      "p50_ms": 18.824582166719967,
+      "p95_ms": 49.896733200012015,
+      "routed_fraction": 0.332
+    },
+    {
+      "name": "staged_50",
+      "samples": 1000,
+      "mean_ms": 23.149093834000574,
+      "p50_ms": 19.036339833443584,
+      "p95_ms": 50.162568166357836,
+      "routed_fraction": 0.332
+    },
+    {
+      "name": "uniform_n148",
+      "samples": 1000,
+      "mean_ms": 22.846316194667754,
+      "p50_ms": 19.045082333226066,
+      "p95_ms": 49.978262533219706,
+      "routed_fraction": 0.332
+    }
+  ]
+}
