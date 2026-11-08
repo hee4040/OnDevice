@@ -1,0 +1,100 @@
+{
+  "summary": {
+    "baseline": {
+      "mean_ms": 12.306400542147458,
+      "p50_ms": 8.753949543461204,
+      "p95_ms": 19.049072358757257,
+      "repeat_means": [
+        12.307629846967757,
+        12.278863742016256,
+        12.33270803745836
+      ],
+      "peak_allocated_mib": 97.2744140625,
+      "code_mismatches": [
+        0,
+        0,
+        0
+      ],
+      "correctness_mismatches": [
+        0,
+        0,
+        0
+      ],
+      "sample_gmacs": 2.0578185216,
+      "stage2_fraction": 0.355
+    },
+    "same_budget": {
+      "mean_ms": 13.392301671672612,
+      "p50_ms": 8.905179798603058,
+      "p95_ms": 19.15938830934465,
+      "repeat_means": [
+        13.355524777434766,
+        13.392738204449415,
+        13.428642033133656
+      ],
+      "peak_allocated_mib": 97.2744140625,
+      "code_mismatches": [
+        0,
+        0,
+        0
+      ],
+      "correctness_mismatches": [
+        0,
+        0,
+        0
+      ],
+      "sample_gmacs": 2.053827121152,
+      "stage2_fraction": 0.453
+    },
+    "target_80.0": {
+      "mean_ms": 13.672653497041514,
+      "p50_ms": 8.965809596702456,
+      "p95_ms": 19.161416520364583,
+      "repeat_means": [
+        13.670125155709684,
+        13.675668967422098,
+        13.672166367992759
+      ],
+      "peak_allocated_mib": 97.2744140625,
+      "code_mismatches": [
+        0,
+        0,
+        0
+      ],
+      "correctness_mismatches": [
+        0,
+        0,
+        0
+      ],
+      "sample_gmacs": 2.130544705536,
+      "stage2_fraction": 0.481
+    },
+    "target_80.2": {
+      "mean_ms": 13.7560192605791,
+      "p50_ms": 9.165701922029257,
+      "p95_ms": 19.32039938401431,
+      "repeat_means": [
+        13.791736396495253,
+        13.733493071515113,
+        13.742828313726932
+      ],
+      "peak_allocated_mib": 97.6337890625,
+      "code_mismatches": [
+        0,
+        0,
+        0
+      ],
+      "correctness_mismatches": [
+        0,
+        0,
+        0
+      ],
+      "sample_gmacs": 2.273391562752,
+      "stage2_fraction": 0.481
+    }
+  },
+  "gpu": "NVIDIA GeForce RTX 3090",
+  "measurement": "synchronized wall time, batch 1, includes narrow/gating/Top-K/recycling/selected wide; excludes decoding/preprocessing/input H2D",
+  "script_sha256": "3b25e58a3d9debc2d210e4cce9b5e7cbcc97308e42993c7e9aa71f7d589d627b",
+  "runtime_sha256": "e9204671457f2edaed1037fc28e4470f3f25b601f790dddeb2c743775dfa87a8"
+}

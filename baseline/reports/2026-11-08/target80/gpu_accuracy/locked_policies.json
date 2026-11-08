@@ -1,0 +1,31 @@
+{
+  "baseline": {
+    "kind": "fixed",
+    "gate": 1.0,
+    "ratio": 0.5
+  },
+  "same_budget": {
+    "kind": "monotone",
+    "gate": 0.8,
+    "t1": 1.25,
+    "t2": "+inf",
+    "correct": 19968,
+    "cost": 51812049057792
+  },
+  "target_80.0": {
+    "kind": "monotone",
+    "gate": 0.75,
+    "t1": 1.15,
+    "t2": "+inf",
+    "correct": 20001,
+    "cost": 53593815616512
+  },
+  "target_80.2": {
+    "kind": "monotone",
+    "gate": 0.75,
+    "t1": 1.15,
+    "t2": 1.75,
+    "correct": 20050,
+    "cost": 56724926567424
+  }
+}

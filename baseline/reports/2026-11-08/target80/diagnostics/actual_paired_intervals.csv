@@ -1,0 +1,4 @@
+split,delta_pp,ci_low_pp,ci_high_pp
+calibration,0.368,0.188,0.544
+previously_seen_holdout,0.48,0.292,0.66
+full_validation,0.424,0.296,0.552

@@ -1,0 +1,14 @@
+{
+  "scope": "Post-hoc repeated crossfit on all 50000 already explored images; not independent confirmation; cache based",
+  "seeds": [
+    20261108,
+    20261109
+  ],
+  "folds": 5,
+  "budget_fractions": [
+    1.0,
+    0.98
+  ],
+  "selection": "Frozen candidate grid; maximize training correct count within training cost; no retuning on evaluation fold",
+  "ci": "Conditional paired bootstrap with fixed OOF predictions; excludes selection/repeated-exploration uncertainty"
+}

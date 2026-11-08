@@ -1,9 +1,10 @@
 # 결과 파일 안내
 
-날짜별 폴더에 실험 결과 요약이 들어 있습니다. 이미지별 원자료와 가중치는 용량 때문에 올리지 않았고, 실행한 PC의 `results/`에 있습니다.
+날짜별 폴더에 실험 결과 요약이 들어 있습니다. 2026-11-08의 80% 목표 실험은 이미지별 수치 원자료를 압축 파일로 함께 제공합니다. 이미지와 가중치는 포함하지 않습니다. 이전 실험의 원자료는 실행한 PC의 `results/`에 있습니다.
 
 | 폴더 | 실험 | 설명 문서 | 주요 파일 |
 | --- | --- | --- | --- |
+| `2026-11-08/target80/` | 기존 평균 MAC 예산으로 80.076% · 종료 게이트·유지율 공동 조정 | [실험 결과](2026-11-08/target80/report.md), [재현 안내](../target80_README.md) | 실제 정확도·지연시간·crossfit CSV/JSON, 그림, 수치 원자료 ZIP |
 | `2026-10-14/` | 베이스라인 정확도·지연 (RTX 3090, 준철) | [`docs/baseline.md`](../../docs/baseline.md) | `accuracy.json` 정확도, `latency.json` 지연, `provenance.json` 환경·해시 |
 | `2026-10-15/` | 실패 분석 (준철) | [`failure_analysis.md`](../failure_analysis.md) | `failure_analysis.json`, `stage_analysis.json`, 사례 CSV |
 | `2026-10-27/` | CLS attention 분석, 패치 가림 실험 (준철) | main 브랜치 커밋 `ac7ff72` | `attention_maps.png`, `occlusion_summary.json` |

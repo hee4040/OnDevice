@@ -1,0 +1,262 @@
+[
+  {
+    "seed": 20261108,
+    "fold": 1,
+    "budget_fraction": 1.0,
+    "policy": {
+      "kind": "monotone",
+      "gate": 0.8,
+      "t1": 1.25,
+      "t2": 2.25,
+      "correct": 32015,
+      "cost": 82892723460096
+    }
+  },
+  {
+    "seed": 20261108,
+    "fold": 1,
+    "budget_fraction": 0.98,
+    "policy": {
+      "kind": "monotone",
+      "gate": 0.75,
+      "t1": 1.45,
+      "t2": 2.2,
+      "correct": 31976,
+      "cost": 81288699703296
+    }
+  },
+  {
+    "seed": 20261108,
+    "fold": 2,
+    "budget_fraction": 1.0,
+    "policy": {
+      "kind": "monotone",
+      "gate": 0.8,
+      "t1": 1.25,
+      "t2": 2.25,
+      "correct": 32084,
+      "cost": 82894187206656
+    }
+  },
+  {
+    "seed": 20261108,
+    "fold": 2,
+    "budget_fraction": 0.98,
+    "policy": {
+      "kind": "monotone",
+      "gate": 0.8,
+      "t1": 1.4,
+      "t2": 2.15,
+      "correct": 32026,
+      "cost": 81120633947136
+    }
+  },
+  {
+    "seed": 20261108,
+    "fold": 3,
+    "budget_fraction": 1.0,
+    "policy": {
+      "kind": "monotone",
+      "gate": 0.8,
+      "t1": 1.3,
+      "t2": 2.15,
+      "correct": 31944,
+      "cost": 82683430917120
+    }
+  },
+  {
+    "seed": 20261108,
+    "fold": 3,
+    "budget_fraction": 0.98,
+    "policy": {
+      "kind": "monotone",
+      "gate": 0.8,
+      "t1": 1.4,
+      "t2": 2.2,
+      "correct": 31900,
+      "cost": 80889181111296
+    }
+  },
+  {
+    "seed": 20261108,
+    "fold": 4,
+    "budget_fraction": 1.0,
+    "policy": {
+      "kind": "monotone",
+      "gate": 0.8,
+      "t1": 1.25,
+      "t2": 2.25,
+      "correct": 32027,
+      "cost": 82815820643328
+    }
+  },
+  {
+    "seed": 20261108,
+    "fold": 4,
+    "budget_fraction": 0.98,
+    "policy": {
+      "kind": "monotone",
+      "gate": 0.8,
+      "t1": 1.4,
+      "t2": 2.15,
+      "correct": 31963,
+      "cost": 81072840072192
+    }
+  },
+  {
+    "seed": 20261108,
+    "fold": 5,
+    "budget_fraction": 1.0,
+    "policy": {
+      "kind": "monotone",
+      "gate": 0.8,
+      "t1": 1.25,
+      "t2": 2.25,
+      "correct": 32082,
+      "cost": 82742291530752
+    }
+  },
+  {
+    "seed": 20261108,
+    "fold": 5,
+    "budget_fraction": 0.98,
+    "policy": {
+      "kind": "monotone",
+      "gate": 0.8,
+      "t1": 1.4,
+      "t2": 2.15,
+      "correct": 32040,
+      "cost": 80976713696256
+    }
+  },
+  {
+    "seed": 20261109,
+    "fold": 1,
+    "budget_fraction": 1.0,
+    "policy": {
+      "kind": "monotone",
+      "gate": 0.8,
+      "t1": 1.25,
+      "t2": 2.25,
+      "correct": 32029,
+      "cost": 82921289653248
+    }
+  },
+  {
+    "seed": 20261109,
+    "fold": 1,
+    "budget_fraction": 0.98,
+    "policy": {
+      "kind": "monotone",
+      "gate": 0.8,
+      "t1": 1.35,
+      "t2": 2.25,
+      "correct": 31984,
+      "cost": 81356059318272
+    }
+  },
+  {
+    "seed": 20261109,
+    "fold": 2,
+    "budget_fraction": 1.0,
+    "policy": {
+      "kind": "monotone",
+      "gate": 0.8,
+      "t1": 1.25,
+      "t2": "+inf",
+      "correct": 32020,
+      "cost": 82764384798720
+    }
+  },
+  {
+    "seed": 20261109,
+    "fold": 2,
+    "budget_fraction": 0.98,
+    "policy": {
+      "kind": "monotone",
+      "gate": 0.8,
+      "t1": 1.4,
+      "t2": 2.15,
+      "correct": 31952,
+      "cost": 81101513874432
+    }
+  },
+  {
+    "seed": 20261109,
+    "fold": 3,
+    "budget_fraction": 1.0,
+    "policy": {
+      "kind": "monotone",
+      "gate": 0.8,
+      "t1": 1.25,
+      "t2": "+inf",
+      "correct": 32029,
+      "cost": 82920930017280
+    }
+  },
+  {
+    "seed": 20261109,
+    "fold": 3,
+    "budget_fraction": 0.98,
+    "policy": {
+      "kind": "monotone",
+      "gate": 0.8,
+      "t1": 1.4,
+      "t2": 2.15,
+      "correct": 31980,
+      "cost": 81183088472064
+    }
+  },
+  {
+    "seed": 20261109,
+    "fold": 4,
+    "budget_fraction": 1.0,
+    "policy": {
+      "kind": "monotone",
+      "gate": 0.8,
+      "t1": 1.25,
+      "t2": "+inf",
+      "correct": 32041,
+      "cost": 82815603489792
+    }
+  },
+  {
+    "seed": 20261109,
+    "fold": 4,
+    "budget_fraction": 0.98,
+    "policy": {
+      "kind": "monotone",
+      "gate": 0.8,
+      "t1": 1.4,
+      "t2": 2.15,
+      "correct": 31996,
+      "cost": 81074393127936
+    }
+  },
+  {
+    "seed": 20261109,
+    "fold": 5,
+    "budget_fraction": 1.0,
+    "policy": {
+      "kind": "monotone",
+      "gate": 0.8,
+      "t1": 1.25,
+      "t2": 2.25,
+      "correct": 32037,
+      "cost": 82742882472960
+    }
+  },
+  {
+    "seed": 20261109,
+    "fold": 5,
+    "budget_fraction": 0.98,
+    "policy": {
+      "kind": "monotone",
+      "gate": 0.8,
+      "t1": 1.4,
+      "t2": 2.15,
+      "correct": 31989,
+      "cost": 81022898817024
+    }
+  }
+]

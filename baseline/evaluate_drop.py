@@ -10,6 +10,7 @@ from datetime import datetime, timezone
 import hashlib
 import json
 import os
+import subprocess
 from pathlib import Path
 import sys
 
@@ -64,12 +65,14 @@ def main():
     parser.add_argument("--batch-size", type=int, default=64)
     parser.add_argument("--workers", type=int, default=8)
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--output", type=Path)
     args = parser.parse_args()
     check_counts(args.data_dir / "validation", 50000)
     if not torch.cuda.is_available():
         raise SystemExit("CUDA is unavailable")
 
     torch.backends.cuda.matmul.allow_tf32 = True
+    torch.backends.cudnn.allow_tf32 = True
     torch.backends.cudnn.benchmark = True
     model = load_model(args.repo.resolve(), args.checkpoint.resolve(), args.weights)
     from torchvision.datasets import ImageFolder
@@ -81,7 +84,7 @@ def main():
     loader = DataLoader(Subset(dataset, indices), batch_size=args.batch_size, num_workers=args.workers,
                         pin_memory=True)
     tag = "finetuned" if args.weights else "official"
-    output = ROOT / "results" / (datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S.%fZ") + f"-drop-eval-{tag}")
+    output = args.output or ROOT / "results" / (datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S.%fZ") + f"-drop-eval-{tag}")
     output.mkdir(parents=True)
     print(f"Results: {output}", flush=True)
     keys = ["narrow_correct", "wide_correct"] + [f"drop_{round(100 * r)}_correct" for r in RATIOS]
@@ -105,6 +108,10 @@ def main():
     per_image = {key: torch.cat(value) for key, value in per_image.items()}
     if len(per_image["entropy"]) != 50000:
         raise RuntimeError("Incomplete evaluation")
+    per_image["image_id"] = torch.tensor(indices, dtype=torch.int64)
+    validation_root = (args.data_dir / "validation").resolve()
+    per_image["image_path"] = [str(Path(dataset.samples[i][0]).resolve().relative_to(validation_root)) for i in indices]
+    per_image["target"] = torch.tensor([dataset.samples[i][1] for i in indices], dtype=torch.int64)
     torch.save(per_image, output / "per_image.pt")
     routed = per_image["entropy"] >= 1.0
     summary = {"model": tag, "weights": str(args.weights) if args.weights else None,
@@ -118,6 +125,23 @@ def main():
             mixed = torch.where(routed, per_image[key], per_image["narrow_correct"])
             summary["top1"][key.removesuffix("_correct") + "_threshold_1"] = 100 * mixed.double().mean().item()
     (output / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")
+    metadata = {
+        "identity_schema": 1, "identity_definition": "sorted ImageFolder validation index",
+        "evaluation_seed": args.seed, "batch_size": args.batch_size, "samples": len(indices),
+        "weights_sha256": summary["weights_sha256"],
+        "official_checkpoint_sha256": hashlib.sha256(args.checkpoint.read_bytes()).hexdigest(),
+        "cache_sha256": hashlib.sha256((output / "per_image.pt").read_bytes()).hexdigest(),
+        "source_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
+        "evaluator_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        "data_dir": str(args.data_dir.resolve()), "repo": str(args.repo.resolve()),
+        "transform_config": config, "class_to_idx": dataset.class_to_idx,
+        "torch": torch.__version__, "cuda": torch.version.cuda,
+        "precision": summary["precision"], "gpu": summary["gpu"],
+        "matmul_allow_tf32": torch.backends.cuda.matmul.allow_tf32,
+        "cudnn_allow_tf32": torch.backends.cudnn.allow_tf32,
+        "full_path_matches_official": True,
+    }
+    (output / "cache_metadata.json").write_text(json.dumps(metadata, indent=2) + "\n")
     print(json.dumps(summary, indent=2), flush=True)
 
 

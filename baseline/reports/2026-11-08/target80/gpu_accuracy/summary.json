@@ -1,0 +1,243 @@
+{
+  "status": "complete",
+  "comparison": [
+    {
+      "split": "calibration",
+      "method": "baseline",
+      "n": 25000,
+      "correct": 19876,
+      "top1": 79.50399999999999,
+      "gmacs": 2.0737653178368003,
+      "total_macs": 51844132945920,
+      "baseline_macs": 51844132945920,
+      "cost_change_percent": 0.0,
+      "budget_exceeded": false,
+      "stage2_fraction": 0.36204,
+      "improved": 0,
+      "regressed": 0
+    },
+    {
+      "split": "previously_seen_holdout",
+      "method": "baseline",
+      "n": 25000,
+      "correct": 19950,
+      "top1": 79.80000000000001,
+      "gmacs": 2.0707752935424,
+      "total_macs": 51769382338560,
+      "baseline_macs": 51769382338560,
+      "cost_change_percent": 0.0,
+      "budget_exceeded": false,
+      "stage2_fraction": 0.36072,
+      "improved": 0,
+      "regressed": 0
+    },
+    {
+      "split": "full_validation",
+      "method": "baseline",
+      "n": 50000,
+      "correct": 39826,
+      "top1": 79.652,
+      "gmacs": 2.0722703056896,
+      "total_macs": 103613515284480,
+      "baseline_macs": 103613515284480,
+      "cost_change_percent": 0.0,
+      "budget_exceeded": false,
+      "stage2_fraction": 0.36138,
+      "improved": 0,
+      "regressed": 0
+    },
+    {
+      "split": "calibration",
+      "method": "same_budget",
+      "n": 25000,
+      "correct": 19968,
+      "top1": 79.872,
+      "gmacs": 2.07248196231168,
+      "total_macs": 51812049057792,
+      "baseline_macs": 51844132945920,
+      "cost_change_percent": -0.061885282489859694,
+      "budget_exceeded": false,
+      "stage2_fraction": 0.45212,
+      "improved": 302,
+      "regressed": 210
+    },
+    {
+      "split": "previously_seen_holdout",
+      "method": "same_budget",
+      "n": 25000,
+      "correct": 20070,
+      "top1": 80.28,
+      "gmacs": 2.06830494892032,
+      "total_macs": 51707623723008,
+      "baseline_macs": 51769382338560,
+      "cost_change_percent": -0.11929563916391883,
+      "budget_exceeded": false,
+      "stage2_fraction": 0.45188,
+      "improved": 334,
+      "regressed": 214
+    },
+    {
+      "split": "full_validation",
+      "method": "same_budget",
+      "n": 50000,
+      "correct": 40038,
+      "top1": 80.07600000000001,
+      "gmacs": 2.0703934556159997,
+      "total_macs": 103519672780800,
+      "baseline_macs": 103613515284480,
+      "cost_change_percent": -0.09056975185365301,
+      "budget_exceeded": false,
+      "stage2_fraction": 0.452,
+      "improved": 636,
+      "regressed": 424
+    },
+    {
+      "split": "calibration",
+      "method": "target_80.0",
+      "n": 25000,
+      "correct": 20002,
+      "top1": 80.008,
+      "gmacs": 2.14375262466048,
+      "total_macs": 53593815616512,
+      "baseline_macs": 51844132945920,
+      "cost_change_percent": 3.3748904093297227,
+      "budget_exceeded": true,
+      "stage2_fraction": 0.4784,
+      "improved": 315,
+      "regressed": 189
+    },
+    {
+      "split": "previously_seen_holdout",
+      "method": "target_80.0",
+      "n": 25000,
+      "correct": 20110,
+      "top1": 80.44,
+      "gmacs": 2.14075067265024,
+      "total_macs": 53518766816256,
+      "baseline_macs": 51769382338560,
+      "cost_change_percent": 3.3791874630750396,
+      "budget_exceeded": true,
+      "stage2_fraction": 0.47684,
+      "improved": 337,
+      "regressed": 177
+    },
+    {
+      "split": "full_validation",
+      "method": "target_80.0",
+      "n": 50000,
+      "correct": 40112,
+      "top1": 80.22399999999999,
+      "gmacs": 2.14225164865536,
+      "total_macs": 107112582432768,
+      "baseline_macs": 103613515284480,
+      "cost_change_percent": 3.3770373861759184,
+      "budget_exceeded": true,
+      "stage2_fraction": 0.47762,
+      "improved": 652,
+      "regressed": 366
+    },
+    {
+      "split": "calibration",
+      "method": "target_80.2",
+      "n": 25000,
+      "correct": 20050,
+      "top1": 80.2,
+      "gmacs": 2.2689970626969598,
+      "total_macs": 56724926567424,
+      "baseline_macs": 51844132945920,
+      "cost_change_percent": 9.414360592345684,
+      "budget_exceeded": true,
+      "stage2_fraction": 0.4784,
+      "improved": 433,
+      "regressed": 259
+    },
+    {
+      "split": "previously_seen_holdout",
+      "method": "target_80.2",
+      "n": 25000,
+      "correct": 20149,
+      "top1": 80.596,
+      "gmacs": 2.26281561612288,
+      "total_macs": 56570390403072,
+      "baseline_macs": 51769382338560,
+      "cost_change_percent": 9.273836865803231,
+      "budget_exceeded": true,
+      "stage2_fraction": 0.47684,
+      "improved": 449,
+      "regressed": 250
+    },
+    {
+      "split": "full_validation",
+      "method": "target_80.2",
+      "n": 50000,
+      "correct": 40199,
+      "top1": 80.398,
+      "gmacs": 2.2659063394099204,
+      "total_macs": 113295316970496,
+      "baseline_macs": 103613515284480,
+      "cost_change_percent": 9.344149418571268,
+      "budget_exceeded": true,
+      "stage2_fraction": 0.47762,
+      "improved": 882,
+      "regressed": 509
+    }
+  ],
+  "cache_mismatches": {
+    "baseline": {
+      "routing": 0,
+      "correctness": 2,
+      "image_ids": [
+        49388,
+        16102
+      ]
+    },
+    "same_budget": {
+      "routing": 0,
+      "correctness": 0,
+      "image_ids": []
+    },
+    "target_80.0": {
+      "routing": 0,
+      "correctness": 1,
+      "image_ids": [
+        35129
+      ]
+    },
+    "target_80.2": {
+      "routing": 0,
+      "correctness": 2,
+      "image_ids": [
+        49388,
+        35129
+      ]
+    }
+  },
+  "max_entropy_error": 0.0,
+  "narrow_correctness_mismatches": 0,
+  "weights_sha256": "a14958ad4da105c9e0290aacadd6c7d83ce6003831090351cfc0fd13eb6562bd",
+  "transform": {
+    "input_size": [
+      3,
+      224,
+      224
+    ],
+    "interpolation": "bicubic",
+    "mean": [
+      0.485,
+      0.456,
+      0.406
+    ],
+    "std": [
+      0.229,
+      0.224,
+      0.225
+    ],
+    "crop_pct": 0.9,
+    "crop_mode": "center"
+  },
+  "gpu": "NVIDIA GeForce RTX 3090",
+  "batch_size": 64,
+  "script_sha256": "ea2e555c65ee2c661f17bd33506dc715ef955e32519006d38e81de33378aa814",
+  "runtime_sha256": "e9204671457f2edaed1037fc28e4470f3f25b601f790dddeb2c743775dfa87a8",
+  "note": "Actual conditional grouping can differ numerically from all-image counterfactual cache. All mismatches retained; no policy retuning."
+}

@@ -1,0 +1,20 @@
+{
+  "status": "complete",
+  "unit_tests_passed": 53,
+  "actual_replay_samples": 50000,
+  "policies": 4,
+  "latency_records": 12,
+  "student_sha256": "a14958ad4da105c9e0290aacadd6c7d83ce6003831090351cfc0fd13eb6562bd",
+  "protocol_sha256": "f340ad375c77d4296c33468bcb0a049b9d29a489e379b0210d05c6cf8fee4370",
+  "source_sha256": {
+    "target80_gate_search.py": "9d95018bc684ff8e0021913871bea38c2215ddb3888fdd21333e8d70bb033de6",
+    "target80_runtime.py": "e9204671457f2edaed1037fc28e4470f3f25b601f790dddeb2c743775dfa87a8",
+    "evaluate_target80.py": "ea2e555c65ee2c661f17bd33506dc715ef955e32519006d38e81de33378aa814",
+    "measure_target80.py": "3b25e58a3d9debc2d210e4cce9b5e7cbcc97308e42993c7e9aa71f7d589d627b",
+    "diagnose_target80.py": "998306e626e70b49a34d4b119bc41e9e31696b6958bc94e24c8469a67f2aa91e",
+    "finetune_target80.py": "59c7c9c598516ceb8b4419c1947e91b0391512fed72505e86275a42aaf3cf4db",
+    "report_target80.py": "085fa9afc8dd3374e489bbed99575160e5117fb6682dd072a110e8eb50a72bfb"
+  },
+  "audit": "image identities, predictions vs targets, exact split costs and timing sample identities verified",
+  "limitations": "Validation reuse; post-hoc CV; average MAC constraint; increased latency; full fine-tuning not performed"
+}

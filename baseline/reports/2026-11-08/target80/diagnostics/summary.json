@@ -1,0 +1,110 @@
+{
+  "crossfit": [
+    {
+      "seed": 20261108,
+      "budget_fraction": 1.0,
+      "top1": 80.062,
+      "gmacs": 2.06959926386688,
+      "delta_baseline_pp": 0.41000000000000003,
+      "ci_low_pp": 0.278,
+      "ci_high_pp": 0.538,
+      "cost_change_percent": -0.1288944697700134,
+      "budget_exceeded": false,
+      "ceiling_exceeded_folds": 3
+    },
+    {
+      "seed": 20261108,
+      "budget_fraction": 0.98,
+      "top1": 79.92399999999999,
+      "gmacs": 2.02614834751488,
+      "delta_baseline_pp": 0.272,
+      "ci_low_pp": 0.124,
+      "ci_high_pp": 0.42,
+      "cost_change_percent": -2.225672879068341,
+      "budget_exceeded": false,
+      "ceiling_exceeded_folds": 0
+    },
+    {
+      "seed": 20261109,
+      "budget_fraction": 1.0,
+      "top1": 80.07600000000001,
+      "gmacs": 2.07078513248256,
+      "delta_baseline_pp": 0.424,
+      "ci_low_pp": 0.294,
+      "ci_high_pp": 0.55,
+      "cost_change_percent": -0.07166889391612141,
+      "budget_exceeded": false,
+      "ceiling_exceeded_folds": 2
+    },
+    {
+      "seed": 20261109,
+      "budget_fraction": 0.98,
+      "top1": 79.956,
+      "gmacs": 2.0284363436236803,
+      "delta_baseline_pp": 0.304,
+      "ci_low_pp": 0.158,
+      "ci_high_pp": 0.448,
+      "cost_change_percent": -2.1152627601510265,
+      "budget_exceeded": false,
+      "ceiling_exceeded_folds": 0
+    }
+  ],
+  "attribution": [
+    {
+      "region": "entropy < 0.8",
+      "n": 27400,
+      "baseline_correct": 25611,
+      "new_correct": 25611,
+      "improved": 0,
+      "regressed": 0,
+      "net_correct": 0
+    },
+    {
+      "region": "0.8 <= entropy < 1.0",
+      "n": 4531,
+      "baseline_correct": 3214,
+      "new_correct": 3489,
+      "improved": 467,
+      "regressed": 192,
+      "net_correct": 275
+    },
+    {
+      "region": "1.0 <= entropy < 1.25",
+      "n": 4819,
+      "baseline_correct": 3444,
+      "new_correct": 3381,
+      "improved": 168,
+      "regressed": 231,
+      "net_correct": -63
+    },
+    {
+      "region": "entropy >= 1.25",
+      "n": 13250,
+      "baseline_correct": 7557,
+      "new_correct": 7557,
+      "improved": 1,
+      "regressed": 1,
+      "net_correct": 0
+    }
+  ],
+  "paired_intervals": [
+    {
+      "split": "calibration",
+      "delta_pp": 0.368,
+      "ci_low_pp": 0.188,
+      "ci_high_pp": 0.544
+    },
+    {
+      "split": "previously_seen_holdout",
+      "delta_pp": 0.48,
+      "ci_low_pp": 0.292,
+      "ci_high_pp": 0.66
+    },
+    {
+      "split": "full_validation",
+      "delta_pp": 0.424,
+      "ci_low_pp": 0.296,
+      "ci_high_pp": 0.552
+    }
+  ]
+}

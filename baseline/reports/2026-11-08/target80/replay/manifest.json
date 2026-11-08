@@ -1,0 +1,126 @@
+{
+  "description": "Numeric predictions, labels, entropy, image identifiers, splits, policies and timings only; no images or model weights.",
+  "archive_sha256": "b5e0e221cc4f2c0286a2c996ec6340b0bc299dce9d0c4bb6b60d6f7ee6c9b691",
+  "members": [
+    {
+      "path": "source/cache/per_image.pt",
+      "bytes": 3953108,
+      "sha256": "726e28d4132e2faf5b9bbb4583654c653dbc13facc0a115be905509ba2c2319c"
+    },
+    {
+      "path": "source/cache/cache_metadata.json",
+      "bytes": 18125,
+      "sha256": "4625a42aeabffea0aa2b84080f0ecea65252df82d1b497b5c5d4cae7ae5ab60f"
+    },
+    {
+      "path": "source/split_ids.json",
+      "bytes": 538961,
+      "sha256": "c5d6be7dbba6f9f48926c7eddd72de86d2798ec01c1a56cb53de5e2642701065"
+    },
+    {
+      "path": "experiment/gate_search/calibration_candidates.json",
+      "bytes": 2749171,
+      "sha256": "20e9cd5f82c80f61031feec0d20d2ff3b47cdf796c5f14e058210e1b561b24c2"
+    },
+    {
+      "path": "experiment/gate_search/comparison.csv",
+      "bytes": 1785,
+      "sha256": "5bfa7ea445ebc544b19739f802f0e04752b3be785ceb9c648b506892096c230c"
+    },
+    {
+      "path": "experiment/gate_search/policies.json",
+      "bytes": 523,
+      "sha256": "d0905ad6555f51eef77fab0712c1acfdb9b1f4b179ea3a820ec5d6f0d9214782"
+    },
+    {
+      "path": "experiment/gate_search/protocol.json",
+      "bytes": 2626,
+      "sha256": "64efed17c52cd7a105d64fc9970743a8cf3e4c6efacb6a454fc5b17525b2e450"
+    },
+    {
+      "path": "experiment/gate_search/summary.json",
+      "bytes": 6237,
+      "sha256": "e65f01afd587152cea591b1531c55a83b1db2d350e41229190cfa2e4e6d559e4"
+    },
+    {
+      "path": "experiment/gpu_accuracy/comparison.csv",
+      "bytes": 1748,
+      "sha256": "2f18cc3bb707144367b8a6b99e66b6d5a6991280131eac1905642ae3b3c489b5"
+    },
+    {
+      "path": "experiment/gpu_accuracy/locked_policies.json",
+      "bytes": 523,
+      "sha256": "d0905ad6555f51eef77fab0712c1acfdb9b1f4b179ea3a820ec5d6f0d9214782"
+    },
+    {
+      "path": "experiment/gpu_accuracy/per_image.pt",
+      "bytes": 4204496,
+      "sha256": "9aecc320cc2a22b06fe72b2cc1bf5b9c85a2451c00fa96f9d0ff13867541aa57"
+    },
+    {
+      "path": "experiment/gpu_accuracy/summary.json",
+      "bytes": 6279,
+      "sha256": "565a25713e99458314c20a86b2737f9371f4904e836c7f870036627eaed24a56"
+    },
+    {
+      "path": "experiment/diagnostics/actual_paired_intervals.csv",
+      "bytes": 140,
+      "sha256": "a2cd91ae49470a8762262666980303344c19e85655b1ff98fe86c7cd66890d61"
+    },
+    {
+      "path": "experiment/diagnostics/actual_region_attribution.csv",
+      "bytes": 242,
+      "sha256": "aad763480d22a6e81fcd5a29fc95c2558e9516cbb33ce1f64edb7efb85607053"
+    },
+    {
+      "path": "experiment/diagnostics/crossfit_folds.csv",
+      "bytes": 1458,
+      "sha256": "2f0fa264c56df2ac07dd36949f50a22452679bf46656abc8b7b68a9adfc59ea1"
+    },
+    {
+      "path": "experiment/diagnostics/crossfit_policies.json",
+      "bytes": 4609,
+      "sha256": "e78aeb6fbe8813c952f9e34071a348a63fbd37468a8750719b1f1a5495b75e67"
+    },
+    {
+      "path": "experiment/diagnostics/crossfit_pooled.csv",
+      "bytes": 500,
+      "sha256": "6d36c4858841d4c4077deafe9fa78c28b531f1bdfb34ad2db9d020fc77319b13"
+    },
+    {
+      "path": "experiment/diagnostics/oof_20261108.pt",
+      "bytes": 501751,
+      "sha256": "966262e32f44c9768587f353f440aee807e98ad0f5e6c8edec7563167b984d6a"
+    },
+    {
+      "path": "experiment/diagnostics/oof_20261109.pt",
+      "bytes": 501751,
+      "sha256": "834d65f08ec0835f7d8ab3f6e525f1472c53759af342f4711e089ecbf985eabc"
+    },
+    {
+      "path": "experiment/diagnostics/protocol.json",
+      "bytes": 476,
+      "sha256": "b42886043eccf55945823e0269efdbbdafc8de65ec85f152f1e0af46464cdba3"
+    },
+    {
+      "path": "experiment/diagnostics/summary.json",
+      "bytes": 2571,
+      "sha256": "c729c7545a1218120e0d450e3e6702773473636f64801bb3a3818c690f356516"
+    },
+    {
+      "path": "experiment/latency.json",
+      "bytes": 803860,
+      "sha256": "b702cb20038e4bb83f1227bfc94cce5aab5b9287669f59b63af6e214a89f9288"
+    },
+    {
+      "path": "experiment/latency_protocol.json",
+      "bytes": 11262,
+      "sha256": "d2a89b2e4a3f0c2fd5f85da39b5f5c5949a843c58551dbbaf409a0ad573407af"
+    },
+    {
+      "path": "experiment/execution_decision.json",
+      "bytes": 799,
+      "sha256": "9a053cb8bf63614c2c5ade47f5007eb515a52b1f37493c5f2805fa9e10836cb6"
+    }
+  ]
+}

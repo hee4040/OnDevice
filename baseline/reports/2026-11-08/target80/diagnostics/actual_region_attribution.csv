@@ -1,0 +1,5 @@
+region,n,baseline_correct,new_correct,improved,regressed,net_correct
+entropy < 0.8,27400,25611,25611,0,0,0
+0.8 <= entropy < 1.0,4531,3214,3489,467,192,275
+1.0 <= entropy < 1.25,4819,3444,3381,168,231,-63
+entropy >= 1.25,13250,7557,7557,1,1,0

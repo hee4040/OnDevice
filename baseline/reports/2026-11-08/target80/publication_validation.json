@@ -1,0 +1,11 @@
+{
+  "status": "passed",
+  "numeric_files_restored": 24,
+  "policy_selection_matches": true,
+  "all_12_comparison_rows_match": true,
+  "existing_output_overwrite_rejected": true,
+  "gpu_inference_repeated_for_publication": false,
+  "original_gpu_result": "50000-image actual conditional inference, preserved unchanged",
+  "publication_branch_unit_tests_passed": 43,
+  "original_experiment_worktree_unit_tests_passed": 53
+}

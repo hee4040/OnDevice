@@ -1,0 +1,7 @@
+{
+  "change": "Defer full-epoch fine-tuning pending real GPU validation of same-budget gate policy",
+  "reason": "Previously announced condition for further training was insufficient same-cost accuracy. Calibration-selected gate policy now estimates 80.076% on full validation and 80.280% on previously seen holdout at lower analytic MAC cost.",
+  "weights_for_primary_experiment": "original student a14958ad4da105c9e0290aacadd6c7d83ce6003831090351cfc0fd13eb6562bd",
+  "finetune_status": "Both variants completed 10-step execution checks only. No fine-tuning efficacy claim; no one-epoch checkpoint selected.",
+  "next": "Lock existing policies, replay 50000 real conditional predictions and benchmark latency. Add explicitly post-hoc crossfit robustness and gate-region attribution diagnostics."
+}
