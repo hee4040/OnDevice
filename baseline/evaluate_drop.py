@@ -10,6 +10,8 @@ from datetime import datetime, timezone
 import hashlib
 import json
 import os
+import platform
+import subprocess
 from pathlib import Path
 import sys
 
@@ -64,6 +66,7 @@ def main():
     parser.add_argument("--batch-size", type=int, default=64)
     parser.add_argument("--workers", type=int, default=8)
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--output-dir", type=Path)
     args = parser.parse_args()
     check_counts(args.data_dir / "validation", 50000)
     if not torch.cuda.is_available():
@@ -81,7 +84,7 @@ def main():
     loader = DataLoader(Subset(dataset, indices), batch_size=args.batch_size, num_workers=args.workers,
                         pin_memory=True)
     tag = "finetuned" if args.weights else "official"
-    output = ROOT / "results" / (datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S.%fZ") + f"-drop-eval-{tag}")
+    output = args.output_dir or ROOT / "results" / (datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S.%fZ") + f"-drop-eval-{tag}")
     output.mkdir(parents=True)
     print(f"Results: {output}", flush=True)
     keys = ["narrow_correct", "wide_correct"] + [f"drop_{round(100 * r)}_correct" for r in RATIOS]
@@ -108,6 +111,10 @@ def main():
     torch.save(per_image, output / "per_image.pt")
     routed = per_image["entropy"] >= 1.0
     summary = {"model": tag, "weights": str(args.weights) if args.weights else None,
+               "checkpoint_sha256": hashlib.sha256(args.checkpoint.read_bytes()).hexdigest(),
+               "torch": torch.__version__, "cuda": torch.version.cuda, "platform": platform.platform(),
+               "repo_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=args.repo, text=True).strip(),
+               "batch_size": args.batch_size, "seed": args.seed, "samples": len(dataset),
                "weights_sha256": hashlib.sha256(args.weights.read_bytes()).hexdigest() if args.weights else None,
                "routed_at_threshold_1": int(routed.sum()), "gpu": torch.cuda.get_device_name(),
                "precision": "float32, TF32 allowed (official default)",

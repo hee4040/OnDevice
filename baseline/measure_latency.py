@@ -12,9 +12,12 @@ method's 6H pass for routed images. H1 freeze and MLP-selective are the dense-ma
 from the H1 branches: they compute every token and discard updates, so they save no time.
 """
 import argparse
+import hashlib
 from datetime import datetime, timezone
 import json
 import platform
+from pathlib import Path
+import random
 import subprocess
 import time
 
@@ -71,15 +74,20 @@ def pipeline(model, x, method):
     return True
 
 
-def measure_pipelines(args, images):
+def measure_pipelines(args, images, repeat=0):
     rows = []
     for label, device, threads, _, _ in SETTINGS:
+        if args.gpu_only and device != "cuda":
+            continue
         if threads:
             torch.set_num_threads(threads)
-        model = load_model(args.repo.resolve(), args.checkpoint.resolve(), device=device)
+        model = load_model(args.repo.resolve(), args.checkpoint.resolve(), weights=args.weights, device=device)
         sync = torch.cuda.synchronize if device == "cuda" else (lambda: None)
         batch = [x.to(device) for x in images]
-        for name, method in PIPELINES.items():
+        methods = list(PIPELINES.items())
+        if args.repeats > 1:
+            random.Random(42 + repeat).shuffle(methods)
+        for name, method in methods:
             for x in batch[:10]:  # warm-up
                 pipeline(model, x, method)
             times, routed = [], 0
@@ -91,7 +99,7 @@ def measure_pipelines(args, images):
                 times.append((time.perf_counter() - start) * 1000)
             ms = torch.tensor(times, dtype=torch.float64)
             rows.append({"setting": label, "method": name, "mean_ms": ms.mean().item(), "p50_ms": ms.median().item(),
-                         "images": len(batch), "routed_share": routed / len(batch)})
+                         "images": len(batch), "routed_share": routed / len(batch), "repeat": repeat})
             print(json.dumps(rows[-1]), flush=True)
         del model, batch
     return rows
@@ -102,7 +110,13 @@ def main():
     add_paths(parser)
     parser.add_argument("--mode", choices=["stages", "pipeline"], default="stages")
     parser.add_argument("--images", type=int, default=500, help="Validation images per method (pipeline mode)")
+    parser.add_argument("--gpu-only", action="store_true")
+    parser.add_argument("--weights", type=Path, help="Evaluate an actual fine-tuned checkpoint")
+    parser.add_argument("--output-dir", type=Path)
+    parser.add_argument("--repeats", type=int, default=1, help="Pipeline repetitions; shuffle method order when >1")
     args = parser.parse_args()
+    if args.images < 1 or args.images > 50000 or args.repeats < 1:
+        parser.error("Invalid image count or repeat count")
     torch.backends.cuda.matmul.allow_tf32 = True
     torch.backends.cudnn.benchmark = True
     rows = []
@@ -114,11 +128,15 @@ def main():
             config = resolve_data_config({}, model=model, use_test_size=True)
             dataset = ImageFolder(args.data_dir / "validation", transform=create_transform(**config, is_training=False))
             order = torch.randperm(len(dataset), generator=torch.Generator().manual_seed(42))[:args.images].tolist()
-            rows = measure_pipelines(args, [dataset[i][0].unsqueeze(0) for i in order])
+            images = [dataset[i][0].unsqueeze(0) for i in order]
+            for repeat in range(args.repeats):
+                rows.extend(measure_pipelines(args, images, repeat))
         for label, device, threads, warmup, runs in SETTINGS if args.mode == "stages" else []:
+            if args.gpu_only and device != "cuda":
+                continue
             if threads:
                 torch.set_num_threads(threads)
-            model = load_model(args.repo.resolve(), args.checkpoint.resolve(), device=device)
+            model = load_model(args.repo.resolve(), args.checkpoint.resolve(), weights=args.weights, device=device)
             x = torch.randn(1, 3, 224, 224, generator=torch.Generator().manual_seed(0)).to(device)
             features, _, attention = forward_narrow_with_attention(model, x, STAGES)
 
@@ -140,10 +158,13 @@ def main():
                 print(json.dumps(rows[-1]), flush=True)
             del model
     suffix = "-latency" if args.mode == "stages" else "-latency-pipeline"
-    output = ROOT / "results" / (datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S.%fZ") + suffix)
+    output = args.output_dir or ROOT / "results" / (datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S.%fZ") + suffix)
     output.mkdir(parents=True)
     cpu = subprocess.run(["lscpu"], capture_output=True, text=True).stdout
     environment = {"gpu": torch.cuda.get_device_name(), "torch": torch.__version__, "platform": platform.platform(),
+                   "weights": str(args.weights) if args.weights else None,
+                   "weights_sha256": hashlib.sha256(args.weights.read_bytes()).hexdigest() if args.weights else None,
+                   "repeats": args.repeats,
                    "cpu": next((l.split(":", 1)[1].strip() for l in cpu.splitlines() if l.startswith("Model name")), ""),
                    "precision": "float32, TF32 allowed", "batch_size": 1,
                    "measurement": "synchronized wall time of one stage, median; excludes preprocessing and H2D"

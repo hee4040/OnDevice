@@ -94,6 +94,8 @@ def main():
     parser.add_argument("--splits", nargs="+", choices=list(COUNTS), default=["validation", "train"])
     parser.add_argument("--revision", default=None, help="HF commit; defaults to the saved commit after the first run")
     parser.add_argument("--retries", type=int, default=8, help="Additional attempts per network operation (default: 8)")
+    parser.add_argument("--discard-shards", action="store_true",
+                        help="Use a private temporary shard cache and remove it after verified extraction")
     args = parser.parse_args()
     if args.retries < 0:
         parser.error("--retries must be nonnegative")
@@ -154,7 +156,8 @@ def main():
             print(f"[{split} {index + 1}/{len(shards)}] {filename}", flush=True)
             shard = retry_download(
                 lambda: hf_hub_download(REPO, filename, repo_type="dataset", revision=info.sha,
-                                        token=True, etag_timeout=metadata_timeout),
+                                        token=True, etag_timeout=metadata_timeout,
+                                        **({"cache_dir": state_dir / "shard-cache"} if args.discard_shards else {})),
                 filename, args.retries)
             images = []
             table = pq.ParquetFile(shard)
@@ -179,10 +182,14 @@ def main():
                     images.append({"path": str(relative), "bytes": len(raw), "sha256": hashlib.sha256(raw).hexdigest(),
                                    "source_path": row["image"].get("path")})
             write_json(marker, {"shard": filename, "revision": info.sha, "images": images})
+            if args.discard_shards:
+                # Only this opt-in run's private cache; never remove the shared HF cache.
+                del table
+                shutil.rmtree(state_dir / "shard-cache")
         counts = check_counts(destination, COUNTS[split])
         write_json(state_dir / f"{split}-complete.json", {"revision": info.sha, "count": sum(counts.values()), "classes": counts})
         print(f"{split}: verified {sum(counts.values())} images / 1000 classes", flush=True)
-    print("Requested splits prepared. Source Parquet files remain in .cache/huggingface for resuming.")
+    print("Requested splits prepared. Extraction manifests are preserved for resuming.")
 
 
 if __name__ == "__main__":
