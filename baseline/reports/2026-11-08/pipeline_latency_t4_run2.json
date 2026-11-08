@@ -1,0 +1,77 @@
+{
+  "environment": {
+    "gpu": "Tesla T4",
+    "torch": "2.11.0+cu130",
+    "platform": "Linux-6.18.55+-x86_64-with-glibc2.39",
+    "cpu": "Intel(R) Xeon(R) CPU @ 2.00GHz",
+    "precision": "float32, TF32 allowed",
+    "batch_size": 1,
+    "measurement": "mean synchronized wall time per image, whole inference including the entropy gate; excludes preprocessing and H2D"
+  },
+  "rows": [
+    {
+      "setting": "GPU",
+      "method": "3H only",
+      "mean_ms": 11.852681594999012,
+      "p50_ms": 11.710818000096879,
+      "images": 1000,
+      "routed_share": 0.0
+    },
+    {
+      "setting": "GPU",
+      "method": "Official, threshold 1.0",
+      "mean_ms": 16.96673531299848,
+      "p50_ms": 11.946019999982127,
+      "images": 1000,
+      "routed_share": 0.363
+    },
+    {
+      "setting": "GPU",
+      "method": "6H for every image",
+      "mean_ms": 25.89811376999978,
+      "p50_ms": 25.62327800001185,
+      "images": 1000,
+      "routed_share": 1.0
+    },
+    {
+      "setting": "GPU",
+      "method": "H1 freeze Top-K 50%",
+      "mean_ms": 17.479444099999,
+      "p50_ms": 12.205154999946899,
+      "images": 1000,
+      "routed_share": 0.363
+    },
+    {
+      "setting": "GPU",
+      "method": "MLP-selective Top-K 75%",
+      "mean_ms": 17.49910065799861,
+      "p50_ms": 12.216955999974743,
+      "images": 1000,
+      "routed_share": 0.363
+    },
+    {
+      "setting": "GPU",
+      "method": "Drop Top-K 25%",
+      "mean_ms": 17.371161021001967,
+      "p50_ms": 12.237888000072417,
+      "images": 1000,
+      "routed_share": 0.363
+    },
+    {
+      "setting": "GPU",
+      "method": "Drop Top-K 50%",
+      "mean_ms": 17.279820610999767,
+      "p50_ms": 12.117618000047514,
+      "images": 1000,
+      "routed_share": 0.363
+    },
+    {
+      "setting": "GPU",
+      "method": "Drop Top-K 75%",
+      "mean_ms": 17.493295819002586,
+      "p50_ms": 12.333054000009724,
+      "images": 1000,
+      "routed_share": 0.363
+    }
+  ]
+}

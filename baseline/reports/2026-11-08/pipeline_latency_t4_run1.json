@@ -1,0 +1,77 @@
+{
+  "environment": {
+    "gpu": "Tesla T4",
+    "torch": "2.11.0+cu130",
+    "platform": "Linux-6.18.55+-x86_64-with-glibc2.39",
+    "cpu": "Intel(R) Xeon(R) CPU @ 2.00GHz",
+    "precision": "float32, TF32 allowed",
+    "batch_size": 1,
+    "measurement": "mean synchronized wall time per image, whole inference including the entropy gate; excludes preprocessing and H2D"
+  },
+  "rows": [
+    {
+      "setting": "GPU",
+      "method": "3H only",
+      "mean_ms": 12.144519766998998,
+      "p50_ms": 11.975864999953956,
+      "images": 1000,
+      "routed_share": 0.0
+    },
+    {
+      "setting": "GPU",
+      "method": "Official, threshold 1.0",
+      "mean_ms": 17.382726792999282,
+      "p50_ms": 12.242078999975092,
+      "images": 1000,
+      "routed_share": 0.363
+    },
+    {
+      "setting": "GPU",
+      "method": "6H for every image",
+      "mean_ms": 26.612138949998215,
+      "p50_ms": 26.31260199996177,
+      "images": 1000,
+      "routed_share": 1.0
+    },
+    {
+      "setting": "GPU",
+      "method": "H1 freeze Top-K 50%",
+      "mean_ms": 17.856201193997773,
+      "p50_ms": 12.50613499996689,
+      "images": 1000,
+      "routed_share": 0.363
+    },
+    {
+      "setting": "GPU",
+      "method": "MLP-selective Top-K 75%",
+      "mean_ms": 17.81246997599817,
+      "p50_ms": 12.488120999933017,
+      "images": 1000,
+      "routed_share": 0.363
+    },
+    {
+      "setting": "GPU",
+      "method": "Drop Top-K 25%",
+      "mean_ms": 17.664972389999093,
+      "p50_ms": 12.452453000037167,
+      "images": 1000,
+      "routed_share": 0.363
+    },
+    {
+      "setting": "GPU",
+      "method": "Drop Top-K 50%",
+      "mean_ms": 17.742996211997482,
+      "p50_ms": 12.490125999988777,
+      "images": 1000,
+      "routed_share": 0.363
+    },
+    {
+      "setting": "GPU",
+      "method": "Drop Top-K 75%",
+      "mean_ms": 17.747318975998837,
+      "p50_ms": 12.48612199992749,
+      "images": 1000,
+      "routed_share": 0.363
+    }
+  ]
+}

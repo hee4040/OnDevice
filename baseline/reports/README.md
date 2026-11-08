@@ -37,3 +37,5 @@
 | `exp2_latency.json` | 단계별 시간 원자료 (`optimize_latency.py`, 녹화·컴파일 실패 기록 포함) |
 | `drop_eval_official_t4.json`, `drop_eval_finetuned_t4.json` | T4 FP32 정확도 (원래·파인튜닝 모델) |
 | `drop_eval_official_fp16.json`, `drop_eval_finetuned_fp16.json` | T4 FP16 정확도 (원래·파인튜닝 모델) |
+| `pipeline_latency_t4_run1.json`, `pipeline_latency_t4_run2.json` | 기본 실행으로 사진 1,000장을 끝까지 돌린 시간 (`measure_latency.py --mode pipeline`, GPU만, Kaggle 세션 2번) |
+| `official_latency_t4.csv` | 팀 기준 `evaluate.py --mode latency` 결과 (T4) |
