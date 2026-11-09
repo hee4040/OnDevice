@@ -24,6 +24,7 @@ from evaluate_drop import ROOT, STAGES, NARROW_P, WIDE_P, add_paths, load_model,
 from evaluate_h1_diagnosis import wide_input
 from selective_refinement import forward_narrow_with_attention, make_update_mask
 from drop_ft_losses import aligned_feature_loss, capture_wide_features
+from partial_tuning import MODES, configure_partial, frozen_digest, verify_narrow_preserved
 
 
 def distill(student, teacher):
@@ -53,6 +54,8 @@ def main():
                         help="Zero-based wide block indices")
     parser.add_argument("--output-dir", type=Path)
     parser.add_argument("--save-every", type=int, default=500)
+    parser.add_argument("--partial-mode", choices=MODES)
+    parser.add_argument("--train-indices", type=Path, help="Train-only subset for predeclared LR pilots")
     args = parser.parse_args()
     if (args.batch_size < 1 or args.micro_batch_size < 1 or args.workers < 0 or args.warmup < 1
             or args.epochs <= 0 or args.save_every < 1 or args.lr <= 0
@@ -68,6 +71,7 @@ def main():
     # eval() on purpose: this model has no dropout or drop-path, and the attention capture requires it.
     student = load_model(args.repo.resolve(), args.checkpoint.resolve())
     teacher = copy.deepcopy(student).requires_grad_(False)
+    partial_config = configure_partial(student, args.partial_mode) if args.partial_mode else None
     resume_state = None
     if args.resume:
         saved = torch.load(args.resume, map_location="cuda", weights_only=True)
@@ -84,6 +88,13 @@ def main():
     dataset = ImageFolder(args.data_dir / "train", transform=create_transform(**config, is_training=True))
     if len(dataset) != 1281167:
         raise RuntimeError(f"Expected 1,281,167 train images, found {len(dataset)}")
+    train_transform = dataset.transform
+    if args.train_indices:
+        from torch.utils.data import Subset
+        indices = torch.load(args.train_indices, map_location="cpu", weights_only=True)
+        if not len(indices) or min(indices) < 0 or max(indices) >= len(dataset) or len(set(indices)) != len(indices):
+            raise ValueError("Invalid train subset indices")
+        dataset = Subset(dataset, indices)
     loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True, num_workers=args.workers,
                         pin_memory=True, drop_last=True,
                         **({"persistent_workers": True, "prefetch_factor": 2} if args.workers else {}),
@@ -91,7 +102,7 @@ def main():
     total = math.ceil(args.epochs * len(loader))
     if args.max_steps:
         total = min(total, args.max_steps)
-    optimizer = torch.optim.AdamW(student.parameters(), lr=args.lr, weight_decay=0.0)
+    optimizer = torch.optim.AdamW([p for p in student.parameters() if p.requires_grad], lr=args.lr, weight_decay=0.0)
     schedule_offset = 0 if resume_state is not None else args.start_step
     schedule = torch.optim.lr_scheduler.LambdaLR(optimizer, lambda s: min(1, (s + schedule_offset + 1) / args.warmup)
                                                  * 0.5 * (1 + math.cos(math.pi * min(s + schedule_offset, total) / total)))
@@ -101,6 +112,10 @@ def main():
                     "ratios", "ce_weight", "full_weight", "feature_weight", "feature_layers"):
             if previous.get(key) != getattr(args, key):
                 raise ValueError(f"Cannot resume with a changed {key}")
+        if previous.get("partial_mode") != args.partial_mode:
+            raise ValueError("Cannot resume with a changed partial_mode")
+        if previous.get("train_indices") != (str(args.train_indices) if args.train_indices else None):
+            raise ValueError("Cannot resume with changed train_indices")
         optimizer.load_state_dict(resume_state["optimizer"])
         schedule.load_state_dict(resume_state["schedule"])
         random.setstate(resume_state["python_rng"])
@@ -112,8 +127,16 @@ def main():
         raise ValueError("Output already contains weights; choose a new directory or resume")
     (output / "arguments.json").write_text(json.dumps(
         {**{k: str(v) if isinstance(v, Path) else v for k, v in vars(args).items()}, "steps": total,
-         "train_transform": str(dataset.transform), "gpu": torch.cuda.get_device_name()}, indent=2) + "\n")
+         "train_transform": str(train_transform), "gpu": torch.cuda.get_device_name(),
+         "train_samples": len(dataset)}, indent=2) + "\n")
+    if partial_config:
+        (output / "partial_config.json").write_text(json.dumps(partial_config, indent=2) + "\n")
     print(f"Results: {output}  steps: {total}", flush=True)
+    guard_images, frozen_before = None, None
+    if partial_config:
+        guard_images = torch.randn(4, 3, 224, 224, generator=torch.Generator().manual_seed(1701)).cuda()
+        frozen_before = frozen_digest(student)
+        verify_narrow_preserved(student, teacher, guard_images)
 
     step, start, log = args.start_step, time.time(), []
     if args.resume:
@@ -121,6 +144,12 @@ def main():
         if log_file.exists():
             log = [e for e in json.loads(log_file.read_text()) if e["step"] <= step]
     def save():
+        if partial_config:
+            preservation = verify_narrow_preserved(student, teacher, guard_images)
+            preservation["frozen_parameters_unchanged"] = frozen_digest(student) == frozen_before
+            if not preservation["frozen_parameters_unchanged"]:
+                raise AssertionError("Frozen backbone parameters changed")
+            (output / "preservation.json").write_text(json.dumps({"step": step, **preservation}, indent=2) + "\n")
         # Atomic replacements keep the previous checkpoint usable if interrupted.
         torch.save(student.state_dict(), output / "student.tmp.pth")
         (output / "student.tmp.pth").replace(output / "student.pth")
@@ -131,6 +160,7 @@ def main():
                     "cuda_rng": torch.cuda.get_rng_state_all()}, output / "resume.tmp.pth")
         (output / "resume.tmp.pth").replace(output / "resume.pth")
 
+    torch.cuda.reset_peak_memory_stats()
     while step < total:
         epoch = step // len(loader)
         skip_batches = step % len(loader)
@@ -187,7 +217,8 @@ def main():
             if step == total:
                 break
     (output / "complete.json").write_text(json.dumps({"steps": step, "elapsed_seconds": time.time() - start,
-                                                     "resume_augmentation_exact": False}, indent=2) + "\n")
+                                                     "resume_augmentation_exact": False,
+                                                     "peak_allocated_mib": torch.cuda.max_memory_allocated() / 1024**2}, indent=2) + "\n")
     print(f"Done in {(time.time() - start) / 60:.1f} min: {output / 'student.pth'}", flush=True)
 
 

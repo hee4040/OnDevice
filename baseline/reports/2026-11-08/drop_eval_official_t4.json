@@ -1,0 +1,24 @@
+{
+  "model": "official",
+  "weights": null,
+  "weights_sha256": null,
+  "routed_at_threshold_1": 18006,
+  "gpu": "Tesla T4",
+  "precision": "float32, TF32 allowed (official default)",
+  "full_path_matches_official": true,
+  "top1": {
+    "narrow_all": 73.538,
+    "wide_all": 81.44,
+    "wide_threshold_1": 80.30199999999999,
+    "drop_10_all": 39.97,
+    "drop_10_threshold_1": 63.786,
+    "drop_25_all": 71.902,
+    "drop_25_threshold_1": 73.80799999999999,
+    "drop_50_all": 79.30199999999999,
+    "drop_50_threshold_1": 78.602,
+    "drop_75_all": 80.97800000000001,
+    "drop_75_threshold_1": 79.93400000000001,
+    "drop_90_all": 81.26,
+    "drop_90_threshold_1": 80.122
+  }
+}

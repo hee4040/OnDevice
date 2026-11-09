@@ -1,0 +1,815 @@
+{
+  "environment": {
+    "gpu": "Tesla T4",
+    "torch": "2.11.0+cu130",
+    "float32": "TF32 allowed",
+    "float16": "model.half(), float16 input",
+    "measurement": "synchronized wall time of one stage, median of runs; excludes preprocessing and H2D"
+  },
+  "rows": [
+    {
+      "precision": "float32",
+      "batch": 1,
+      "runtime": "eager",
+      "stage": "3H",
+      "setup_s": 0.13714108799996438,
+      "median_ms": 13.26447899998584,
+      "p90_ms": 13.90531949999172,
+      "runs": 300
+    },
+    {
+      "precision": "float32",
+      "batch": 1,
+      "runtime": "eager",
+      "stage": "3H + attention",
+      "setup_s": 0.014806919000022845,
+      "median_ms": 14.021162000005916,
+      "p90_ms": 16.181711299987,
+      "runs": 300
+    },
+    {
+      "precision": "float32",
+      "batch": 1,
+      "runtime": "eager",
+      "stage": "6H full",
+      "setup_s": 0.01992797499997323,
+      "median_ms": 16.248562999976457,
+      "p90_ms": 17.067548800037002,
+      "runs": 300
+    },
+    {
+      "precision": "float32",
+      "batch": 1,
+      "runtime": "eager",
+      "stage": "6H drop Top-K 25%",
+      "setup_s": 0.01861958799997865,
+      "median_ms": 16.380027000025166,
+      "p90_ms": 16.926738099977,
+      "runs": 300
+    },
+    {
+      "precision": "float32",
+      "batch": 1,
+      "runtime": "eager",
+      "stage": "6H drop Top-K 50%",
+      "setup_s": 0.018299922999972296,
+      "median_ms": 16.581864999977824,
+      "p90_ms": 17.205892600031802,
+      "runs": 300
+    },
+    {
+      "precision": "float32",
+      "batch": 1,
+      "runtime": "eager",
+      "stage": "6H drop Top-K 75%",
+      "setup_s": 0.018107715999974516,
+      "median_ms": 16.40941000005114,
+      "p90_ms": 17.398516999992353,
+      "runs": 300
+    },
+    {
+      "precision": "float32",
+      "batch": 1,
+      "runtime": "CUDA Graphs",
+      "stage": "3H",
+      "error": "RuntimeError: Cannot copy between CPU and CUDA tensors during CUDA graph capture unless the CPU tensor is pinned. Please use tensor.pin_memory() or allocate the tensor with pin_memory=True."
+    },
+    {
+      "precision": "float32",
+      "batch": 1,
+      "runtime": "CUDA Graphs",
+      "stage": "3H + attention",
+      "error": "RuntimeError: Cannot copy between CPU and CUDA tensors during CUDA graph capture unless the CPU tensor is pinned. Please use tensor.pin_memory() or allocate the tensor with pin_memory=True."
+    },
+    {
+      "precision": "float32",
+      "batch": 1,
+      "runtime": "CUDA Graphs",
+      "stage": "6H full",
+      "error": "RuntimeError: Cannot copy between CPU and CUDA tensors during CUDA graph capture unless the CPU tensor is pinned. Please use tensor.pin_memory() or allocate the tensor with pin_memory=True."
+    },
+    {
+      "precision": "float32",
+      "batch": 1,
+      "runtime": "CUDA Graphs",
+      "stage": "6H drop Top-K 25%",
+      "error": "RuntimeError: Cannot copy between CPU and CUDA tensors during CUDA graph capture unless the CPU tensor is pinned. Please use tensor.pin_memory() or allocate the tensor with pin_memory=True."
+    },
+    {
+      "precision": "float32",
+      "batch": 1,
+      "runtime": "CUDA Graphs",
+      "stage": "6H drop Top-K 50%",
+      "error": "RuntimeError: Cannot copy between CPU and CUDA tensors during CUDA graph capture unless the CPU tensor is pinned. Please use tensor.pin_memory() or allocate the tensor with pin_memory=True."
+    },
+    {
+      "precision": "float32",
+      "batch": 1,
+      "runtime": "CUDA Graphs",
+      "stage": "6H drop Top-K 75%",
+      "error": "RuntimeError: Cannot copy between CPU and CUDA tensors during CUDA graph capture unless the CPU tensor is pinned. Please use tensor.pin_memory() or allocate the tensor with pin_memory=True."
+    },
+    {
+      "precision": "float32",
+      "batch": 1,
+      "runtime": "torch.compile",
+      "stage": "3H",
+      "setup_s": 16.45654014500002,
+      "median_ms": 4.1884560000085,
+      "p90_ms": 4.587521200005541,
+      "runs": 300
+    },
+    {
+      "precision": "float32",
+      "batch": 1,
+      "runtime": "torch.compile",
+      "stage": "3H + attention",
+      "setup_s": 10.925636063000013,
+      "median_ms": 4.367790999992849,
+      "p90_ms": 4.896693700038668,
+      "runs": 300
+    },
+    {
+      "precision": "float32",
+      "batch": 1,
+      "runtime": "torch.compile",
+      "stage": "6H full",
+      "setup_s": 9.577204728000027,
+      "median_ms": 4.81403099996669,
+      "p90_ms": 4.973885099997233,
+      "runs": 300
+    },
+    {
+      "precision": "float32",
+      "batch": 1,
+      "runtime": "torch.compile",
+      "stage": "6H drop Top-K 25%",
+      "setup_s": 10.198462162000055,
+      "median_ms": 3.8538200000175493,
+      "p90_ms": 4.425850400025411,
+      "runs": 300
+    },
+    {
+      "precision": "float32",
+      "batch": 1,
+      "runtime": "torch.compile",
+      "stage": "6H drop Top-K 50%",
+      "setup_s": 10.750772465999944,
+      "median_ms": 3.8332530000388942,
+      "p90_ms": 4.962663199933104,
+      "runs": 300
+    },
+    {
+      "precision": "float32",
+      "batch": 1,
+      "runtime": "torch.compile",
+      "stage": "6H drop Top-K 75%",
+      "setup_s": 12.774858893999976,
+      "median_ms": 4.008847000022797,
+      "p90_ms": 5.439463099969544,
+      "runs": 300
+    },
+    {
+      "precision": "float32",
+      "batch": 1,
+      "runtime": "torch.compile + CUDA Graphs",
+      "stage": "3H",
+      "setup_s": 8.928802358999974,
+      "median_ms": 2.2390240000049744,
+      "p90_ms": 2.6263234999760248,
+      "runs": 300
+    },
+    {
+      "precision": "float32",
+      "batch": 1,
+      "runtime": "torch.compile + CUDA Graphs",
+      "stage": "3H + attention",
+      "setup_s": 9.35233598800005,
+      "median_ms": 2.350981000063257,
+      "p90_ms": 4.785445099946628,
+      "runs": 300
+    },
+    {
+      "precision": "float32",
+      "batch": 1,
+      "runtime": "torch.compile + CUDA Graphs",
+      "stage": "6H full",
+      "setup_s": 8.589949210999976,
+      "median_ms": 4.847542999982579,
+      "p90_ms": 4.960464200030401,
+      "runs": 300
+    },
+    {
+      "precision": "float32",
+      "batch": 1,
+      "runtime": "torch.compile + CUDA Graphs",
+      "stage": "6H drop Top-K 25%",
+      "setup_s": 8.707248992000018,
+      "median_ms": 2.3609830000168586,
+      "p90_ms": 3.131227799997305,
+      "runs": 300
+    },
+    {
+      "precision": "float32",
+      "batch": 1,
+      "runtime": "torch.compile + CUDA Graphs",
+      "stage": "6H drop Top-K 50%",
+      "setup_s": 8.709044186999904,
+      "median_ms": 3.4138269999175463,
+      "p90_ms": 3.5769370999560124,
+      "runs": 300
+    },
+    {
+      "precision": "float32",
+      "batch": 1,
+      "runtime": "torch.compile + CUDA Graphs",
+      "stage": "6H drop Top-K 75%",
+      "setup_s": 9.67007817800004,
+      "median_ms": 4.0345149999438945,
+      "p90_ms": 4.222154099954878,
+      "runs": 300
+    },
+    {
+      "precision": "float32",
+      "batch": 8,
+      "runtime": "eager",
+      "stage": "3H",
+      "setup_s": 0.02059015999998337,
+      "median_ms": 13.8821939999616,
+      "p90_ms": 15.13844619998963,
+      "runs": 300
+    },
+    {
+      "precision": "float32",
+      "batch": 8,
+      "runtime": "eager",
+      "stage": "3H + attention",
+      "setup_s": 0.020521067999993647,
+      "median_ms": 14.074649000008321,
+      "p90_ms": 15.495354900031089,
+      "runs": 300
+    },
+    {
+      "precision": "float32",
+      "batch": 8,
+      "runtime": "eager",
+      "stage": "6H full",
+      "setup_s": 0.04381577799995284,
+      "median_ms": 28.402592000020377,
+      "p90_ms": 28.969121999978142,
+      "runs": 300
+    },
+    {
+      "precision": "float32",
+      "batch": 8,
+      "runtime": "eager",
+      "stage": "6H drop Top-K 25%",
+      "setup_s": 0.025311303000080443,
+      "median_ms": 17.04424199999721,
+      "p90_ms": 18.101533299966377,
+      "runs": 300
+    },
+    {
+      "precision": "float32",
+      "batch": 8,
+      "runtime": "eager",
+      "stage": "6H drop Top-K 50%",
+      "setup_s": 0.02579925700001695,
+      "median_ms": 17.689144000087254,
+      "p90_ms": 18.752251200055525,
+      "runs": 300
+    },
+    {
+      "precision": "float32",
+      "batch": 8,
+      "runtime": "eager",
+      "stage": "6H drop Top-K 75%",
+      "setup_s": 0.03416486099990834,
+      "median_ms": 23.10001299997566,
+      "p90_ms": 23.704827299991393,
+      "runs": 300
+    },
+    {
+      "precision": "float32",
+      "batch": 32,
+      "runtime": "eager",
+      "stage": "3H",
+      "setup_s": 0.03851146099998459,
+      "median_ms": 40.84133899993958,
+      "p90_ms": 42.93541849999656,
+      "runs": 300
+    },
+    {
+      "precision": "float32",
+      "batch": 32,
+      "runtime": "eager",
+      "stage": "3H + attention",
+      "setup_s": 0.05750727099996311,
+      "median_ms": 43.40780300003644,
+      "p90_ms": 44.46434169990425,
+      "runs": 300
+    },
+    {
+      "precision": "float32",
+      "batch": 32,
+      "runtime": "eager",
+      "stage": "6H full",
+      "setup_s": 0.14215075900006013,
+      "median_ms": 121.53427600003397,
+      "p90_ms": 125.66954699994994,
+      "runs": 300
+    },
+    {
+      "precision": "float32",
+      "batch": 32,
+      "runtime": "eager",
+      "stage": "6H drop Top-K 25%",
+      "setup_s": 0.041982909000012114,
+      "median_ms": 28.66974100004427,
+      "p90_ms": 28.981712899974355,
+      "runs": 300
+    },
+    {
+      "precision": "float32",
+      "batch": 32,
+      "runtime": "eager",
+      "stage": "6H drop Top-K 50%",
+      "setup_s": 0.07358773799990104,
+      "median_ms": 53.97780100008731,
+      "p90_ms": 55.25243750004165,
+      "runs": 300
+    },
+    {
+      "precision": "float32",
+      "batch": 32,
+      "runtime": "eager",
+      "stage": "6H drop Top-K 75%",
+      "setup_s": 0.1102248500000087,
+      "median_ms": 87.42623300008745,
+      "p90_ms": 89.10226439992357,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 1,
+      "runtime": "eager",
+      "stage": "3H",
+      "setup_s": 0.018168555999977798,
+      "median_ms": 13.542510000092989,
+      "p90_ms": 14.02642279997508,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 1,
+      "runtime": "eager",
+      "stage": "3H + attention",
+      "setup_s": 0.015026186000000052,
+      "median_ms": 13.620871999933115,
+      "p90_ms": 14.101035699968634,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 1,
+      "runtime": "eager",
+      "stage": "6H full",
+      "setup_s": 0.02039520400001038,
+      "median_ms": 15.671244000031948,
+      "p90_ms": 16.512659700038057,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 1,
+      "runtime": "eager",
+      "stage": "6H drop Top-K 25%",
+      "setup_s": 0.018114581000077123,
+      "median_ms": 16.375057000004745,
+      "p90_ms": 17.064945999993597,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 1,
+      "runtime": "eager",
+      "stage": "6H drop Top-K 50%",
+      "setup_s": 0.01826084100002845,
+      "median_ms": 16.06718899995485,
+      "p90_ms": 16.932531699967512,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 1,
+      "runtime": "eager",
+      "stage": "6H drop Top-K 75%",
+      "setup_s": 0.018682159999912074,
+      "median_ms": 15.98714600004314,
+      "p90_ms": 16.59318710004527,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 1,
+      "runtime": "CUDA Graphs",
+      "stage": "3H",
+      "error": "RuntimeError: Cannot copy between CPU and CUDA tensors during CUDA graph capture unless the CPU tensor is pinned. Please use tensor.pin_memory() or allocate the tensor with pin_memory=True."
+    },
+    {
+      "precision": "float16",
+      "batch": 1,
+      "runtime": "CUDA Graphs",
+      "stage": "3H + attention",
+      "error": "RuntimeError: Cannot copy between CPU and CUDA tensors during CUDA graph capture unless the CPU tensor is pinned. Please use tensor.pin_memory() or allocate the tensor with pin_memory=True."
+    },
+    {
+      "precision": "float16",
+      "batch": 1,
+      "runtime": "CUDA Graphs",
+      "stage": "6H full",
+      "error": "RuntimeError: Cannot copy between CPU and CUDA tensors during CUDA graph capture unless the CPU tensor is pinned. Please use tensor.pin_memory() or allocate the tensor with pin_memory=True."
+    },
+    {
+      "precision": "float16",
+      "batch": 1,
+      "runtime": "CUDA Graphs",
+      "stage": "6H drop Top-K 25%",
+      "error": "RuntimeError: Cannot copy between CPU and CUDA tensors during CUDA graph capture unless the CPU tensor is pinned. Please use tensor.pin_memory() or allocate the tensor with pin_memory=True."
+    },
+    {
+      "precision": "float16",
+      "batch": 1,
+      "runtime": "CUDA Graphs",
+      "stage": "6H drop Top-K 50%",
+      "error": "RuntimeError: Cannot copy between CPU and CUDA tensors during CUDA graph capture unless the CPU tensor is pinned. Please use tensor.pin_memory() or allocate the tensor with pin_memory=True."
+    },
+    {
+      "precision": "float16",
+      "batch": 1,
+      "runtime": "CUDA Graphs",
+      "stage": "6H drop Top-K 75%",
+      "error": "RuntimeError: Cannot copy between CPU and CUDA tensors during CUDA graph capture unless the CPU tensor is pinned. Please use tensor.pin_memory() or allocate the tensor with pin_memory=True."
+    },
+    {
+      "precision": "float16",
+      "batch": 1,
+      "runtime": "torch.compile",
+      "stage": "3H",
+      "setup_s": 9.70278501100006,
+      "median_ms": 4.024385000093389,
+      "p90_ms": 4.24694709997766,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 1,
+      "runtime": "torch.compile",
+      "stage": "3H + attention",
+      "setup_s": 10.596295170999952,
+      "median_ms": 4.581597999958831,
+      "p90_ms": 5.0677508000262605,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 1,
+      "runtime": "torch.compile",
+      "stage": "6H full",
+      "setup_s": 9.651371628999982,
+      "median_ms": 3.7888110000494635,
+      "p90_ms": 4.031669000039528,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 1,
+      "runtime": "torch.compile",
+      "stage": "6H drop Top-K 25%",
+      "setup_s": 9.511539620000008,
+      "median_ms": 3.8897879999240104,
+      "p90_ms": 4.076924899914047,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 1,
+      "runtime": "torch.compile",
+      "stage": "6H drop Top-K 50%",
+      "setup_s": 8.574424917999977,
+      "median_ms": 3.8614110000025903,
+      "p90_ms": 4.226446699942699,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 1,
+      "runtime": "torch.compile",
+      "stage": "6H drop Top-K 75%",
+      "setup_s": 9.461829562000048,
+      "median_ms": 3.8827519999813376,
+      "p90_ms": 4.138973399949464,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 1,
+      "runtime": "torch.compile + CUDA Graphs",
+      "stage": "3H",
+      "setup_s": 9.434773270999926,
+      "median_ms": 1.598598999976275,
+      "p90_ms": 2.5453570999843578,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 1,
+      "runtime": "torch.compile + CUDA Graphs",
+      "stage": "3H + attention",
+      "setup_s": 9.41877581999995,
+      "median_ms": 1.525309000044217,
+      "p90_ms": 2.6591066000037245,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 1,
+      "runtime": "torch.compile + CUDA Graphs",
+      "stage": "6H full",
+      "setup_s": 8.536785417000033,
+      "median_ms": 1.8285910000486183,
+      "p90_ms": 3.381108800022048,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 1,
+      "runtime": "torch.compile + CUDA Graphs",
+      "stage": "6H drop Top-K 25%",
+      "setup_s": 8.501460843000018,
+      "median_ms": 1.4087120000567666,
+      "p90_ms": 2.362134499981039,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 1,
+      "runtime": "torch.compile + CUDA Graphs",
+      "stage": "6H drop Top-K 50%",
+      "setup_s": 8.539889689999995,
+      "median_ms": 1.7127360000586123,
+      "p90_ms": 2.7523715999336673,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 1,
+      "runtime": "torch.compile + CUDA Graphs",
+      "stage": "6H drop Top-K 75%",
+      "setup_s": 8.029001522000044,
+      "median_ms": 1.7797319999317551,
+      "p90_ms": 3.0820594000260826,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 8,
+      "runtime": "eager",
+      "stage": "3H",
+      "setup_s": 0.017867716000182554,
+      "median_ms": 13.999174999980823,
+      "p90_ms": 14.605068600053528,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 8,
+      "runtime": "eager",
+      "stage": "3H + attention",
+      "setup_s": 0.015377043999933449,
+      "median_ms": 14.689035999936095,
+      "p90_ms": 15.419588900044802,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 8,
+      "runtime": "eager",
+      "stage": "6H full",
+      "setup_s": 0.01972943300006591,
+      "median_ms": 17.65616000011505,
+      "p90_ms": 18.89921169997706,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 8,
+      "runtime": "eager",
+      "stage": "6H drop Top-K 25%",
+      "setup_s": 0.018843781999976272,
+      "median_ms": 17.407714999990276,
+      "p90_ms": 20.639547900100297,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 8,
+      "runtime": "eager",
+      "stage": "6H drop Top-K 50%",
+      "setup_s": 0.01857052900004419,
+      "median_ms": 17.178298999851904,
+      "p90_ms": 18.66610279996621,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 8,
+      "runtime": "eager",
+      "stage": "6H drop Top-K 75%",
+      "setup_s": 0.01901529700012361,
+      "median_ms": 18.87987800000701,
+      "p90_ms": 19.977119400095944,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 8,
+      "runtime": "torch.compile + CUDA Graphs",
+      "stage": "3H",
+      "setup_s": 10.797678339999948,
+      "median_ms": 3.0586969999149005,
+      "p90_ms": 3.61632860001464,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 8,
+      "runtime": "torch.compile + CUDA Graphs",
+      "stage": "3H + attention",
+      "setup_s": 11.294074193999904,
+      "median_ms": 3.1301629999234137,
+      "p90_ms": 5.337044499810873,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 8,
+      "runtime": "torch.compile + CUDA Graphs",
+      "stage": "6H full",
+      "setup_s": 9.508898880999823,
+      "median_ms": 6.433060000063051,
+      "p90_ms": 6.569925900043928,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 8,
+      "runtime": "torch.compile + CUDA Graphs",
+      "stage": "6H drop Top-K 25%",
+      "setup_s": 15.671450350999976,
+      "median_ms": 2.6849199998650874,
+      "p90_ms": 4.973774100062656,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 8,
+      "runtime": "torch.compile + CUDA Graphs",
+      "stage": "6H drop Top-K 50%",
+      "setup_s": 32.25423731899991,
+      "median_ms": 3.7470100000973616,
+      "p90_ms": 3.9080968000007488,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 8,
+      "runtime": "torch.compile + CUDA Graphs",
+      "stage": "6H drop Top-K 75%",
+      "setup_s": 13.55446475199983,
+      "median_ms": 5.09801300017898,
+      "p90_ms": 5.232165899838037,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 32,
+      "runtime": "eager",
+      "stage": "3H",
+      "setup_s": 0.024024138999948264,
+      "median_ms": 15.11508200019307,
+      "p90_ms": 16.230507100112845,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 32,
+      "runtime": "eager",
+      "stage": "3H + attention",
+      "setup_s": 0.022079045000054975,
+      "median_ms": 15.459672999895702,
+      "p90_ms": 16.130550099865104,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 32,
+      "runtime": "eager",
+      "stage": "6H full",
+      "setup_s": 0.03892023000003064,
+      "median_ms": 28.91368399991734,
+      "p90_ms": 29.4378485999232,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 32,
+      "runtime": "eager",
+      "stage": "6H drop Top-K 25%",
+      "setup_s": 0.020593133000147645,
+      "median_ms": 18.10189299999365,
+      "p90_ms": 18.8915545000782,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 32,
+      "runtime": "eager",
+      "stage": "6H drop Top-K 50%",
+      "setup_s": 0.023380945000099018,
+      "median_ms": 19.21954999988884,
+      "p90_ms": 20.085757599963472,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 32,
+      "runtime": "eager",
+      "stage": "6H drop Top-K 75%",
+      "setup_s": 0.030237961000011637,
+      "median_ms": 23.424093000130597,
+      "p90_ms": 24.324334000061754,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 32,
+      "runtime": "torch.compile + CUDA Graphs",
+      "stage": "3H",
+      "setup_s": 10.578568025000095,
+      "median_ms": 11.210129999881246,
+      "p90_ms": 11.404316699963601,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 32,
+      "runtime": "torch.compile + CUDA Graphs",
+      "stage": "3H + attention",
+      "setup_s": 10.73892822599987,
+      "median_ms": 11.310997000009593,
+      "p90_ms": 11.523138800021115,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 32,
+      "runtime": "torch.compile + CUDA Graphs",
+      "stage": "6H full",
+      "setup_s": 8.601924000000054,
+      "median_ms": 27.097126999933607,
+      "p90_ms": 27.807242000062615,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 32,
+      "runtime": "torch.compile + CUDA Graphs",
+      "stage": "6H drop Top-K 25%",
+      "setup_s": 76.62319371199987,
+      "median_ms": 7.280614000137575,
+      "p90_ms": 7.376217799901497,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 32,
+      "runtime": "torch.compile + CUDA Graphs",
+      "stage": "6H drop Top-K 50%",
+      "setup_s": 466.886347504,
+      "median_ms": 13.525126999866188,
+      "p90_ms": 13.815279299797112,
+      "runs": 300
+    },
+    {
+      "precision": "float16",
+      "batch": 32,
+      "runtime": "torch.compile + CUDA Graphs",
+      "stage": "6H drop Top-K 75%",
+      "setup_s": 13.741727490999892,
+      "median_ms": 20.340922000059436,
+      "p90_ms": 22.30589559994769,
+      "runs": 300
+    }
+  ]
+}

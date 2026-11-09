@@ -22,6 +22,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from prepare_imagenet import check_counts
 from evaluate_h1_diagnosis import wide_blocks, wide_input
 from selective_refinement import forward_narrow_with_attention, make_update_mask
+from partial_tuning import configure_partial, drop_context, partial_mode_from_state
 
 STAGES = (3, 6)
 NARROW_P, WIDE_P = 0.5, 1.0
@@ -40,7 +41,11 @@ def load_model(repo, checkpoint, weights=None, device="cuda"):
     _load_eval_checkpoint(model, str(checkpoint), use_ema=True)
     RLDropping(model, used_heads=6, max_heads=6, ema=False)
     if weights is not None:
-        model.load_state_dict(torch.load(weights, map_location="cpu", weights_only=True))
+        state = torch.load(weights, map_location="cpu", weights_only=True)
+        mode = partial_mode_from_state(state)
+        if mode:
+            configure_partial(model, mode)
+        model.load_state_dict(state)
     if model.patch_embed.num_patches != 196 or model.num_prefix_tokens != 1 or model._stage_ratio(3) != NARROW_P:
         raise RuntimeError("Expected 196 patches, one CLS token and 3H = half width")
     return model.to(device).eval()
@@ -49,8 +54,9 @@ def load_model(repo, checkpoint, weights=None, device="cuda"):
 def wide_logits(model, x0, mask=None):
     """6H logits from the 6H input; with a mask, tokens outside it leave the sequence."""
     model.p = WIDE_P
-    x = wide_blocks(model, x0, WIDE_P, mask, "drop") if mask is not None else wide_blocks(model, x0, WIDE_P)
-    return model.forward_head(model.norm(x, int(WIDE_P * model.embed_dim)))
+    with drop_context(model, mask is not None):
+        x = wide_blocks(model, x0, WIDE_P, mask, "drop") if mask is not None else wide_blocks(model, x0, WIDE_P)
+        return model.forward_head(model.norm(x, int(WIDE_P * model.embed_dim)))
 
 
 def add_paths(parser):
@@ -67,6 +73,7 @@ def main():
     parser.add_argument("--workers", type=int, default=8)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--output-dir", type=Path)
+    parser.add_argument("--fp16", action="store_true", help="float16 weights and inputs (experiment 2)")
     args = parser.parse_args()
     check_counts(args.data_dir / "validation", 50000)
     if not torch.cuda.is_available():
@@ -74,7 +81,13 @@ def main():
 
     torch.backends.cuda.matmul.allow_tf32 = True
     torch.backends.cudnn.benchmark = True
+    if args.fp16:
+        # Imported from h1-diagnosis: rounded FP16 top-10 probabilities can fail
+        # Categorical's simplex validation. Keep existing FP32 behavior unchanged.
+        torch.distributions.Distribution.set_default_validate_args(False)
     model = load_model(args.repo.resolve(), args.checkpoint.resolve(), args.weights)
+    dtype = torch.float16 if args.fp16 else torch.float32
+    model = model.to(dtype)
     from torchvision.datasets import ImageFolder
     from torch.utils.data import DataLoader, Subset
     from timm.data import create_transform, resolve_data_config
@@ -83,7 +96,7 @@ def main():
     indices = torch.randperm(len(dataset), generator=torch.Generator().manual_seed(args.seed)).tolist()
     loader = DataLoader(Subset(dataset, indices), batch_size=args.batch_size, num_workers=args.workers,
                         pin_memory=True)
-    tag = "finetuned" if args.weights else "official"
+    tag = ("finetuned" if args.weights else "official") + ("-fp16" if args.fp16 else "")
     output = args.output_dir or ROOT / "results" / (datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S.%fZ") + f"-drop-eval-{tag}")
     output.mkdir(parents=True)
     print(f"Results: {output}", flush=True)
@@ -91,7 +104,7 @@ def main():
     per_image = {key: [] for key in ["entropy"] + keys}
     with torch.no_grad():
         for batch_index, (images, targets) in enumerate(loader, 1):
-            images, targets = images.cuda(non_blocking=True), targets.cuda(non_blocking=True)
+            images, targets = images.to("cuda", dtype=dtype, non_blocking=True), targets.cuda(non_blocking=True)
             features, logits, attention = forward_narrow_with_attention(model, images, STAGES)
             x0 = wide_input(model, images, features)
             outputs = [logits, wide_logits(model, x0)] + [
@@ -99,8 +112,9 @@ def main():
             if batch_index == 1:  # the full path must equal the official two-stage forward
                 model.p = WIDE_P
                 reference = model.forward_head(model.forward_features(images, WIDE_P, features, STAGES))
-                torch.testing.assert_close(outputs[1], reference, rtol=1e-5, atol=1e-6)
-            per_image["entropy"].append(model.entropy(logits)[:, 0].cpu())
+                torch.testing.assert_close(outputs[1], reference, **({"rtol": 1e-2, "atol": 1e-2} if args.fp16
+                                                                     else {"rtol": 1e-5, "atol": 1e-6}))
+            per_image["entropy"].append(model.entropy(logits)[:, 0].float().cpu())
             for key, value in zip(keys, outputs):
                 per_image[key].append((value.argmax(1) == targets).cpu())
             if batch_index % 100 == 0:
@@ -117,7 +131,7 @@ def main():
                "batch_size": args.batch_size, "seed": args.seed, "samples": len(dataset),
                "weights_sha256": hashlib.sha256(args.weights.read_bytes()).hexdigest() if args.weights else None,
                "routed_at_threshold_1": int(routed.sum()), "gpu": torch.cuda.get_device_name(),
-               "precision": "float32, TF32 allowed (official default)",
+               "precision": "float16 weights and inputs" if args.fp16 else "float32, TF32 allowed (official default)",
                "full_path_matches_official": True, "top1": {}}
     for key in keys:
         summary["top1"][key.removesuffix("_correct") + "_all"] = 100 * per_image[key].double().mean().item()
