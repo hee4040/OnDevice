@@ -1,0 +1,9 @@
+6H answer only all 80.070  calibration 79.868  holdout 80.272 | harmed 1227  fixed 4464
+mix a=0.1      all 80.092  calibration 79.976  holdout 80.208 | harmed 1141  fixed 4389
+mix a=0.2      all 80.090  calibration 79.976  holdout 80.204 | harmed 1029  fixed 4276
+mix a=0.3      all 80.048  calibration 79.984  holdout 80.112 | harmed 912  fixed 4138
+mix a=0.4      all 79.888  calibration 79.740  holdout 80.036 | harmed 798  fixed 3944
+mix a=0.5      all 79.604  calibration 79.468  holdout 79.740 | harmed 659  fixed 3663
+mix a=0.6      all 78.996  calibration 78.856  holdout 79.136 | harmed 515  fixed 3215
+a picked on calibration = 0.3 -> holdout change -0.160 pp, 95% [-0.308, -0.012]
+reference: 3H only 73.596  every image full 6H 81.030  same images sent but 6H sees all patches 80.610

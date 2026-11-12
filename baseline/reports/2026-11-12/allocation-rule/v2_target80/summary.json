@@ -1,0 +1,147 @@
+{
+  "dataset": "ImageNet-V2 matched-frequency (vaishaal/ImageNetV2, folders zero-padded)",
+  "n": 10000,
+  "policies": {
+    "baseline": {
+      "kind": "fixed",
+      "gate": 1.0,
+      "ratio": 0.5
+    },
+    "same_budget": {
+      "kind": "monotone",
+      "gate": 0.8,
+      "t1": 1.25,
+      "t2": "+inf",
+      "correct": 19968,
+      "cost": 51812049057792
+    },
+    "target_80.0": {
+      "kind": "monotone",
+      "gate": 0.75,
+      "t1": 1.15,
+      "t2": "+inf",
+      "correct": 20001,
+      "cost": 53593815616512
+    },
+    "target_80.2": {
+      "kind": "monotone",
+      "gate": 0.75,
+      "t1": 1.15,
+      "t2": 1.75,
+      "correct": 20050,
+      "cost": 56724926567424
+    },
+    "official_tau1_full6h": {
+      "kind": "fixed",
+      "gate": 1.0,
+      "ratio": 1.0
+    },
+    "all_images_full6h": {
+      "kind": "fixed",
+      "gate": "-inf",
+      "ratio": 1.0
+    }
+  },
+  "comparison": [
+    {
+      "method": "3H_only",
+      "correct": 6175,
+      "top1": 61.75000000000001,
+      "gmacs": 1.2536832
+    },
+    {
+      "method": "baseline",
+      "correct": 6867,
+      "top1": 68.67,
+      "gmacs": 2.340511727616,
+      "cost_change_percent": 0.0,
+      "stage2_fraction": 0.4798,
+      "diff_vs_baseline_pp": 0.0,
+      "ci95_pp": [
+        0.0,
+        0.0
+      ],
+      "improved": 0,
+      "regressed": 0
+    },
+    {
+      "method": "same_budget",
+      "correct": 6896,
+      "top1": 68.96,
+      "gmacs": 2.3155082542080003,
+      "cost_change_percent": -1.0682908832705618,
+      "stage2_fraction": 0.5629,
+      "diff_vs_baseline_pp": 0.29,
+      "ci95_pp": [
+        0.01,
+        0.5599999999999999
+      ],
+      "improved": 113,
+      "regressed": 84
+    },
+    {
+      "method": "target_80.0",
+      "correct": 6909,
+      "top1": 69.08999999999999,
+      "gmacs": 2.3893883575296,
+      "cost_change_percent": 2.088288186591769,
+      "stage2_fraction": 0.5873,
+      "diff_vs_baseline_pp": 0.42,
+      "ci95_pp": [
+        0.15,
+        0.69
+      ],
+      "improved": 114,
+      "regressed": 72
+    },
+    {
+      "method": "target_80.2",
+      "correct": 6934,
+      "top1": 69.34,
+      "gmacs": 2.5885675640832,
+      "cost_change_percent": 10.598359048594252,
+      "stage2_fraction": 0.5873,
+      "diff_vs_baseline_pp": 0.67,
+      "ci95_pp": [
+        0.33,
+        1.02
+      ],
+      "improved": 185,
+      "regressed": 118
+    },
+    {
+      "method": "official_tau1_full6h",
+      "correct": 6891,
+      "top1": 68.91000000000001,
+      "gmacs": 3.467195744256,
+      "cost_change_percent": 48.138362365208856,
+      "stage2_fraction": 0.4798,
+      "diff_vs_baseline_pp": 0.24,
+      "ci95_pp": [
+        -0.12,
+        0.61
+      ],
+      "improved": 182,
+      "regressed": 158
+    },
+    {
+      "method": "all_images_full6h",
+      "correct": 6999,
+      "top1": 69.99,
+      "gmacs": 5.86708992,
+      "cost_change_percent": 150.67551898046264,
+      "stage2_fraction": 1.0,
+      "diff_vs_baseline_pp": 1.32,
+      "ci95_pp": [
+        0.8699999999999999,
+        1.78
+      ],
+      "improved": 344,
+      "regressed": 212
+    }
+  ],
+  "gpu": "NVIDIA GeForce RTX 5060",
+  "torch": "2.11.0+cu128",
+  "bootstrap": "paired, 5000 resamples, seed 0, policies fixed (no selection uncertainty)",
+  "note": "Policies locked from ImageNet-1K validation search; not retuned on V2."
+}

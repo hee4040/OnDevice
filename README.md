@@ -1,5 +1,7 @@
 # ThinkingViT: 기존 평균 계산 예산으로 정확도 80% 달성
 
+> **2026-11-12 추가 · 브랜치 `experiment/allocation-rule`.** 이 정책의 숫자(0.8·1.25·25%·50%)가 왜 그 값인지, 같은 가중치로 더 올릴 수 있는지를 검증했습니다. 다른 GPU 재실행과 ImageNet-V2 독립 평가도 포함합니다. → [계산 배분 규칙 검증 보고서](baseline/reports/2026-11-12/allocation-rule/report.md)
+
 이 브랜치(`codex/target80-results`)는 **3H 종료 기준과 6H 토큰 유지율을 함께 조정한 실험**을 공유합니다. 기존 파인튜닝 학생 가중치와 공식 전처리를 유지하고, ImageNet-1K validation 50,000장을 실제 조건부 GPU 추론으로 평가했습니다.
 
 ## 핵심 결과
