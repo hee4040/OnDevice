@@ -20,24 +20,31 @@ def cls_attention_from_qkv(attention, projected, heads):
 
 
 @contextmanager
-def capture_narrow_cls_attention(model, narrow_heads):
+def capture_narrow_cls_attention(model, narrow_heads, global_cls=False, decay=0.5):
     """Capture final-block attention only for the narrow forward."""
     captured = []
-    attention = model.blocks[-1].attn
-
-    def hook(module, inputs, projected):
-        heads = projected.shape[-1] // (3 * attention.head_dim)
-        if heads == narrow_heads:
-            captured.append(cls_attention_from_qkv(attention, projected.detach(), heads))
-
-    handle = attention.qkv.register_forward_hook(hook)
+    handles = []
+    def make_hook(attention):
+        def hook(module, inputs, projected):
+            heads = projected.shape[-1] // (3 * attention.head_dim)
+            if heads == narrow_heads:
+                with torch.no_grad():
+                    values = projected.detach().float() if global_cls else projected.detach()
+                    score = cls_attention_from_qkv(attention, values, heads)
+                    if global_cls and captured:
+                        score = decay * captured[-1] + (1 - decay) * score
+                    captured[:] = [score]
+        return hook
+    for block in (model.blocks if global_cls else [model.blocks[-1]]):
+        handles.append(block.attn.qkv.register_forward_hook(make_hook(block.attn)))
     try:
         yield captured
     finally:
-        handle.remove()
+        for handle in handles:
+            handle.remove()
 
 
-def forward_narrow_with_attention(model, x, stages=(3, 6)):
+def forward_narrow_with_attention(model, x, stages=(3, 6), global_cls=False, decay=0.5):
     """Run 3H once and return features, logits, and final-block CLS attention."""
     if model.training:
         raise ValueError("Selective refinement requires model.eval()")
@@ -45,7 +52,7 @@ def forward_narrow_with_attention(model, x, stages=(3, 6)):
     if len(stages) != 2:
         raise ValueError("Selective refinement currently supports exactly two stages")
     p = model.p = model._stage_ratio(stages[0])
-    with capture_narrow_cls_attention(model, stages[0]) as captured:
+    with capture_narrow_cls_attention(model, stages[0], global_cls, decay) as captured:
         features = model.forward_features(x, p)
     if len(captured) != 1:
         raise RuntimeError(f"Expected one narrow attention tensor, captured {len(captured)}")

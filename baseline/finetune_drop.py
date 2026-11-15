@@ -10,6 +10,7 @@ Trains on ImageNet-1K train only; validation stays for evaluate_drop.py.
 """
 import argparse
 import copy
+import hashlib
 from datetime import datetime, timezone
 import json
 import math
@@ -25,6 +26,7 @@ from evaluate_h1_diagnosis import wide_input
 from selective_refinement import forward_narrow_with_attention, make_update_mask
 from drop_ft_losses import aligned_feature_loss, capture_wide_features
 from partial_tuning import MODES, configure_partial, frozen_digest, verify_narrow_preserved
+from token_evolution import METHODS, evolution_logits
 
 
 def distill(student, teacher):
@@ -35,6 +37,8 @@ def distill(student, teacher):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     add_paths(parser)
+    parser.add_argument("--token-method", choices=METHODS, default="last_cls")
+    parser.add_argument("--cls-decay", type=float, default=0.5)
     parser.add_argument("--ratios", nargs="+", type=float, default=[0.25, 0.5])
     parser.add_argument("--epochs", type=float, default=1.0)
     parser.add_argument("--max-steps", type=int, help="Stop early (smoke test)")
@@ -44,6 +48,8 @@ def main():
     parser.add_argument("--workers", type=int, default=14)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--resume", type=Path, help="resume.pth with optimizer/RNG, or legacy student.pth")
+    parser.add_argument("--init-weights", type=Path,
+                        help="Initialize student only; keep official teacher and start a fresh optimizer/schedule")
     parser.add_argument("--start-step", type=int, default=0, help="Step of --resume; the schedule continues from it")
     parser.add_argument("--micro-batch-size", type=int, default=32,
                         help="Accumulate gradients to --batch-size without changing the effective batch")
@@ -57,6 +63,10 @@ def main():
     parser.add_argument("--partial-mode", choices=MODES)
     parser.add_argument("--train-indices", type=Path, help="Train-only subset for predeclared LR pilots")
     args = parser.parse_args()
+    if args.token_method != "last_cls" and (args.partial_mode or args.feature_weight):
+        parser.error("Token evolution currently supports full KD without feature/partial tuning")
+    if not 0 <= args.cls_decay <= 1 or (args.token_method != "last_cls" and min(args.ratios) <= 0):
+        parser.error("Invalid attention decay or token ratio")
     if (args.batch_size < 1 or args.micro_batch_size < 1 or args.workers < 0 or args.warmup < 1
             or args.epochs <= 0 or args.save_every < 1 or args.lr <= 0
             or any(w < 0 for w in (args.ce_weight, args.full_weight, args.feature_weight))
@@ -71,6 +81,11 @@ def main():
     # eval() on purpose: this model has no dropout or drop-path, and the attention capture requires it.
     student = load_model(args.repo.resolve(), args.checkpoint.resolve())
     teacher = copy.deepcopy(student).requires_grad_(False)
+    init_sha256 = None
+    if args.init_weights:
+        init_sha256 = hashlib.sha256(args.init_weights.read_bytes()).hexdigest()
+        if not args.resume:
+            student.load_state_dict(torch.load(args.init_weights, map_location="cuda", weights_only=True))
     partial_config = configure_partial(student, args.partial_mode) if args.partial_mode else None
     resume_state = None
     if args.resume:
@@ -112,6 +127,12 @@ def main():
                     "ratios", "ce_weight", "full_weight", "feature_weight", "feature_layers"):
             if previous.get(key) != getattr(args, key):
                 raise ValueError(f"Cannot resume with a changed {key}")
+        if previous.get("token_method", "last_cls") != args.token_method or previous.get("cls_decay", 0.5) != args.cls_decay:
+            raise ValueError("Cannot resume with a changed token selector")
+        if previous.get("init_weights") != (str(args.init_weights) if args.init_weights else None):
+            raise ValueError("Cannot resume with changed initial weights")
+        if resume_state.get("init_weights_sha256") != init_sha256:
+            raise ValueError("Initial weights file changed since checkpoint")
         if previous.get("partial_mode") != args.partial_mode:
             raise ValueError("Cannot resume with a changed partial_mode")
         if previous.get("train_indices") != (str(args.train_indices) if args.train_indices else None):
@@ -128,6 +149,7 @@ def main():
     (output / "arguments.json").write_text(json.dumps(
         {**{k: str(v) if isinstance(v, Path) else v for k, v in vars(args).items()}, "steps": total,
          "train_transform": str(train_transform), "gpu": torch.cuda.get_device_name(),
+         "init_weights_sha256": init_sha256,
          "train_samples": len(dataset)}, indent=2) + "\n")
     if partial_config:
         (output / "partial_config.json").write_text(json.dumps(partial_config, indent=2) + "\n")
@@ -155,6 +177,7 @@ def main():
         (output / "student.tmp.pth").replace(output / "student.pth")
         arguments = {k: str(v) if isinstance(v, Path) else v for k, v in vars(args).items()}
         torch.save({"student": student.state_dict(), "optimizer": optimizer.state_dict(),
+                    "init_weights_sha256": init_sha256,
                     "schedule": schedule.state_dict(), "step": step, "arguments": arguments,
                     "python_rng": random.getstate(), "torch_rng": torch.get_rng_state(),
                     "cuda_rng": torch.cuda.get_rng_state_all()}, output / "resume.tmp.pth")
@@ -183,11 +206,14 @@ def main():
                         teacher_narrow = teacher.forward_head(teacher_features)
                         with capture_wide_features(teacher, layers) as teacher_tokens:
                             teacher_wide = wide_logits(teacher, wide_input(teacher, x, teacher_features))
-                    features, narrow, attention = forward_narrow_with_attention(student, x, STAGES)
+                    features, narrow, attention = forward_narrow_with_attention(
+                        student, x, STAGES, global_cls=args.token_method != "last_cls", decay=args.cls_decay)
                     x0 = wide_input(student, x, features)
                     mask = make_update_mask(attention.float(), ratio, "topk")
                     with capture_wide_features(student, layers) as student_tokens:
-                        wide = wide_logits(student, x0, mask)
+                        wide = (wide_logits(student, x0, mask) if args.token_method == "last_cls" else
+                                evolution_logits(student, x0, attention, ratio, args.token_method,
+                                                 progress=step / total, decay=args.cls_decay))
                     full = wide_logits(student, x0) if args.full_weight else None
                 loss_narrow, loss_wide = distill(narrow, teacher_narrow), distill(wide, teacher_wide)
                 zero = narrow.new_zeros((), dtype=torch.float32)

@@ -4,6 +4,8 @@ ThinkingViT(3H → 6H)에서 토큰을 줄였을 때의 정확도 손실을 **�
 
 **주요 결과:** 고정 Drop 50%·τ=1에서 기존 전체 KD가 **79.672%**로 가장 높았습니다. 부분 학습에서는 **projection + LayerNorm + LoRA가 79.512%**로 가장 높았으며, 전체의 약 **1.09% 파라미터만 학습하면서 3H 보존 검사를 통과**했습니다.
 
+2026-11-15 후속 실험은 기존 전체 KD 학습 설정을 유지하면서 Evo-ViT의 global CLS attention과 slow-fast·layer-to-stage 방식을 비교합니다. Global CLS 가중치에서 slow-fast를 추가 학습하는 후속 실험까지 포함한 설정·진행·성능은 [통합 실험 기록](baseline/evolution_experiments.md)에 자동 갱신됩니다.
+
 ## 무엇을 했나
 
 | 순서 | 질문 | 수행한 작업 | 결과 |
