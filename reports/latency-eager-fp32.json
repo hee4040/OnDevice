@@ -1,0 +1,224 @@
+{
+  "started": "2026-11-16T07:12:21.745057+00:00",
+  "command": "benchmark",
+  "checkpoint_sha256": "9ead984e9e39887eb037a42c189c58c0af14cd9c2771ad27b4b01876997242b5",
+  "weights_sha256": "37e9a36a3a33edc1baf7ef06c93ddb970cc3a4fafea92a413acc24eea2d628ae",
+  "gpu": "NVIDIA GeForce RTX 3070 Ti Laptop GPU",
+  "torch": "2.5.1+cu124",
+  "precision": "fp32",
+  "policies": {
+    "economy": {
+      "gate": 1.0,
+      "boundaries": [],
+      "ratios": [
+        0.25
+      ]
+    },
+    "balanced": {
+      "gate": 0.8,
+      "boundaries": [
+        1.25
+      ],
+      "ratios": [
+        0.25,
+        0.5
+      ]
+    },
+    "accuracy": {
+      "gate": 0.75,
+      "boundaries": [
+        1.15,
+        1.75
+      ],
+      "ratios": [
+        0.25,
+        0.5,
+        0.75
+      ]
+    },
+    "kd50": {
+      "gate": 1.0,
+      "boundaries": [],
+      "ratios": [
+        0.5
+      ]
+    },
+    "full": {
+      "gate": 1.0,
+      "boundaries": [],
+      "ratios": [
+        1.0
+      ]
+    }
+  },
+  "mac_convention": "1 MAC = multiply+accumulate; 384-channel embedding cached after narrow (native control recomputes); excludes norm/softmax/sort/gather/memory traffic",
+  "policy_selection": "locked source policies, no tuning on this evaluation",
+  "samples": 1000,
+  "runtime_matches_eager_on_real_images": 32,
+  "runtime": "eager",
+  "setup_seconds": 1.504250287078321,
+  "measurement": "batch1 synchronized wall-clock; preprocessing/H2D/final argmax excluded; gate included",
+  "rows": [
+    {
+      "policy": "kd50",
+      "repeat": 0,
+      "mean_ms": 3.0078798877075315,
+      "p95_ms": 5.030681133270264,
+      "serial_images_per_s": 332.46008395706065,
+      "resident_allocated_mib": 688.24755859375,
+      "peak_allocated_mib": 691.2880859375,
+      "incremental_peak_mib": 3.04052734375
+    },
+    {
+      "policy": "balanced",
+      "repeat": 0,
+      "mean_ms": 3.2434741149190813,
+      "p95_ms": 5.385014057159424,
+      "serial_images_per_s": 308.31138605370006,
+      "resident_allocated_mib": 688.25244140625,
+      "peak_allocated_mib": 691.2880859375,
+      "incremental_peak_mib": 3.03564453125
+    },
+    {
+      "policy": "accuracy",
+      "repeat": 0,
+      "mean_ms": 3.5192728703841567,
+      "p95_ms": 5.751168727874756,
+      "serial_images_per_s": 284.14960613464507,
+      "resident_allocated_mib": 688.25244140625,
+      "peak_allocated_mib": 692.07861328125,
+      "incremental_peak_mib": 3.826171875
+    },
+    {
+      "policy": "full",
+      "repeat": 0,
+      "mean_ms": 3.2250133235938847,
+      "p95_ms": 5.461277008056641,
+      "serial_images_per_s": 310.0762383473262,
+      "resident_allocated_mib": 688.25244140625,
+      "peak_allocated_mib": 693.29736328125,
+      "incremental_peak_mib": 5.044921875
+    },
+    {
+      "policy": "economy",
+      "repeat": 0,
+      "mean_ms": 3.1205258078407496,
+      "p95_ms": 5.2992072105407715,
+      "serial_images_per_s": 320.45881418040597,
+      "resident_allocated_mib": 688.25244140625,
+      "peak_allocated_mib": 691.13037109375,
+      "incremental_peak_mib": 2.8779296875
+    },
+    {
+      "policy": "balanced",
+      "repeat": 1,
+      "mean_ms": 3.506175289163366,
+      "p95_ms": 5.733120441436768,
+      "serial_images_per_s": 285.21106833726424,
+      "resident_allocated_mib": 688.25244140625,
+      "peak_allocated_mib": 691.2880859375,
+      "incremental_peak_mib": 3.03564453125
+    },
+    {
+      "policy": "full",
+      "repeat": 1,
+      "mean_ms": 4.339301101164892,
+      "p95_ms": 8.610040664672852,
+      "serial_images_per_s": 230.45185772693864,
+      "resident_allocated_mib": 688.25244140625,
+      "peak_allocated_mib": 693.29736328125,
+      "incremental_peak_mib": 5.044921875
+    },
+    {
+      "policy": "kd50",
+      "repeat": 1,
+      "mean_ms": 3.136207182193175,
+      "p95_ms": 5.836684703826904,
+      "serial_images_per_s": 318.85648552743,
+      "resident_allocated_mib": 688.25244140625,
+      "peak_allocated_mib": 691.2880859375,
+      "incremental_peak_mib": 3.03564453125
+    },
+    {
+      "policy": "accuracy",
+      "repeat": 1,
+      "mean_ms": 3.4061467074789107,
+      "p95_ms": 6.31521463394165,
+      "serial_images_per_s": 293.5868845003916,
+      "resident_allocated_mib": 688.25244140625,
+      "peak_allocated_mib": 692.07861328125,
+      "incremental_peak_mib": 3.826171875
+    },
+    {
+      "policy": "economy",
+      "repeat": 1,
+      "mean_ms": 3.5709003617521375,
+      "p95_ms": 6.3400421142578125,
+      "serial_images_per_s": 280.04141776426627,
+      "resident_allocated_mib": 688.25244140625,
+      "peak_allocated_mib": 691.13037109375,
+      "incremental_peak_mib": 2.8779296875
+    },
+    {
+      "policy": "accuracy",
+      "repeat": 2,
+      "mean_ms": 3.8180679643992335,
+      "p95_ms": 7.091544151306152,
+      "serial_images_per_s": 261.91257183588357,
+      "resident_allocated_mib": 688.25244140625,
+      "peak_allocated_mib": 692.07861328125,
+      "incremental_peak_mib": 3.826171875
+    },
+    {
+      "policy": "balanced",
+      "repeat": 2,
+      "mean_ms": 2.8969237292185426,
+      "p95_ms": 4.876870155334473,
+      "serial_images_per_s": 345.1937618909125,
+      "resident_allocated_mib": 688.25244140625,
+      "peak_allocated_mib": 691.2880859375,
+      "incremental_peak_mib": 3.03564453125
+    },
+    {
+      "policy": "full",
+      "repeat": 2,
+      "mean_ms": 2.9601351937744766,
+      "p95_ms": 5.011596202850342,
+      "serial_images_per_s": 337.82240828159513,
+      "resident_allocated_mib": 688.25244140625,
+      "peak_allocated_mib": 693.29736328125,
+      "incremental_peak_mib": 5.044921875
+    },
+    {
+      "policy": "economy",
+      "repeat": 2,
+      "mean_ms": 2.85562221868895,
+      "p95_ms": 5.085165500640869,
+      "serial_images_per_s": 350.1863774050308,
+      "resident_allocated_mib": 688.25244140625,
+      "peak_allocated_mib": 691.13037109375,
+      "incremental_peak_mib": 2.8779296875
+    },
+    {
+      "policy": "kd50",
+      "repeat": 2,
+      "mean_ms": 2.7418597873765975,
+      "p95_ms": 4.786473274230957,
+      "serial_images_per_s": 364.71595105043525,
+      "resident_allocated_mib": 688.25244140625,
+      "peak_allocated_mib": 691.2880859375,
+      "incremental_peak_mib": 3.03564453125
+    }
+  ],
+  "clean": true,
+  "latency_ms": {
+    "economy": 3.1205258078407496,
+    "balanced": 3.2434741149190813,
+    "accuracy": 3.5192728703841567,
+    "kd50": 3.0078798877075315,
+    "full": 3.2250133235938847
+  },
+  "finished": "2026-11-16T07:13:21.714628+00:00",
+  "gpu_monitor_samples": 51,
+  "other_gpu_process_observations": []
+}

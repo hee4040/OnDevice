@@ -1,3 +1,0 @@
-# Optional plotting dependency for baseline/analyze_attention.py.
-# Install after the project's normal environment setup.
-matplotlib==3.10.7

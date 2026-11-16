@@ -1,0 +1,104 @@
+{
+  "started": "2026-11-16T07:13:33.802825+00:00",
+  "command": "evaluate",
+  "checkpoint_sha256": "9ead984e9e39887eb037a42c189c58c0af14cd9c2771ad27b4b01876997242b5",
+  "weights_sha256": "37e9a36a3a33edc1baf7ef06c93ddb970cc3a4fafea92a413acc24eea2d628ae",
+  "gpu": "NVIDIA GeForce RTX 3070 Ti Laptop GPU",
+  "torch": "2.5.1+cu124",
+  "precision": "fp16",
+  "policies": {
+    "economy": {
+      "gate": 1.0,
+      "boundaries": [],
+      "ratios": [
+        0.25
+      ]
+    },
+    "balanced": {
+      "gate": 0.8,
+      "boundaries": [
+        1.25
+      ],
+      "ratios": [
+        0.25,
+        0.5
+      ]
+    },
+    "accuracy": {
+      "gate": 0.75,
+      "boundaries": [
+        1.15,
+        1.75
+      ],
+      "ratios": [
+        0.25,
+        0.5,
+        0.75
+      ]
+    },
+    "kd50": {
+      "gate": 1.0,
+      "boundaries": [],
+      "ratios": [
+        0.5
+      ]
+    },
+    "full": {
+      "gate": 1.0,
+      "boundaries": [],
+      "ratios": [
+        1.0
+      ]
+    }
+  },
+  "mac_convention": "1 MAC = multiply+accumulate; 384-channel embedding cached after narrow (native control recomputes); excludes norm/softmax/sort/gather/memory traffic",
+  "policy_selection": "locked source policies, no tuning on this evaluation",
+  "samples": 50000,
+  "runtime": "eager",
+  "accuracy": {
+    "economy": {
+      "top1": 78.38000000000001,
+      "gmacs": 1.68009524391936,
+      "path_counts": {
+        "exit": 31927,
+        "0.25": 18073
+      }
+    },
+    "balanced": {
+      "top1": 79.996,
+      "gmacs": 2.07129083191296,
+      "path_counts": {
+        "exit": 27477,
+        "0.25": 9283,
+        "0.5": 13240
+      }
+    },
+    "accuracy": {
+      "top1": 80.408,
+      "gmacs": 2.2651489101004803,
+      "path_counts": {
+        "exit": 26184,
+        "0.25": 8723,
+        "0.5": 9695,
+        "0.75": 5398
+      }
+    },
+    "kd50": {
+      "top1": 79.654,
+      "gmacs": 2.08049733654528,
+      "path_counts": {
+        "exit": 31927,
+        "0.5": 18073
+      }
+    },
+    "full": {
+      "top1": 80.04599999999999,
+      "gmacs": 2.92929101027328,
+      "path_counts": {
+        "exit": 31927,
+        "1.0": 18073
+      }
+    }
+  },
+  "finished": "2026-11-16T07:15:20.412407+00:00"
+}

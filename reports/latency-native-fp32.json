@@ -1,0 +1,64 @@
+{
+  "started": "2026-11-16T06:59:29.124581+00:00",
+  "command": "benchmark",
+  "checkpoint_sha256": "9ead984e9e39887eb037a42c189c58c0af14cd9c2771ad27b4b01876997242b5",
+  "weights_sha256": "37e9a36a3a33edc1baf7ef06c93ddb970cc3a4fafea92a413acc24eea2d628ae",
+  "gpu": "NVIDIA GeForce RTX 3070 Ti Laptop GPU",
+  "torch": "2.5.1+cu124",
+  "precision": "fp32",
+  "policies": {
+    "kd50": {
+      "gate": 1.0,
+      "boundaries": [],
+      "ratios": [
+        0.5
+      ]
+    }
+  },
+  "mac_convention": "1 MAC = multiply+accumulate; actual 384-channel embedding in both stages; excludes norm/softmax/sort/gather/memory traffic",
+  "policy_selection": "locked source policies, no tuning on this evaluation",
+  "samples": 1000,
+  "runtime_matches_eager_on_real_images": 32,
+  "runtime": "native",
+  "setup_seconds": 0.884411659091711,
+  "measurement": "batch1 synchronized wall-clock; preprocessing/H2D/final argmax excluded; gate included",
+  "rows": [
+    {
+      "policy": "kd50",
+      "repeat": 0,
+      "mean_ms": 10.467399792280048,
+      "p95_ms": 20.495412826538086,
+      "serial_images_per_s": 95.53470965516415,
+      "resident_allocated_mib": 668.47607421875,
+      "peak_allocated_mib": 672.05126953125,
+      "incremental_peak_mib": 3.5751953125
+    },
+    {
+      "policy": "kd50",
+      "repeat": 1,
+      "mean_ms": 10.278753656195477,
+      "p95_ms": 20.09930419921875,
+      "serial_images_per_s": 97.28805976367126,
+      "resident_allocated_mib": 668.48095703125,
+      "peak_allocated_mib": 672.05126953125,
+      "incremental_peak_mib": 3.5703125
+    },
+    {
+      "policy": "kd50",
+      "repeat": 2,
+      "mean_ms": 9.870056316489354,
+      "p95_ms": 19.545846939086914,
+      "serial_images_per_s": 101.31654449928068,
+      "resident_allocated_mib": 668.48095703125,
+      "peak_allocated_mib": 672.05126953125,
+      "incremental_peak_mib": 3.5703125
+    }
+  ],
+  "clean": true,
+  "latency_ms": {
+    "kd50": 10.278753656195477
+  },
+  "finished": "2026-11-16T07:00:08.836501+00:00",
+  "gpu_monitor_samples": 31,
+  "other_gpu_process_observations": []
+}

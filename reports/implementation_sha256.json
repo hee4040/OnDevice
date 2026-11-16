@@ -1,0 +1,9 @@
+{
+  "efficient_vit/__init__.py": "9498d54c0a70bb056ab44400d95da21cf2dfccb41ada1ec0d6c02eceb2ae0c3f",
+  "efficient_vit/__main__.py": "be913c5c2de0c874b9beea8abaf6fb72c012633a3a79976ef171b37624382b74",
+  "efficient_vit/model.py": "331fa8f6372ffc02b3d6250f9a6552ca9ee61dffee5a8e454cf85a64e002ea5f",
+  "efficient_vit/policy.py": "2f9f15269d7b4a22957622c48ec48603e7083f9710655e6d22b310cfafd6dae8",
+  "efficient_vit/runtime.py": "2c7f33d165d401dd3eee2fc85028a02c90164802407ff33b1779e6b8bf9fd052",
+  "efficient_vit/train.py": "03210ae9665f310412237b9db474d474370d6af95e5b38f4a02d53a187f34cdf",
+  "efficient_vit/verify.py": "1dcb523b868d058547210b0f3b2eaeb0409a3260667d806a634fe0f5034cbe02"
+}
