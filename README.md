@@ -4,6 +4,10 @@
 정확도·평균 GMACs·실제 시간을 함께 비교하며 절약/균형/정확도 모드를 제공한다.
 [이번 브랜치 실측](reports/RESULTS.md) · [방법·범위·평가 한계](docs/method.md)
 
+**주 비교 기준은 main의 원본 ThinkingViT(공식 EMA·Drop 없음·3H→6H·τ=1, 80.304%)다.**
+KD 고정 50%는 보조 대조군으로만 사용한다. 보고서에 원본 대비 정확도·GMACs·시간과,
+같은 원본에 실행 최적화만 적용한 대조군을 함께 표시한다.
+
 ## 준비
 
 ```bash
@@ -36,6 +40,13 @@ cosine·seed 42, batch별 25/50% 유지, 0.5 KL(3H)+0.5 KL(Drop 6H)를 사용한
 
 # 전체 5만 장 정확도·분기별 GMACs
 .venv/bin/python -m efficient_vit evaluate --output results/accuracy.json
+
+# main의 Drop 이전 원본 ThinkingViT (KD 가중치를 로드하지 않음)
+.venv/bin/python -m efficient_vit evaluate --official --runtime native --policies full --output results/original.json
+.venv/bin/python -m efficient_vit benchmark --official --runtime native --policies full --output results/original-time.json
+
+# 원본 가중치·전체 토큰은 그대로 두고 실행 최적화만 한 대조군
+.venv/bin/python -m efficient_vit benchmark --official --runtime graph --policies full --output results/original-graph.json
 
 # 실제 batch-1 시간: 다른 GPU compute 작업이 없을 때
 .venv/bin/python -m efficient_vit benchmark --runtime graph --output results/graph.json

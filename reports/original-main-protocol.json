@@ -1,0 +1,23 @@
+{
+  "main_commit": "ac7ff72d9c3054f309cc6cd464f8ff97011c9497",
+  "native_repo_commit": "9254c4950d3159937ad682592d58a2be69708c42",
+  "main_early_exit_source_sha256": "1f2739653a223ecb95137f31689bcd6c640ad8f57f72d6d3507651dbbdf47857",
+  "checkpoint_sha256": "9ead984e9e39887eb037a42c189c58c0af14cd9c2771ad27b4b01876997242b5",
+  "weight_source": "NCPS/thinkingvit_deit-3h-6h-imagenet1k",
+  "thinking_stages": [
+    3,
+    6
+  ],
+  "threshold": 1.0,
+  "patches": 196,
+  "cls": 1,
+  "token_drop": false,
+  "kd_finetuning": false,
+  "precision": "FP32, AMP off, TF32 allowed",
+  "latency_baseline": "main actual early exit, gate synchronization included; no attention selector; both narrow and wide use original embedding and full tokens",
+  "historical_main_top1": 80.304,
+  "historical_main_gpu": "RTX 3090; its milliseconds are not reused for current GPU comparison",
+  "distribution_validation": true,
+  "current_accuracy_batch": 64,
+  "historical_main_accuracy_batch": 128
+}

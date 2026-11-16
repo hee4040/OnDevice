@@ -1,0 +1,65 @@
+{
+  "started": "2026-11-16T07:31:36.483267+00:00",
+  "command": "benchmark",
+  "checkpoint_sha256": "9ead984e9e39887eb037a42c189c58c0af14cd9c2771ad27b4b01876997242b5",
+  "weights_sha256": null,
+  "model_role": "official_optimized",
+  "gpu": "NVIDIA GeForce RTX 3070 Ti Laptop GPU",
+  "torch": "2.5.1+cu124",
+  "precision": "fp32",
+  "policies": {
+    "full": {
+      "gate": 1.0,
+      "boundaries": [],
+      "ratios": [
+        1.0
+      ]
+    }
+  },
+  "mac_convention": "1 MAC = multiply+accumulate; 384-channel embedding cached after narrow (native control recomputes); excludes norm/softmax/sort/gather/memory traffic",
+  "policy_selection": "locked source policies, no tuning on this evaluation",
+  "samples": 1000,
+  "runtime_matches_eager_on_real_images": 32,
+  "runtime": "graph",
+  "setup_seconds": 1.0943205750081688,
+  "measurement": "batch1 synchronized wall-clock; preprocessing/H2D/final argmax excluded; gate included",
+  "rows": [
+    {
+      "policy": "full",
+      "repeat": 0,
+      "mean_ms": 2.135026679839939,
+      "p95_ms": 3.8574941158294678,
+      "serial_images_per_s": 468.3782218941494,
+      "resident_allocated_mib": 739.76318359375,
+      "peak_allocated_mib": 739.77294921875,
+      "incremental_peak_mib": 0.009765625
+    },
+    {
+      "policy": "full",
+      "repeat": 1,
+      "mean_ms": 2.1485066532623023,
+      "p95_ms": 3.903435468673706,
+      "serial_images_per_s": 465.43956402536406,
+      "resident_allocated_mib": 739.76806640625,
+      "peak_allocated_mib": 739.77294921875,
+      "incremental_peak_mib": 0.0048828125
+    },
+    {
+      "policy": "full",
+      "repeat": 2,
+      "mean_ms": 2.2021687247324735,
+      "p95_ms": 3.9269065856933594,
+      "serial_images_per_s": 454.0978122016891,
+      "resident_allocated_mib": 739.76806640625,
+      "peak_allocated_mib": 739.77294921875,
+      "incremental_peak_mib": 0.0048828125
+    }
+  ],
+  "clean": true,
+  "latency_ms": {
+    "full": 2.1485066532623023
+  },
+  "finished": "2026-11-16T07:31:50.508085+00:00",
+  "gpu_monitor_samples": 7,
+  "other_gpu_process_observations": []
+}

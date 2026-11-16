@@ -46,7 +46,7 @@ def entropy10(logits):
     return -(probabilities * probabilities.clamp(eps, 1 - eps).log()).sum(-1)
 
 
-def macs(ratio, cached_embedding=True):
+def macs(ratio, cached_embedding=True, capture_cls=True):
     """Actual executed dimensions; matmul/conv MACs, not memory or kernel costs."""
     patches, tokens, d, wide = 196, 197, 192, 384
     patch = patches * 3 * 16 * 16 * wide
@@ -54,5 +54,5 @@ def macs(ratio, cached_embedding=True):
     narrow = patch + 12 * block(tokens, d) + d * 1000
     n = 1 + round(patches * ratio)
     stage2 = (0 if cached_embedding else patch) + tokens * d * wide + 12 * block(n, wide) + wide * 1000
-    # Last narrow CLS query is extracted for selection, even for the full control.
-    return narrow + tokens * d, stage2
+    # The original paper/main control disables this extra selector query.
+    return narrow + (tokens * d if capture_cls else 0), stage2

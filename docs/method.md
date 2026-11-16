@@ -1,5 +1,12 @@
 # 통합 범위와 비교 기준
 
+**주 기준은 `origin/main`의 Drop/KD 이전 ThinkingViT다.** 공식 EMA
+`9ead984e…9742b5`, 공식 코드 `9254c495…68c42`, 3H→6H·τ=1·197개 전체 토큰·FP32/TF32를 사용한다.
+`OriginalEngine`은 main의 실제 early-exit 경로를 재현하며 토큰 선택용 hook/QK 계산을 넣지 않는다.
+기록상 Top-1은 80.304%다. 이 가중치가 중간 KD의 가중치와 다르므로, KD 79.67%를 원본 기준으로
+대체하지 않는다. main 과거 GPU는 RTX 3090이므로 원본 시간은 현재 GPU에서 다시 잰다.
+가중치·정책을 유지한 '공식 원본 + 실행 최적화만'도 측정해 runtime 개선과 알고리즘 개선을 구분한다.
+
 새 브랜치 `integration/efficient-kd`는 다음 네 가지를 통합한다.
 
 1. 전체 가중치 KD: 0.5 KL(3H)+0.5 KL(Drop 6H), 공식 EMA Teacher, T=1.

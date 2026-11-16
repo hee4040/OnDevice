@@ -88,3 +88,42 @@ class NativeEngine:
         if code >= 0:
             logits = native_wide(self.native, images, features, scores, policy.ratios[code])
         return logits, torch.tensor([code], device=images.device), entropy
+
+
+class OriginalEngine:
+    """Original paper's full-token 3H -> entropy gate -> 6H, without CLS hooks."""
+    def __init__(self, native):
+        self.native = native
+
+    @torch.inference_mode()
+    def narrow(self, images):
+        self.native.p = .5
+        features = self.native.forward_features(images, .5)
+        logits = self.native.forward_head(features)
+        return features, logits, None, self.native.entropy(logits).flatten()
+
+    @torch.inference_mode()
+    def predict(self, images, policy, narrow_result=None):
+        from .policy import PRESETS
+        policy = PRESETS[policy] if isinstance(policy, str) else policy
+        if policy.ratios != (1.,) or policy.gate != 1.:
+            raise ValueError("Original ThinkingViT control requires full tokens and tau=1")
+        features, logits, _, entropy = self.narrow(images) if narrow_result is None else narrow_result
+        if len(images) == 1:
+            if (entropy < 1.).item():
+                return logits, torch.full_like(entropy, -1, dtype=torch.long), entropy
+            self.native.p = 1.
+            wide = self.native.forward_features(images, 1., features, (3, 6))
+            return self.native.forward_head(wide), torch.zeros_like(entropy, dtype=torch.long), entropy
+        selected = (~(entropy < 1.)).nonzero(as_tuple=True)[0]
+        codes = torch.where(entropy < 1., -1, 0).long()
+        if not len(selected):
+            return logits, codes, entropy
+        self.native.p = 1.
+        if len(selected) == len(images):
+            wide = self.native.forward_features(images, 1., features, (3, 6))
+            return self.native.forward_head(wide), codes, entropy
+        wide = self.native.forward_features(images[selected], 1., features[selected], (3, 6))
+        result = logits.clone()
+        result.index_copy_(0, selected, self.native.forward_head(wide))
+        return result, codes, entropy

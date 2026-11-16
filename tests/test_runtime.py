@@ -8,6 +8,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from efficient_vit.model import linear
 from efficient_vit.policy import PRESETS, Policy, entropy10, macs
 from efficient_vit.runtime import Engine
+from efficient_vit.verify import OriginalEngine
 
 
 class EchoModel(nn.Module):
@@ -28,6 +29,28 @@ class EchoModel(nn.Module):
 
 
 class RuntimeTests(unittest.TestCase):
+    def test_main_baseline_exits_without_selector_and_retains_all_wide_tokens(self):
+        class Native:
+            def __init__(self):
+                self.calls = []
+            def forward_features(self, images, width, previous=None, stages=None):
+                self.calls.append((width, len(images)))
+                return images if width == .5 else images * 2
+            def forward_head(self, features):
+                return features
+            def entropy(self, logits):
+                return logits[:, :1]
+        native = Native()  # No attention modules: this baseline must not access a selector.
+        engine = OriginalEngine(native)
+        output, codes, _ = engine.predict(torch.tensor([[.2, .3], [1., .4]]), "full")
+        self.assertEqual(codes.tolist(), [-1, 0])
+        self.assertEqual(native.calls, [(.5, 2), (1., 1)])
+        torch.testing.assert_close(output, torch.tensor([[.2, .3], [2., .8]]))
+        native.calls.clear()
+        engine.predict(torch.tensor([[.2, .3]]), "full")
+        self.assertEqual(native.calls, [(.5, 1)])
+        self.assertEqual(macs(1, capture_cls=True)[0]-macs(1, capture_cls=False)[0], 197*192)
+
     def test_policy_boundaries_and_real_conditional_dispatch(self):
         model = EchoModel()
         engine = Engine(model)

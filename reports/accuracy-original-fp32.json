@@ -1,0 +1,34 @@
+{
+  "started": "2026-11-16T07:27:14.673816+00:00",
+  "command": "evaluate",
+  "checkpoint_sha256": "9ead984e9e39887eb037a42c189c58c0af14cd9c2771ad27b4b01876997242b5",
+  "weights_sha256": null,
+  "model_role": "original_thinkingvit",
+  "gpu": "NVIDIA GeForce RTX 3070 Ti Laptop GPU",
+  "torch": "2.5.1+cu124",
+  "precision": "fp32",
+  "policies": {
+    "full": {
+      "gate": 1.0,
+      "boundaries": [],
+      "ratios": [
+        1.0
+      ]
+    }
+  },
+  "mac_convention": "1 MAC = multiply+accumulate; 384-channel embedding cached after narrow (native control recomputes); excludes norm/softmax/sort/gather/memory traffic",
+  "policy_selection": "locked source policies, no tuning on this evaluation",
+  "samples": 50000,
+  "runtime": "native",
+  "accuracy": {
+    "full": {
+      "top1": 80.304,
+      "gmacs": 2.9437800677376,
+      "path_counts": {
+        "exit": 31996,
+        "1.0": 18004
+      }
+    }
+  },
+  "finished": "2026-11-16T07:28:52.495640+00:00"
+}

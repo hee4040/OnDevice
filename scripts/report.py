@@ -17,8 +17,10 @@ def main():
     output = ROOT / "reports"
     output.mkdir(exist_ok=True)
     data = {}
-    for name in ("accuracy-fp32", "accuracy-native-fp32", "accuracy-fp16", "native_equivalence", "validate-fp32", "validate-fp16", "validate-real-fp32",
-                 "latency-graph-fp32", "latency-eager-fp32", "latency-native-fp32", "latency-graph-fp16"):
+    for name in ("accuracy-fp32", "accuracy-native-fp32", "accuracy-fp16", "accuracy-original-fp32", "accuracy-official-optimized-fp32",
+                 "native_equivalence", "original_equivalence", "validate-fp32", "validate-fp16", "validate-real-fp32",
+                 "latency-graph-fp32", "latency-eager-fp32", "latency-native-fp32", "latency-graph-fp16",
+                 "latency-original-fp32", "latency-official-graph-fp32", "latency-integrated-vs-original-fp32"):
         path = args.source / f"{name}.json"
         if not path.exists():
             continue
@@ -31,12 +33,38 @@ def main():
         data[name] = value
         (output / f"{name}.json").write_text(json.dumps(value, indent=2, ensure_ascii=False) + "\n")
     accuracy = data.get("accuracy-fp32", {}).get("accuracy", {})
-    lines = ["# 통합 KD 실측 결과", "", f"갱신 UTC: {datetime.now(timezone.utc).isoformat()}", "",
+    original = data.get("accuracy-original-fp32", {}).get("accuracy", {}).get("full")
+    lines = ["# 원본 ThinkingViT 대비 통합 모델 실측", "", f"갱신 UTC: {datetime.now(timezone.utc).isoformat()}", "",
         "브랜치: `integration/efficient-kd`. GPU: RTX 3070 Ti Laptop 8GB. FP32/TF32.",
+        "**주 대조군은 main의 공식 EMA ThinkingViT다. KD 학습·Drop 없이 3H→6H, 토큰 197개 전체, τ=1의 실제 early exit다.**",
+        "원본 체크포인트 SHA-256과 공식 모델 revision은 main과 같다. `original-main-protocol.json`에 근거를 보존한다.",
         "정확도는 ImageNet validation 50,000장, 시간은 같은 seed-42 입력 1,000장·batch 1·warmup 50장·3회다.",
         "시간은 반복 평균의 중앙값이다. gate·선택·recycling을 포함하고 전처리/H2D/최종 argmax는 제외한다.",
-        "표의 native는 이전 동적 폭 코드, eager는 고정 폭 코드, Graph는 고정 폭+CUDA Graph다.",
-        "서로 다른 날짜의 과거 시간 대신 이번 세션의 대조군을 사용한다.", "",
+        "원본은 토큰 선택용 CLS attention을 추가 계산하지 않는다. main의 과거 RTX 3090 시간은 현재 GPU 비교에 재사용하지 않는다.",
+        "현재 정확도 batch는 64(main 과거 측정은 128)이며 원본 80.304%·6H 진입 18,004/50,000을 재현했다.", "",
+        "| 모델 / 정책 | Top-1 | GMACs | 원본 대비 정확도 %p | 원본 대비 연산량 감소 | 실제 ms |",
+        "| --- | ---: | ---: | ---: | ---: | ---: |"]
+    def ms(key, policy):
+        timing = data.get(key, {})
+        value = timing.get("latency_ms", {}).get(policy) if timing.get("clean") else None
+        return f"{value:.3f}" if value is not None else "미측정/오염 제외"
+    if original:
+        lines.append(f"| main 원본 ThinkingViT, 원래 실행 | {original['top1']:.3f}% | {original['gmacs']:.4f} | 기준 | 기준 | {ms('latency-original-fp32','full')} |")
+        optimized = data.get("accuracy-official-optimized-fp32", {}).get("accuracy", {}).get("full")
+        if optimized:
+            lines.append(f"| 같은 공식 가중치·전체 토큰 + 실행 최적화만 | {optimized['top1']:.3f}% | {optimized['gmacs']:.4f} | "
+                f"{optimized['top1']-original['top1']:+.3f} | {100*(1-optimized['gmacs']/original['gmacs']):.2f}% | {ms('latency-official-graph-fp32','full')} |")
+        names = {"kd50": "통합 kd50 (보조)", "economy": "통합 절약", "balanced": "통합 기본", "accuracy": "통합 정확도 우선", "full": "KD 학생 전체 토큰 (보조)"}
+        for name in ("economy", "balanced", "accuracy", "kd50", "full"):
+            value = accuracy[name]
+            lines.append(f"| {names[name]} | {value['top1']:.3f}% | {value['gmacs']:.4f} | {value['top1']-original['top1']:+.3f} | "
+                f"{100*(1-value['gmacs']/original['gmacs']):.2f}% | {ms('latency-integrated-vs-original-fp32',name)} |")
+        lines += ["", "원본 대비 시간 차이는 정책과 실행 최적화의 효과를 함께 포함한다. 위의 '실행 최적화만' 행으로",
+            "같은 가중치·같은 토큰·같은 gate를 유지한 runtime 이득을 따로 확인한다.",
+            "원본의 GMACs는 실제 early exit 실행량이다. 공식 raw forward가 6H까지 항상 계산한 뒤 출력을 고르는",
+            "실행 방식의 전체 연산량/시간과 섞지 않는다."]
+    lines += ["", "## 보조 분석: 중간 KD 모델 대비", "",
+        "아래는 주 베이스라인이 아니라, KD 이후 통합 정책·embedding 재사용 효과를 분리하는 대조군이다.", "",
         "| 정책 | Top-1 | GMACs | native ms | 고정 폭 eager ms | Graph ms | KD 대비 연산량 |",
         "| --- | ---: | ---: | ---: | ---: | ---: | ---: |"]
     native_accuracy = data.get("accuracy-native-fp32", {}).get("accuracy", {})

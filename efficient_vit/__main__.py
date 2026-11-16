@@ -14,7 +14,7 @@ import torch
 from .model import ROOT, load_native, specialize
 from .policy import PRESETS, macs
 from .runtime import Engine
-from .verify import verify, NativeEngine, native_narrow
+from .verify import verify, NativeEngine, OriginalEngine, native_narrow
 
 
 def atomic(path, value):
@@ -58,6 +58,11 @@ def main():
     parser.add_argument("--real-images", action="store_true", help="Validate native/eager/Graph on 32 real images as well")
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
+    original_control = args.official and args.runtime == "native"
+    if original_control and args.policies != ["full"]:
+        parser.error("Original ThinkingViT baseline: use --official --runtime native --policies full")
+    if original_control and args.precision != "fp32":
+        parser.error("main's original baseline uses FP32")
     if args.runtime == "native" and args.command == "validate":
         parser.error("Validate eager/Graph against native, rather than native against itself")
     args.samples = args.samples or (50000 if args.command == "evaluate" else 1000)
@@ -69,7 +74,7 @@ def main():
     torch.set_num_threads(1)
     torch.backends.cuda.matmul.allow_tf32 = True
     torch.backends.cudnn.benchmark = True
-    torch.distributions.Distribution.set_default_validate_args(False)
+    torch.distributions.Distribution.set_default_validate_args(original_control)
     if args.command == "benchmark" and processes():
         raise RuntimeError("Other GPU compute processes active; benchmark later")
     dtype = torch.float32 if args.precision == "fp32" else torch.float16
@@ -79,6 +84,8 @@ def main():
     result = {"started": datetime.now(timezone.utc).isoformat(), "command": args.command,
         "checkpoint_sha256": hashlib.sha256(args.checkpoint.read_bytes()).hexdigest(),
         "weights_sha256": None if args.official else hashlib.sha256(args.weights.read_bytes()).hexdigest(),
+        "model_role": "original_thinkingvit" if original_control else ("official_optimized" if args.official else "kd_integrated"),
+        "distribution_validation": original_control,
         "gpu": torch.cuda.get_device_name(), "torch": torch.__version__, "precision": args.precision,
         "policies": {name: asdict(PRESETS[name]) for name in args.policies},
         "mac_convention": "1 MAC = multiply+accumulate; 384-channel embedding cached after narrow (native control recomputes); excludes norm/softmax/sort/gather/memory traffic",
@@ -103,14 +110,14 @@ def main():
         result["samples"], result["indices"] = len(dataset), indices
         if args.command == "evaluate":
             from torch.utils.data import DataLoader
-            engine = NativeEngine(native) if args.runtime == "native" else Engine(model, "eager")
+            engine = OriginalEngine(native) if original_control else (NativeEngine(native) if args.runtime == "native" else Engine(model, "eager"))
             result["runtime"] = "native" if args.runtime == "native" else "eager"
             loader = DataLoader(dataset, batch_size=args.batch_size, num_workers=args.workers, pin_memory=True)
             results = {name: {"correct": [], "codes": [], "predicted": []} for name in args.policies}
             with torch.inference_mode():
                 for batch, (images, targets) in enumerate(loader, 1):
                     x, y = images.cuda().to(dtype), targets.cuda()
-                    narrow = native_narrow(native, x) if args.runtime == "native" else model.narrow(x, return_embedding=True)
+                    narrow = engine.narrow(x) if original_control else (native_narrow(native, x) if args.runtime == "native" else model.narrow(x, return_embedding=True))
                     for name in args.policies:
                         logits, codes, entropy = engine.predict(x, name, narrow)
                         results[name]["correct"].append((logits.argmax(1) == y).cpu())
@@ -123,7 +130,7 @@ def main():
             result["accuracy"] = {}
             for name, values in results.items():
                 policy = PRESETS[name]
-                cost = torch.full((len(dataset),), float(macs(.5)[0]), dtype=torch.float64)
+                cost = torch.full((len(dataset),), float(macs(.5, capture_cls=not original_control)[0]), dtype=torch.float64)
                 counts = {"exit": int((values["codes"] == -1).sum())}
                 for code, ratio in enumerate(policy.ratios):
                     selected = values["codes"] == code
@@ -138,7 +145,7 @@ def main():
                 del native
             inputs = [dataset[i][0].unsqueeze(0).cuda().to(dtype) for i in range(len(dataset))]
             start = time.perf_counter()
-            engine = NativeEngine(native) if args.runtime == "native" else Engine(model, args.runtime)
+            engine = OriginalEngine(native) if original_control else (NativeEngine(native) if args.runtime == "native" else Engine(model, args.runtime))
             reference_engine = Engine(model, "eager")
             with torch.inference_mode():
                 for name in args.policies:

@@ -1,0 +1,66 @@
+{
+  "started": "2026-11-16T07:35:17.744699+00:00",
+  "command": "benchmark",
+  "checkpoint_sha256": "9ead984e9e39887eb037a42c189c58c0af14cd9c2771ad27b4b01876997242b5",
+  "weights_sha256": null,
+  "model_role": "original_thinkingvit",
+  "distribution_validation": true,
+  "gpu": "NVIDIA GeForce RTX 3070 Ti Laptop GPU",
+  "torch": "2.5.1+cu124",
+  "precision": "fp32",
+  "policies": {
+    "full": {
+      "gate": 1.0,
+      "boundaries": [],
+      "ratios": [
+        1.0
+      ]
+    }
+  },
+  "mac_convention": "1 MAC = multiply+accumulate; 384-channel embedding cached after narrow (native control recomputes); excludes norm/softmax/sort/gather/memory traffic",
+  "policy_selection": "locked source policies, no tuning on this evaluation",
+  "samples": 1000,
+  "runtime_matches_eager_on_real_images": 32,
+  "runtime": "native",
+  "setup_seconds": 0.8490714740473777,
+  "measurement": "batch1 synchronized wall-clock; preprocessing/H2D/final argmax excluded; gate included",
+  "rows": [
+    {
+      "policy": "full",
+      "repeat": 0,
+      "mean_ms": 9.654269009130076,
+      "p95_ms": 17.364072799682617,
+      "serial_images_per_s": 103.5811203369511,
+      "resident_allocated_mib": 668.47607421875,
+      "peak_allocated_mib": 672.7646484375,
+      "incremental_peak_mib": 4.28857421875
+    },
+    {
+      "policy": "full",
+      "repeat": 1,
+      "mean_ms": 10.031606073491275,
+      "p95_ms": 18.605548858642578,
+      "serial_images_per_s": 99.68493506164685,
+      "resident_allocated_mib": 668.48095703125,
+      "peak_allocated_mib": 672.7646484375,
+      "incremental_peak_mib": 4.28369140625
+    },
+    {
+      "policy": "full",
+      "repeat": 2,
+      "mean_ms": 10.819488502573222,
+      "p95_ms": 19.6491756439209,
+      "serial_images_per_s": 92.42581105032534,
+      "resident_allocated_mib": 668.48095703125,
+      "peak_allocated_mib": 672.7646484375,
+      "incremental_peak_mib": 4.28369140625
+    }
+  ],
+  "clean": true,
+  "latency_ms": {
+    "full": 10.031606073491275
+  },
+  "finished": "2026-11-16T07:35:57.377664+00:00",
+  "gpu_monitor_samples": 31,
+  "other_gpu_process_observations": []
+}
