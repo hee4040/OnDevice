@@ -1,0 +1,20 @@
+{
+  "sample_size": 5000,
+  "routed": 1747,
+  "seed": 42,
+  "threshold": 1.0,
+  "policy": "staged_75, 4x4 regions, top 6 attention patches per region then global Top-K",
+  "original_top1": 80.96,
+  "spatial_top1": 80.92,
+  "difference_pp": -0.04,
+  "ci95_pp": [
+    -0.16396872322028516,
+    0.08396872322028517
+  ],
+  "spatial_only_correct": 4,
+  "original_only_correct": 6,
+  "mean_replaced_patches_on_routed": 2.7406983400114484,
+  "images_with_changed_patch_set": 1502,
+  "same_analytic_wide_gmacs": 4.017509376,
+  "note": "Small paired pilot on previously used validation; interval descriptive, not independent confirmation."
+}
