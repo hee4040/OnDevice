@@ -1,152 +1,231 @@
-# Efficient ThinkingViT — 최종 통합 결과
+# Adaptive Token Allocation for Efficient ThinkingViT via Token Pruning and Knowledge Distillation
 
-`integration/efficient-kd` 브랜치는 **기존 전체 KD 학습**, **종료 게이트·토큰 유지율 공동 조정**, **중복 임베딩 재사용**, **고정 폭 CUDA Graph 실행**을 통합한다.
-정확도만 높이는 것이 아니라 **정확도–평균 연산량–실제 지연시간**을 함께 비교한다.
+Token Pruning과 Knowledge Distillation을 활용한 ThinkingViT의 적응형 추론 효율 최적화
 
-**주 비교 기준은 현재 `main`의 Drop 이전 ThinkingViT다.** 공식 EMA 가중치, 3H→6H, 토큰 전체 유지, entropy τ=1의 실제 early-exit 경로를 사용한다.
-이번 GPU에서도 원본 정확도 **80.304%**와 6H 진입 **18,004/50,000장**을 재현했다. KD 79.67%는 중간 모델의 보조 대조군이며 원본 기준을 대신하지 않는다.
+## 1. 연구 주제와 제안 방법
 
-[상세 측정 결과](reports/RESULTS.md) · [구현·비교 방법](docs/method.md) · [main 베이스라인 근거](reports/original-main-protocol.json)
+ThinkingViT는 3H 예측의 엔트로피에 따라 3H에서 종료하거나 6H로 확장한다. 기본 6H 경로는 패치 토큰을 모두 처리한다. 제안 방법은 3H 마지막 블록의 CLS Attention으로 패치 토큰을 정렬하고, 선택한 Top-K와 CLS 토큰만 6H에 전달한다. 공식 ThinkingViT EMA를 Teacher로 사용한 Knowledge Distillation(KD)으로 압축 경로의 정확도를 회복한다.
 
-## 1. 최종 결과: main 원본 대비
+중심 기여는 **3H 종료 조건과 6H Token Retention Ratio의 공동 조정**이다. KD 가중치를 고정한 뒤 3H 상위 10개 클래스 확률을 재정규화한 엔트로피로 이미지별 계산을 배분한다. 아래는 사전 고정한 Balanced 정책이다.
 
-ImageNet-1K validation **50,000장**, FP32·TF32 허용. GMACs는 이미지당 평균이다.
-시간은 같은 RTX 3070 Ti Laptop GPU에서 같은 1,000장을 batch 1로 처리한 **3회 반복 평균의 중앙값**이다.
+| 3H 엔트로피 | 추론 경로 |
+| --- | --- |
+| 0.8 미만 | 3H 종료 |
+| 0.8 이상 1.25 미만 | 6H, 패치 25% 유지 |
+| 1.25 이상 | 6H, 패치 50% 유지 |
 
-| 모델 / 모드 | Top-1 | 원본 대비 정확도 | 평균 GMACs | 원본 대비 연산량 감소 | 이미지당 시간 |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| **main 원본 ThinkingViT** | **80.304%** | 기준 | **2.9438** | 기준 | **10.032ms** |
-| 같은 원본 + 실행 최적화만 | 80.304% | +0.000%p | 2.9230 | 0.71% | 2.149ms |
-| 통합 절약 `economy` | 78.388% | −1.916%p | 1.6801 | **42.93%** | **1.759ms** |
-| **통합 기본 `balanced`** | **80.018%** | **−0.286%p** | **2.0714** | **29.63%** | **1.909ms** |
-| 통합 정확도 우선 `accuracy` | **80.438%** | **+0.134%p** | **2.2651** | **23.05%** | **2.038ms** |
+Accuracy 정책은 경계 0.75 / 1.15 / 1.75와 유지율 25% / 50% / 75%를 사용한다.
 
-- **기본 모드:** 원본 대비 정확도 0.286%p를 내주고 연산량을 29.63% 줄였다.
-- **정확도 우선:** 이번 평가에서는 원본보다 정확도가 0.134%p 높으면서 연산량은 23.05% 적었다.
-- **절약 모드:** 정확도 손실을 더 허용해 연산량을 42.93% 줄였다.
+**평가 기준**은 전달받은 **RTX 3070 학습 KD 가중치**(`kd_student.pth`, SHA-256 `37e9a36a3a33edc1baf7ef06c93ddb970cc3a4fafea92a413acc24eea2d628ae`)와 **RTX 4090 측정**이다. 공식 EMA는 원본과 학습 전 대조군에 사용한다. Top-1 및 평균 GMACs는 ImageNet-1K validation 50,000장, 통합 GPU 지연시간은 배치 1, 고정된 1,000장, 3회 반복의 평균 지연시간 중앙값이다. 시간에는 게이트 판단과 GPU 동기화를 포함하며, 전처리·입력 전송·최종 argmax는 제외한다. PyTorch 2.5.1+cu124를 사용했다. 기본 정밀도는 FP32이며 TF32를 허용한다. MAC은 곱셈-누산 한 번으로 계산하며 정렬·메모리 이동은 지연시간에 반영된다. [4090 검증 로그](results/rtx4090-20261122T105147Z/validate-real-fp32.json)
 
-시간 단축에는 **정책 변경과 실행 최적화의 효과가 함께** 들어 있다. 알고리즘만으로 약 5배 가속됐다고 해석하지 않는다.
-같은 원본 가중치·전체 토큰·τ=1을 유지한 실행 최적화 대조군은 **2.149ms**다.
-동일한 실행 최적화 조건에서 비교하면 통합 기본은 **1.909ms**, 정확도 우선은 **2.038ms**다.
-원본에 실행 최적화만 적용했을 때는 5만 장의 예측·정오답·분기 선택이 모두 원본과 일치했다.
+## 2. Main Experiment
 
-`main`의 과거 RTX 3090 시간은 이 표에 재사용하지 않았다. 현재 장치에서 원본과 통합 모델을 다시 측정했다.
-현재 정확도 배치는 64이며 `main`의 과거 측정은 128이다. 모델 가중치·공식 코드 revision·전처리·gate 조건은 맞추고 원본 정확도를 재현했다.
+### 2.1 Token Drop + KD
 
-## 2. 어떤 모드를 쓰면 되는가
+RTX 4090에서 τ=1로 평가했다. 이 표의 GMACs는 레이어별 평가기의 동일 MAC 규약으로 산출했다.
 
-| 모드 | 선택 기준 | 실제 정책 |
-| --- | --- | --- |
-| `economy` | 평균 연산량 절감 우선 | entropy < 1이면 종료, 나머지는 25% 유지 |
-| `balanced` | 기본 정확도–연산량 균형 | entropy < 0.8이면 종료, 0.8 이상 1.25 미만은 25%, 1.25 이상은 50% 유지 |
-| `accuracy` | 정확도를 더 확보 | entropy < 0.75이면 종료, 1.15 미만은 25%, 1.75 미만은 50%, 그 이상은 75% 유지 |
-
-유지율은 **버리는 비율이 아니라 남기는 패치 비율**이다. 원래 패치 196개와 별도로 CLS는 항상 남긴다.
-
-| 패치 유지율 | 유지 패치 | CLS 포함 6H 입력 |
+| 방법 | Top-1 | 평균 GMACs |
 | --- | ---: | ---: |
-| 25% | 49 | 50토큰 |
-| 50% | 98 | 99토큰 |
-| 75% | 147 | 148토큰 |
-| 원본 100% | 196 | 197토큰 |
+| 공식 EMA, 전체 토큰 | 80.304% | 2.9149 |
+| 공식 EMA, 25% 유지 | 73.814% | 1.6705 |
+| 공식 EMA, 50% 유지 | 78.610% | 2.0693 |
+| 공식 EMA, 75% 유지 | 79.952% | 2.4841 |
+| 3070 KD, 25% 유지 | 78.388% | 1.6721 |
+| **3070 KD, 50% 유지** | **79.672%** | **2.0725** |
+| 3070 KD, 75% 유지 | 79.980% | 2.4889 |
 
-`kd50`과 `full`도 제공하지만 보조 비교용이다. 둘 다 **KD 학생 가중치**를 사용한다.
-특히 기본 명령의 `full`은 **main의 공식 원본이 아니다**. 원본 비교에는 반드시 `--official --runtime native --policies full`을 사용한다.
+50% 유지에서 KD로 **+1.062%p**를 회복했다. 공식 전체 토큰 기준 대비 연산은 약 **29%** 줄었고 정확도 차이는 **−0.632%p**였다. [학습 전](results/rtx4090-20261122T105147Z/drop-before-kd.log) · [3070 KD](results/rtx4090-20261122T105147Z/drop-after-kd.log) · [공식 EMA GMACs](results/rtx4090-20261122T105147Z/layerwise-accuracy/summary.json) · [3070 KD GMACs](results/rtx4090-3070-kd/layerwise-accuracy/summary.json)
 
-## 3. FP16은 별도 선택 사항
+### 2.2 Adaptive Token Allocation
 
-아래는 FP16으로 다시 평가한 5만 장 정확도와 Graph 지연시간이다. FP32 정확도와 섞어서 보고하지 않는다.
+같은 3070 가중치로 RTX 4090에서 3H, 6H 25%, 6H 50% 예측을 생성했다. 고정 정책은 그대로 평가했고, 예산 탐색 정책은 시드 42로 나눈 25,000장에서 선택한 뒤 나머지 25,000장에서 확인했다.
 
-| 모드 | FP16 Top-1 | 해당 모드 FP32 대비 | 평균 GMACs | Graph 시간 |
+| 정책 | 전체 50K Top-1 | 평균 GMACs | 홀드아웃 25K Top-1 | 홀드아웃 GMACs |
 | --- | ---: | ---: | ---: | ---: |
-| `economy` | 78.380% | −0.008%p | 1.6801 | 1.195ms |
-| `balanced` | 79.996% | −0.022%p | 2.0713 | 1.285ms |
-| `accuracy` | 80.408% | −0.030%p | 2.2651 | 1.329ms |
+| Fixed Drop 50%, τ=1 | 79.672% | 2.0805 | 79.288% | 2.0851 |
+| 사전 고정 Balanced | 80.022% | 2.0714 | — | — |
+| Joint, 기준 예산에서 탐색 | **80.090%** | **2.0792** | **79.652%** | **2.0830** |
+| 사전 고정 Accuracy, 75% 경로 포함 | 80.440% | 2.2651 | — | — |
 
-FP16 기본 모드는 **79.996%로 80%에 조금 못 미쳤다**. 이번 측정에서 정확도 80% 이상과 낮은 연산량을 함께 본 기본 선택은 FP32 `balanced`다.
-지연시간을 더 중시하면 별도 검증된 FP16 `accuracy`를 선택할 수 있다.
+기준 예산 Joint는 경계 0.75 / 1.30을 선택했다. Fixed 대비 전체 **+0.418%p**, 홀드아웃 **+0.364%p**였으며 양쪽 모두 GMACs가 소폭 낮았다. 홀드아웃의 이미지별 짝지은 부트스트랩 95% 구간은 +0.160~+0.564%p였다(20,000회, seed 42). 정책 탐색에는 추가 모델 학습이 없다. 기존 Target80의 **79.652% → 80.076%**는 이전 저장 예측을 재계산한 결과다. 이 표의 주 결과는 3070 가중치를 RTX 4090에서 직접 평가한 값이다. [새 정책 원자료](results/rtx4090-3070-kd/allocation.json) · [Target80 이전 기록](results/rtx4090-20261122T105147Z/target80-replay-retry.log)
 
-## 4. 통합한 구현
+### 2.3 최종 통합 모델
 
-### 4.1 전체 KD 가중치
+| 모델 | 정밀도 | Top-1 | 평균 GMACs | GPU 지연시간 |
+| --- | --- | ---: | ---: | ---: |
+| 공식 EMA Native | FP32 | 80.304% | 2.9438 | 5.835 ms |
+| 공식 EMA + 고정 폭·임베딩 재사용·CUDA Graph | FP32 | 80.304% | 2.9230 | 1.222 ms |
+| 3070 KD Economy + CUDA Graph | FP32 | 78.388% | 1.6801 | 1.069 ms |
+| 3070 KD Balanced + CUDA Graph | FP32 | 80.022% | 2.0714 | 1.156 ms |
+| **3070 KD Accuracy + CUDA Graph** | **FP32** | **80.440%** | **2.2651** | **1.188 ms** |
+| 3070 KD Fixed 50% + CUDA Graph | FP32 | 79.672% | 2.0805 | 1.115 ms |
+| 3070 KD 전체 토큰 + CUDA Graph | FP32 | 80.040% | 2.9294 | 1.218 ms |
+| 공식 EMA + 고정 폭·임베딩 재사용·CUDA Graph | FP16 | 80.300% | 2.9236 | 0.672 ms |
+| 3070 KD Economy + CUDA Graph | FP16 | 78.420% | 1.6802 | 0.629 ms |
+| 3070 KD Balanced + CUDA Graph | FP16 | 80.034% | 2.0717 | 0.670 ms |
+| 3070 KD Accuracy + CUDA Graph | FP16 | 80.438% | 2.2652 | 0.691 ms |
+| 3070 KD Fixed 50% + CUDA Graph | FP16 | 79.662% | 2.0808 | 0.640 ms |
+| 3070 KD 전체 토큰 + CUDA Graph | FP16 | 80.042% | 2.9298 | 0.669 ms |
 
-정확도가 가장 좋았던 기존 전체 가중치 KD를 사용한다. Teacher는 공식 EMA의 3H 및 전체 토큰 6H이며 손실은 다음과 같다.
+FP32 Accuracy는 공식 Native 대비 **+0.136%p, GMACs 23.05% 감소, 지연시간 79.6% 감소**였다. 동일한 FP32 CUDA Graph 실행기에서 공식 EMA와 비교하면 GMACs는 **22.5%**, 지연시간은 **2.8%** 감소했다. 같은 FP16 CUDA Graph에서 Accuracy는 공식 EMA보다 +0.138%p 높았으며 지연시간은 0.019 ms 길었다. Balanced는 80.034% / 0.670 ms였다. 공식 EMA의 Native → 최적화 실행 차이는 **5.835 → 1.222 ms**로, 전체 시간 개선에서 실행 최적화가 차지하는 부분을 보여준다. [FP32 정확도](results/rtx4090-20261122T105147Z/accuracy-fp32.json) · [FP32 GPU 시간](results/rtx4090-20261122T105147Z/latency-integrated-vs-original-fp32.json) · [KD FP16 GPU 시간](results/rtx4090-20261122T105147Z/latency-graph-fp16.json) · [공식 FP16 정확도](results/rtx4090-3070-kd/official-fp16-accuracy.json) · [공식 FP16 GPU 시간](results/rtx4090-3070-kd/official-fp16-latency.json)
 
-```text
-Loss = 0.5 × KL(Student 3H, Teacher 3H)
-     + 0.5 × KL(Student Drop 6H, Teacher Full 6H)
-T = 1
-```
+아래 p95·직렬 처리량·peak CUDA allocated는 각 행의 평균 지연시간이 중앙값인 반복에서 읽었다. 메모리는 PyTorch가 기록한 프로세스 할당량이다.
 
-**이번 최종 수치는 새 장시간 재학습 결과가 아니다.** 이미 완료된 KD 체크포인트에 고정 정책과 실행 최적화를 통합해 직접 평가했다.
-정리한 학습 코드도 포함했지만 이번 작업에서는 2 update의 실제 역전파·저장 실행 점검만 했다.
+| 모델 | p95 | 직렬 처리량 | Peak CUDA allocated |
+| --- | ---: | ---: | ---: |
+| 공식 EMA Native FP32 | 9.887 ms | 171.4 img/s | 672.8 MiB |
+| 공식 EMA Graph FP32 | 1.952 ms | 818.6 img/s | 739.8 MiB |
+| KD Accuracy Graph FP32 | 1.710 ms | 841.8 img/s | 739.8 MiB |
+| 공식 EMA Graph FP16 | 1.008 ms | 1,488.0 img/s | 399.1 MiB |
+| KD Accuracy Graph FP16 | 1.016 ms | 1,446.6 img/s | 399.1 MiB |
 
-### 4.2 게이트와 토큰 유지율 공동 조정
+## 3. Ablation Study
 
-3H에서 끝낼 이미지, 작은 6H를 적용할 이미지, 더 많은 토큰을 줄 이미지에 계산을 배분한다.
-새 gate 네트워크를 학습하지 않고 기존 상위 10개 클래스 확률을 재정규화한 entropy를 사용한다.
+코드는 [실험별 파일·원본 커밋·재현 명령](experiments/README.md)에 정리했다.
 
-경계는 `codex/target80-results`의 고정 정책에서 가져왔다. 그때의 KD 가중치와 이 컴퓨터의 KD 가중치는 다르므로
-기존 보고의 80.076%를 이번 결과로 복사하지 않았다. 이번 데이터로 경계나 epoch를 다시 선택하지 않고 새로 측정했다.
+### 3.1 Token 처리 방식
 
-### 4.3 이미지 임베딩 재사용
+6H 진입부터 패치 50%만 갱신하거나 유지했다. 두 열 모두 RTX 4090에서 평가했다.
 
-원본 실행은 3H와 6H에서 같은 이미지의 patch/position embedding을 다시 계산한다.
-통합 구현은 3H에서 만든 **384채널 원본 임베딩**을 보존하고, 6H에서 여기에 3H 특징의 recycling projection을 더한다.
-6H에 진입하는 이미지마다 중복 Conv2d **0.057803 GMACs**를 줄이며 토큰 특징의 의미나 위치를 바꾸지 않는다.
+| 방법 | 공식 EMA Top-1 | 3070 KD Top-1 |
+| --- | ---: | ---: |
+| Selective Refinement (Attention + MLP) | 57.772% | 57.758% |
+| Full Attention + Selective MLP | 62.256% | 63.964% |
+| **Token Drop** | **78.610%** | **79.672%** |
 
-### 4.4 고정 폭 모듈과 CUDA Graph
+선택적 갱신은 갱신하지 않은 토큰을 시퀀스에 남긴다. 실제 제거가 두 가중치 모두에서 더 높은 정확도를 얻었다. [공식 EMA H1](results/ablation-worktrees/h1/results/20261122T114914.442466Z-h1-diagnosis/summary.json) · [3070 KD H1](results/rtx4090-3070-kd/h1-kd-summary.json)
 
-원본의 동적 폭 가중치를 192채널·384채널의 일반 PyTorch 모듈로 각각 변환했다.
-추론 중 가중치 인덱싱, attention hook 등록, 토큰 선택용 `mask.nonzero()`를 없애고 고정 길이 Top-K gather를 쓴다.
-좁은 경로와 유지율별 넓은 경로는 CUDA Graph로 캡처하고 게이트에 필요한 scalar 읽기와 실제 분기는 남긴다.
+### 3.2 Token Selection Strategy
 
-**3H/6H는 블록 수가 아니라 attention head 수**다. 두 경로 모두 12개 블록을 사용한다.
-패치 순위는 3H 마지막 블록의 head 평균 CLS attention으로 정하고, 선택된 토큰 집합은 6H의 모든 블록에서 유지한다.
-Global CLS나 블록별 점진적 제거를 적용한 구조가 아니다.
+같은 토큰 제거 구조, τ=1, 50% 유지에서 선택 기준만 바꿨다.
 
-## 5. 보조 결과와 제외한 실험
+| 선택 기준 | 공식 EMA Top-1 | 3070 KD Top-1 |
+| --- | ---: | ---: |
+| **마지막 CLS Attention Top-K** | **78.610%** | **79.672%** |
+| Random-K | 77.400% | 78.152% |
+| CLS Attention Bottom-K | 69.220% | 69.964% |
+| 낮은 3H Token Norm 우선 | — | 74.980% |
+| Global CLS | — | 79.642% |
 
-이번 조건에서 기존 KD 고정 50%는 **79.670%·2.1014 GMACs**였다.
-통합 기본은 이 중간 대조군 대비 **+0.348%p**, 연산량 **1.43% 감소**지만, 주 결론은 1절의 **main 원본 대비**로 판단한다.
-과거 KD 기록 79.672%와 이번 조건부 실행 79.670%는 정답 수 1장 차이다.
-이번 원본 KD와 통합 `kd50`/KD `full`은 5만 장에서 예측·정오답·분기가 이미지별로 모두 일치했다.
+마지막 CLS Attention Top-K가 이 비교에서 가장 높았다. Global CLS는 같은 3070 KD를 사용한 3.6절의 Evo 평가에서 가져왔다. [H1 선택 진단](results/rtx4090-3070-kd/h1-kd-summary.json) · [Global CLS 원자료](results/rtx4090-3070-kd/evo/summary.json)
 
-| 기본 경로에서 제외 | 판단 |
+### 3.3 Fine-tuning Strategy
+
+| 학습 방법 | 50% 유지 Top-1 |
+| --- | ---: |
+| 공식 EMA, 학습 전 | 78.610% |
+| **제공된 3070 KD** | **79.672%** |
+| 4090에서 새로 학습한 기본 KD | 79.596% |
+| 4090 KD + CE | 79.338% |
+| 4090 KD + Full KL | 79.650% |
+| 4090 KD + Feature MSE | 79.618% |
+| 4090 Partial FT (P+LN+LoRA) | 79.496% |
+
+학습 손실과 학습 파라미터의 비교에는 각 방법으로 학습한 가중치가 필요하다. 4090 학습 결과는 학습 방식 비교와 재현성에 사용했다. 같은 통합 Accuracy 정책의 FP32 결과는 **3070 가중치 80.440% / 2.2651 GMACs / 1.188 ms**, **4090 새 가중치 80.234% / 2.2654 GMACs / 1.186 ms**였다. 정확도 차이는 **0.206%p**였으며 추론은 두 경우 모두 4090에서 측정했다. [학습 원자료와 25%·75% 결과](reports/RTX4090_REPRODUCTION.md)
+
+### 3.4 Fixed vs Adaptive Token Allocation
+
+모든 행은 같은 3070 가중치와 4090에서 생성한 예측을 사용한다. Gate-only는 50% 유지율을 고정한다. Ratio-only는 τ=1을 고정하고 25%와 50%를 구분한다. Joint는 두 경계를 함께 탐색한다. 캘리브레이션 기준 예산은 2.0760 GMACs이며, 0.025 간격 그리드에서 예산 이하의 가장 가까운 후보 주변 0.25% 범위 내 정확도를 기준으로 선택했다.
+
+| 정책 | 종료 / 비율 경계 | 전체 Top-1 | 전체 GMACs | 홀드아웃 Top-1 | 홀드아웃 GMACs | GPU 지연시간 |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| Fixed 50% | 1.00 / — | 79.672% | 2.0805 | 79.288% | 2.0851 | 1.117 ms |
+| Gate-only | 1.00 / — | 79.672% | 2.0805 | 79.288% | 2.0851 | 1.117 ms |
+| Ratio-only | 1.00 / 1.025 | 79.670% | 2.0691 | 79.288% | 2.0738 | 1.115 ms |
+| Joint | 0.75 / 1.30 | **80.090%** | 2.0792 | **79.652%** | 2.0830 | 1.173 ms |
+
+같은 예산에서 Gate-only는 Fixed와 동일한 정책을 선택했다. Ratio-only는 캘리브레이션 그리드상 기준 예산에 가장 가까운 비퇴화 정책이며, 홀드아웃에서 Joint보다 0.0092 GMACs 적게 사용했다. 같은 FP32 CUDA Graph 벤치마크의 Joint 지연시간은 Fixed보다 약 0.057 ms 길었다. [Allocation 지연시간](results/rtx4090-3070-kd/allocation-latency.json)
+
+| 캘리브레이션 예산 | Gate-only 홀드아웃 Top-1 / GMACs | Ratio-only 홀드아웃 Top-1 / GMACs | Joint 홀드아웃 Top-1 / GMACs |
+| ---: | ---: | ---: | ---: |
+| 1.9722 (−5%) | 78.724% / 1.9704 | 79.116% / 1.9766 | **79.300%** / 1.9774 |
+| 2.0760 (기준) | 79.288% / 2.0851 | 79.288% / 2.0738 | **79.652%** / 2.0830 |
+| 2.1797 (+5%) | 79.572% / 2.1825 | 79.288% / 2.0738 | **79.888%** / 2.1900 |
+
+비용 제약은 캘리브레이션에서 적용했다. 홀드아웃에서는 이미지별 엔트로피 분포가 달라 예산을 소폭 넘을 수 있다. Ratio-only는 τ=1과 최대 50% 유지 때문에 +5% 예산까지 사용하지 못한다. [세 예산 원자료](results/rtx4090-3070-kd/allocation.json)
+
+### 3.5 Layer-wise Token Drop
+
+같은 3070 KD 가중치로 RTX 4090에서 레이어별 21개 정책을 평가했다. 시간은 배치 1, 1,000장, 이미지별 3회 반복의 Eager 평균이다. 표의 Uniform 172·180 토큰은 Staged·Late와 비슷한 연산량의 대조군이다.
+
+| 정책 | Top-1 | 평균 GMACs | GPU 지연시간 |
+| --- | ---: | ---: | ---: |
+| 전체 토큰 | 80.040% | 2.9213 | 6.139 ms |
+| Uniform 75% | 79.980% | 2.4889 | 5.925 ms |
+| Staged 75% | **80.054%** | 2.7059 | 5.958 ms |
+| Linear 75% | **80.054%** | 2.7039 | 6.119 ms |
+| Late 75% | 80.024% | 2.7772 | 5.931 ms |
+| Uniform 172 토큰 | 80.002% | 2.7075 | 5.922 ms |
+| Uniform 180 토큰 | 80.018% | 2.7784 | 5.910 ms |
+
+비슷한 연산량에서 Staged 75%는 Uniform 172 토큰보다 +0.052%p, Late 75%는 Uniform 180 토큰보다 +0.006%p였다. 25% 최종 유지의 Linear는 79.284% / 2.2858 GMACs였고, 비슷한 비용의 Uniform 123 토큰은 79.772% / 2.2830이었다. [3070 KD 전체 결과](results/rtx4090-3070-kd/layerwise-accuracy/summary.json) · [3070 KD 지연시간](results/rtx4090-3070-kd/layerwise-latency/summary.json) · [공식 EMA 대조군](results/rtx4090-20261122T105147Z/layerwise-accuracy/summary.json)
+
+### 3.6 Token Information Preservation — Evo-ViT
+
+전달받은 3070 KD 가중치로 모든 방법을 RTX 4090에서 평가했다. 6H 토큰 유지율은 50%, τ=1이다. 시간은 이 실험의 Eager 실행기에서 배치 1, 1,000장 평균이다.
+
+| 방법 | Top-1 | GPU 지연시간 |
+| --- | ---: | ---: |
+| Last CLS Token Drop | **79.672%** | **6.554 ms** |
+| Global CLS Token Drop | 79.642% | 7.643 ms |
+| Evo Layer | 78.594% | 9.193 ms |
+| Evo Stage | 78.682% | 8.792 ms |
+
+같은 가중치에서 Global CLS, Evo 모두 Last CLS보다 시간이 길고 정확도가 낮았다. 4090에서 해당 구조로 별도 학습했을 때는 Global CLS 79.690%, Global CLS에서 시작한 Evo Layer 79.666%까지 회복됐다. [3070 KD Evo 원자료](results/rtx4090-3070-kd/evo/summary.json) · [학습 변형별 결과](reports/RTX4090_REPRODUCTION.md)
+
+### 3.7 GPU Execution Optimization
+
+공식 EMA에서 배치 1 FP32 Eager의 6H 구간 중앙값은 전체 토큰 5.348 ms, 25% 유지 5.458 ms, 50% 유지 5.460 ms, 75% 유지 5.503 ms였다. 이 구간의 벤치마크는 메인 표의 종단 간 지연시간과 측정 범위가 다르다. 별도 H1 최적화 스크립트에서는 CUDA Graph 캡처와 `torch.compile`이 오류로 끝났다. 통합 실행기로 조건을 맞춘 비교는 아래에 있다. [H1 최적화 로그](results/rtx4090-20261122T105147Z/hardware-optimization.log)
+
+같은 3070 KD와 배치 1, 1,000장, 3회 반복에서 통합 FP32 Eager의 전체 토큰은 1.954 ms, Fixed 50%는 1.985 ms, Balanced는 2.099 ms, Accuracy는 2.143 ms였다. 같은 정책의 FP32 CUDA Graph 시간은 각각 1.218, 1.115, 1.156, 1.188 ms였다. [Eager 원자료](results/rtx4090-3070-kd/kd-eager-latency.json) · [Graph 원자료](results/rtx4090-20261122T105147Z/latency-integrated-vs-original-fp32.json)
+
+Fixed 50%의 통합 FP32 Eager에서 6H 진입 시 패치 임베딩을 다시 계산하면 2.003 ms, 3H에서 계산한 임베딩을 재사용하면 1.985 ms였다. 측정 차이는 0.018 ms다. [임베딩 재계산 원자료](results/rtx4090-3070-kd/kd-reembed-latency.json)
+
+TF32 허용 상태의 `torch.compile`은 Eager logits 일치 검사에서 실패했다. TF32를 모두 끈 뒤 같은 Fixed 50% 경로로 재측정하면 다음과 같다. 컴파일과 Graph 준비 시간은 지연시간에서 제외했다. 세 경로 모두 실제 이미지 32장의 logits·분기 검사를 통과했다.
+
+| 통합 실행기, 엄격 FP32 | GPU 지연시간 |
+| --- | ---: |
+| Eager | 1.938 ms |
+| `torch.compile` | 1.485 ms |
+| CUDA Graph | **1.270 ms** |
+
+같은 조건의 Eager 대비 `torch.compile`은 23.4%, CUDA Graph는 34.5% 빨랐다. [TF32 허용 실패 로그](results/rtx4090-3070-kd/kd-compiled-latency.log) · [엄격 FP32 Eager](results/rtx4090-3070-kd/kd-eager-strict-latency.json) · [엄격 FP32 컴파일](results/rtx4090-3070-kd/kd-compiled-strict-latency.json) · [엄격 FP32 Graph](results/rtx4090-3070-kd/kd-graph-strict-latency.json)
+
+## 4. 논문 구성
+
+| 섹션 | 내용 |
 | --- | --- |
-| Global CLS | 기존 KD 대비 정확도 차이가 매우 작고 실행 시간이 증가 |
-| Slow-fast·Global CLS 이어받기 | 완료된 비교에서 기존 KD를 넘지 못하고 실행 시간이 증가 |
-| 부분 adapter·LoRA | 학습 파라미터는 줄었지만 전체 KD보다 정확도가 낮고 추론 연산 절감 방법은 아님 |
-| CE·Full·Feature 추가 손실 | 주 지표에서 기존 KD를 일관되게 개선하지 못함 |
-| Layer-wise Drop | 일부 75% 설정의 작은 이점은 있었지만 공동 정책보다 더 효율적이라는 직접 근거가 없어 통합하지 않음 |
+| Introduction / Related Work | ThinkingViT의 추가 추론 비용, 중첩 ViT, Token Pruning, KD, Adaptive Inference |
+| Method | CLS Attention Token Drop → Drop-aware KD → Entropy 기반 공동 배분 |
+| Main Results | Token Drop + KD → Adaptive Allocation → RTX 4090 통합 성능 |
+| Ablation | 토큰 처리 → 토큰 선택 → 학습 방식 → 동일 예산 배분 → 레이어별 제거 → Evo-ViT → GPU 실행 |
+| Generalization | ImageNet-V2, 추가 학습 seed 및 다른 GPU |
+| Conclusion | 같은 계산량에서의 정확도와 실행 최적화를 통한 지연시간 개선 |
 
-과거 실험·문서·중복 runner는 **이 브랜치에서만** 정리했다. 기존 브랜치와 Git 이력에 근거를 보존했고,
-ignored 데이터·체크포인트·실험 원자료는 삭제하지 않았다.
+## 5. 추가 검증 상태
 
-## 6. 측정 조건과 지표 해석
+### 5.1 ImageNet-V2 일반화
 
-| 항목 | 조건 |
-| --- | --- |
-| 환경 | RTX 3070 Ti Laptop 8GB, Python 3.12.3, PyTorch 2.5.1+cu124 |
-| 정확도 | ImageNet-1K validation 50,000장, seed-42 동일 순서, batch 64 |
-| FP32 | AMP off, TF32 허용 |
-| 시간 | 같은 1,000장, batch 1, warmup 50장, 순서를 바꾼 3회 반복 평균의 중앙값 |
-| 시간 포함 | 3H·gate 동기화·토큰 선택·recycling·필요한 6H·Graph 입력/출력 복사 |
-| 시간 제외 | 이미지 읽기·전처리·입력 H2D·최종 argmax·Graph 준비 비용 |
-| GPU 공유 검사 | 다른 GPU compute 프로세스를 1초 간격으로 감시; 관측되면 `clean: false` |
-| GMACs | 실제 분기·토큰 수를 반영한 이미지당 평균 conv/matmul MACs |
+원본 ImageNet-1K에서 결정한 정책을 ImageNet-V2 matched-frequency 10,000장에 그대로 적용했다. RTX 4090 FP32에서 평가했으며, KD는 메인 결과와 같은 3070 가중치다.
 
-1 GMAC은 10억 번의 multiply-accumulate이며 보통 2 GFLOPs에 대응한다.
-이 분석식은 norm·softmax·GELU·정렬/gather·메모리 이동·CPU 호출 비용을 포함하지 않는다.
-**GMACs 감소와 실제 가속을 구분**하며 Graph 준비·warmup 시간은 JSON의 `setup_seconds`에 따로 기록한다.
+| 정책 | Top-1 | 평균 GMACs |
+| --- | ---: | ---: |
+| 공식 EMA 전체 토큰, τ=1 | 69.14% | 3.4511 |
+| KD Fixed 50% / Gate-only | 68.30% | 2.3353 |
+| KD Ratio-only | 68.31% | 2.3230 |
+| KD Joint | 68.47% | 2.3124 |
+| KD Balanced | 68.47% | 2.3091 |
+| KD Accuracy | 68.93% | 2.5859 |
 
-처리량은 batch-1 순차 images/s이며 배치 처리량이 아니다. 메모리는 PyTorch allocated 통계다.
-폭별 가중치 복사와 Graph 버퍼 때문에 **메모리는 증가**했다. 입력 1,000장의 GPU 캐시를 제외한 측정 peak는
-원본 약 **98.5 MiB**, FP32 Graph 약 **165.6 MiB**, FP16 Graph 약 **112.0 MiB**였다.
-Graph 풀이 선할당되므로 incremental peak만 보고 메모리가 절감됐다고 해석하지 않는다.
+Joint는 Fixed보다 **+0.17%p**였고 계산량은 약 **0.98%** 적었다. 정확도 차이의 이미지별 짝지은 부트스트랩 95% 구간은 **−0.15~+0.49%p**였다(20,000회, seed 42). 공식 EMA 대비 Accuracy는 −0.21%p, GMACs 약 25.1% 감소였다. [데이터 원본](https://huggingface.co/datasets/vaishaal/ImageNetV2/blob/main/imagenetv2-matched-frequency.tar.gz) · [공식 EMA 원자료](results/rtx4090-3070-kd/v2/official.json) · [3070 KD 원자료](results/rtx4090-3070-kd/v2/kd.json)
 
-이 validation은 이전 실험에서 반복 사용했다. 단일 KD seed의 관측이며 새로운 독립 테스트나 작은 정확도 차이의 확증 결과로 주장하지 않는다.
-본 브랜치의 통합 모델을 ImageNet-V2에서 새로 평가하지는 않았다. 다른 브랜치의 V2 결과를 이번 모델의 검증으로 대신하지 않는다.
+### 5.2 검증 범위
+
+Gate-only·Ratio-only·Joint의 세 예산 비교, 동일 정밀도·실행기의 통합 비교, 4090에서의 ImageNet-V2 검증을 완료했다. 복수 학습 seed에서 정확도 변동을 정량화하거나 다른 모델·GPU로 확장하는 실험은 이번 범위에서 남아 있다. 별도 Target80 체크포인트의 GPU 재실행 여부는 이 브랜치에서 검증하지 않았다.
+
+## 6. 핵심 연구 기여
+
+3070에서 학습한 하나의 KD 가중치를 고정하고 4090에서 평가했을 때, 3H 종료와 6H 토큰 유지율을 공동 조정한 정책은 거의 같은 연산량에서 Fixed Drop 대비 **전체 +0.418%p**, **홀드아웃 +0.364%p**를 얻었다. FP32 최종 통합 모델은 **80.440% / 2.2651 GMACs / 1.188 ms**를 기록했다. 공식 Native·공식 Graph·통합 Graph의 세 측정으로 실행 최적화와 KD·배분 정책 적용 후의 변화량을 확인했다.
 
 ## 7. 설치와 입력 준비
 
@@ -157,7 +236,7 @@ bash scripts/bootstrap.sh
 공식 ThinkingViT revision은 `9254c4950d3159937ad682592d58a2be69708c42`로 고정한다.
 기존 checkout이 다른 revision이면 스크립트는 그 checkout을 자동으로 바꾸지 않고 종료한다.
 공식 EMA는 `checkpoints/thinkingvit_3h6h_ema.pth`, 학습된 KD는 `checkpoints/kd_student.pth`에 둔다.
-가중치는 Git에 포함하지 않는다. 이 컴퓨터에는 완료된 KD 가중치를 해당 위치에 복사해 두었다.
+가중치는 Git에 포함하지 않는다. 이 컴퓨터의 `checkpoints/kd_student.pth`는 전달받은 RTX 3070 학습 가중치를 가리킨다.
 
 ImageNet 사용 승인과 인증을 완료한 뒤 필요한 split을 준비한다.
 
@@ -169,7 +248,7 @@ ImageNet 사용 승인과 인증을 완료한 뒤 필요한 split을 준비한�
 ```
 
 기본 데이터 위치는 `data/imagenet1k/{train,validation}/<class>/...`다. 기존 데이터가 준비돼 있으면 재다운로드할 필요가 없다.
-모델·가중치 해시는 [원본 기준](reports/original-main-protocol.json), [FP32 평가](reports/accuracy-fp32.json)에 기록했다.
+RTX 4090 실행의 해시와 GPU 정보는 [FP32 원자료](results/rtx4090-20261122T105147Z/accuracy-fp32.json)에 기록했다.
 
 ## 8. 검증과 평가 재현
 
@@ -203,7 +282,13 @@ mkdir -p "$RUN_DIR"
 
 `--samples 128`은 실행 점검용이다. 5만 장 결과로 보고하지 않는다.
 시간 측정은 다른 GPU compute 작업이 없는 상태에서 실행한다. Graph는 **batch 1 전용**이며 전체 정확도는 eager 배치 경로로 측정한다.
-현재 단위 테스트 12개, 실제 GPU 원본/고정 폭/Graph 출력 검증, 5만 장 이미지별 대조군 일치 검사를 통과했다.
+RTX 4090에서 단위 테스트 12개와 실제 이미지 32장의 원본·고정 폭·Graph 출력 검증을 통과했다.
+
+공동 배분의 세 예산 비교는 같은 3070 가중치로 재현한다. JSON에는 분할별 결과, NPZ에는 이미지별 엔트로피와 경로별 정답 여부가 기록된다.
+
+```bash
+.venv/bin/python -m experiments.allocation.evaluate --output "$RUN_DIR/allocation.json"
+```
 
 FP16은 같은 `RUN_DIR`에서 별도로 검증한다.
 
@@ -270,6 +355,8 @@ prediction = logits.argmax(1).item()
 
 ## 11. 파일과 결과 근거
 
+작업 브랜치 `repro/rtx4090-efficient-kd`는 `hee4040/OnDevice`의 `integration/efficient-kd` 커밋 `7b398be`에서 생성했다.
+
 | 경로 | 내용 |
 | --- | --- |
 | [`efficient_vit/policy.py`](efficient_vit/policy.py) | 고정 정책·entropy·MACs 산식 |
@@ -279,12 +366,13 @@ prediction = logits.argmax(1).item()
 | [`efficient_vit/__main__.py`](efficient_vit/__main__.py) | 검증·평가·시간 측정 CLI |
 | [`efficient_vit/train.py`](efficient_vit/train.py) | 보존한 전체 KD 학습 recipe |
 | [`scripts/report.py`](scripts/report.py) | 공유용 요약 생성 |
-| [`reports/RESULTS.md`](reports/RESULTS.md) | 원본 기준 주 비교·KD 보조 비교·p95·처리량·메모리 |
+| [`reports/RESULTS.md`](reports/RESULTS.md) | 기준 브랜치의 이전 통합 결과 |
 | [`reports/original-main-protocol.json`](reports/original-main-protocol.json) | main revision·체크포인트 해시·원본 설정 |
 | [`reports/original_equivalence.json`](reports/original_equivalence.json) | 공식 원본에 실행 최적화만 적용한 5만 장 예측·분기 일치 |
 | [`reports/native_equivalence.json`](reports/native_equivalence.json) | KD 원본/통합 대조군의 5만 장 일치 |
 | [`reports/implementation_sha256.json`](reports/implementation_sha256.json) | 검증한 구현 해시 |
 
-상세 요약 JSON은 `reports/`, 이미지별 결과·학습 checkpoint·시간 원자료는 ignored `results/efficient-kd/`에 있다.
+이번 RTX 4090 원자료는 로컬 `results/rtx4090-20261122T105147Z/`와 `results/rtx4090-3070-kd/`에 있다. `reports/RESULTS.md`와 기존 추적 JSON은 기준 브랜치의 이전 실행 기록이다.
+결과와 체크포인트 경로는 Git 제외 대상이므로 새 클론에서는 평가 명령으로 생성한다. 추가 평가의 로컬 실행 기록은 [종료 상태](results/rtx4090-3070-kd/status.tsv)와 각 로그에 있다.
 이전 실험과 선택 근거는 `experiment/drop-ft`, `codex/target80-results`, `experiment/allocation-rule`,
 `codex/layerwise-drop-results`, `experiment/h1-diagnosis` 브랜치에 보존돼 있다.

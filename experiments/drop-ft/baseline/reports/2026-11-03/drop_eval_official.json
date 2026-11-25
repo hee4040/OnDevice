@@ -1,0 +1,24 @@
+{
+  "model": "official",
+  "weights": null,
+  "weights_sha256": null,
+  "routed_at_threshold_1": 18004,
+  "gpu": "NVIDIA GeForce RTX 4090",
+  "precision": "float32, TF32 allowed (official default)",
+  "full_path_matches_official": true,
+  "top1": {
+    "narrow_all": 73.534,
+    "wide_all": 81.44,
+    "wide_threshold_1": 80.304,
+    "drop_10_all": 39.986,
+    "drop_10_threshold_1": 63.804,
+    "drop_25_all": 71.898,
+    "drop_25_threshold_1": 73.81400000000001,
+    "drop_50_all": 79.308,
+    "drop_50_threshold_1": 78.61,
+    "drop_75_all": 80.996,
+    "drop_75_threshold_1": 79.952,
+    "drop_90_all": 81.254,
+    "drop_90_threshold_1": 80.118
+  }
+}
